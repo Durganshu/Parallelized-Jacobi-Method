@@ -1,17 +1,5 @@
 #!/bin/bash
 
-# Job Name and Files (also --job-name)
-#SBATCH -J heat
-
-#Output and error (also --output, --error):
-#SBATCH -o job.out
-#SBATCH -e job.out
-
-# Wall clock limit:
-#SBATCH --time=00:05:00
-#SBATCH --account=h039v
-#SBATCH --partition=test
-
 # Assign the filename
 filename="Makefile"
 # Declare an array of string with type
@@ -31,11 +19,10 @@ for val in ${StringArray[@]}; do
  sleep 10
  echo "Running the executable"
  echo -e "Compiler flags used: $val" >> log.txt
- for i in {1..2}; do
+ for i in {1..2}; do 
     echo "run $i" >> log.txt 
     ./heat test.dat >> log.txt
  done
  echo -e "---------------------------------------------" >> log.txt
  searchString=$val
 done
-
