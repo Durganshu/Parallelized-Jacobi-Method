@@ -14,6 +14,7 @@
 
 # Assign the filename
 filename="Makefile"
+cp makefileinit $filename
 # Declare an array of string with type
 declare -a StringArray=("CFLAGS = -O1" "CFLAGS = -O2" "CFLAGS = -O3" "CFLAGS = -Ofast"
                         "CFLAGS = -O2 -xhost" "CFLAGS = -O2 -xCORE-AVX512" "CFLAGS = -O2 -xCORE-AVX512 -ipo" "CFLAGS = -O2 -ipo"
