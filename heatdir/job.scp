@@ -36,12 +36,12 @@ for ((i =0; i < ${#StringArray[@]}; i++)) do
  make
  sleep 10
  echo "Running the executable"
- echo -e "Compiler flags used: $val" >> log.txt
- for i in {1..2}; do
-    echo "run $i" >> log.txt 
+ echo -e "Compiler flags used: ${StringArray[$i]}" >> log.txt
+ for k in {1..2}; do
+    echo "run $k" >> log.txt 
     ./heat test.dat >> log.txt
  done
  echo -e "---------------------------------------------" >> log.txt
- searchString=$val
+ searchString=${StringArray[$i]}
 done
 
