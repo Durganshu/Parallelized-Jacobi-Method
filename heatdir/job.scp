@@ -8,41 +8,44 @@
 #SBATCH -e job.out
 
 # Wall clock limit:
-#SBATCH --time=00:15:00
+#SBATCH --time=00:01:30
 #SBATCH --account=h039v
 #SBATCH --partition=test
 
+./heat test.dat >> log.txt
+
 # Assign the filename
-filename="Makefile"
-cp makefileinit $filename
-# Declare an array of string with type
-declare -a StringArray=("CFLAGS = -O1" "CFLAGS = -O2" "CFLAGS = -O3" "CFLAGS = -Ofast"
-                        "CFLAGS = -O2 -xhost" "CFLAGS = -O2 -xCORE-AVX512" "CFLAGS = -O2 -xCORE-AVX512 -ipo" "CFLAGS = -O2 -ipo"
-                        "CFLAGS = -O2 -xCORE-AVX512 -fno-alias" "CFLAGS = -O2 -xCORE-AVX512 -fno-alias" "CFLAGS = -O2 -fno-alias"
-                        "CFLAGS = -O3 -xhost" "CFLAGS = -O3 -xCORE-AVX512" "CFLAGS = -O3 -xCORE-AVX512 -ipo" "CFLAGS = -O3 -ipo"
-                        "CFLAGS = -O3 -xCORE-AVX512 -fno-alias" "CFLAGS = -O3 -xCORE-AVX512 -fno-alias" "CFLAGS = -O3 -fno-alias"
-                        "CFLAGS = -Ofast -xhost" "CFLAGS = -Ofast -xCORE-AVX512" "CFLAGS = -Ofast -xCORE-AVX512 -ipo" "CFLAGS = -Ofast -ipo"
-                        "CFLAGS = -Ofast -xCORE-AVX512 -fno-alias" "CFLAGS = -Ofast -xCORE-AVX512 -fno-alias" "CFLAGS = -Ofast -fno-alias")
+# filename="Makefile"
+# cp makefileinit $filename
+# # Declare an array of string with type
+# declare -a StringArray=("CFLAGS = -O1 -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O2 -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O3 -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -Ofast -qopt-report-annotate -qopt-report-phase=vec,loop"
+#                         "CFLAGS = -O2 -xhost -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O2 -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O2 -xCORE-AVX512 -qopt-zmm-usage=high -ipo -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O2 -ipo -qopt-report-annotate -qopt-report-phase=vec,loop"
+#                         "CFLAGS = -O2 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O2 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O2 -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop"
+#                         "CFLAGS = -O3 -xhost -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O3 -xCORE-AVX512 -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O3 -xCORE-AVX512 -ipo -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O3 -ipo -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop"
+#                         "CFLAGS = -O3 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O3 -xCORE-AVX512 -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -O3 -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop"
+#                         "CFLAGS = -Ofast -xhost -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -Ofast -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -Ofast -xCORE-AVX512 -ipo -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -Ofast -ipo -qopt-report-annotate -qopt-report-phase=vec,loop"
+#                         "CFLAGS = -Ofast -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -Ofast -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop" "CFLAGS = -Ofast -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop")
 
-searchString="CFLAGS = -O0"
+# searchString="CFLAGS = -O0"
 
-for ((i =0; i < ${#StringArray[@]}; i++)) do
- echo "Cleaning files"
- make clean
- sleep 3
- sed -i "s/$searchString/${StringArray[$i]}/" $filename
- echo -e "Replacement done\n"
- sleep 3
- echo "Building new code"
- make
- sleep 10
- echo "Running the executable"
- echo -e "Compiler flags used: ${StringArray[$i]}" >> log.txt
- for k in {1..2}; do
-    echo "run $k" >> log.txt 
-    ./heat test.dat >> log.txt
- done
- echo -e "---------------------------------------------" >> log.txt
- searchString=${StringArray[$i]}
-done
+# for ((i =0; i < ${#StringArray[@]}; i++)) do
+#  echo "Cleaning files"
+#  make clean
+#  sleep 3
+#  sed -i "s/$searchString/${StringArray[$i]}/" $filename
+#  echo -e "Replacement done\n"
+#  sleep 3
+#  echo "Building new code"
+#  make
+#  sleep 10
+#  mv "relax_jacobi.c.annot" "relax_jacobi_$i.c.annot"
+#  echo "Running the executable"
+#  echo -e "Compiler flags used: ${StringArray[$i]}" >> log.txt
+#  for k in {1..2}; do
+#     echo "run $k" >> log.txt 
+#    ./heat test.dat >> log.txt
+#  done
+#  echo -e "---------------------------------------------" >> log.txt
+#  searchString=${StringArray[$i]}
+# done
 
