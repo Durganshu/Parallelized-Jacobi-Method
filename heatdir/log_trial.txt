@@ -1,0 +1,97 @@
+ #CFLAGS = -O1 -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.115; 959.969
+ 1500; 1.274; 776.979
+ 2500; 4.502; 610.892
+ 3500; 10.513; 512.701
+ 4500; 16.781; 530.969
+    
+ #CFLAGS = -O2 -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.094; 1171.811
+ 1500; 1.097; 902.552
+ 2500; 4.399; 625.188
+ 3500; 9.184; 586.866
+ 4500; 15.133; 588.791
+
+ #CFLAGS = -O3 -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.094; 1164.673
+ 1500; 1.041; 950.933
+ 2500; 4.380; 627.809
+ 3500; 9.162; 588.285
+ 4500; 15.102; 590.001
+
+ #CFLAGS = -Ofast -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.094; 1169.541
+ 1500; 1.056; 937.077
+ 2500; 4.423; 621.763
+ 3500; 9.178; 587.247
+ 4500; 15.090; 590.440
+
+ #CFLAGS = -O2 -xhost -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.087; 1263.075
+ 1500; 1.081; 916.135
+ 2500; 4.344; 632.995
+ 3500; 8.190; 658.144
+ 4500; 14.683; 606.836
+
+ #CFLAGS = -O2 -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.085; 1287.515
+ 1500; 0.970; 1021.080
+ 2500; 4.239; 648.683
+ 3500; 8.081; 666.957
+ 4500; 14.504; 614.332
+
+ #CFLAGS = -O2 -xCORE-AVX512 -qopt-zmm-usage=high -ipo -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.087; 1264.121
+ 1500; 0.958; 1033.282
+ 2500; 4.248; 647.402
+ 3500; 8.224; 655.359
+ 4500; 14.635; 608.797
+
+ #CFLAGS = -O2 -ipo -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.096; 1147.830
+ 1500; 1.026; 965.064
+ 2500; 4.425; 621.469
+ 3500; 9.293; 579.984
+ 4500; 15.299; 582.377
+
+ #CFLAGS = -O2 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.027; 4112.319
+ 1500; 0.214; 4623.186
+ 2500; 0.857; 3207.588
+ 3500; 1.848; 2916.597
+ 4500; 3.096; 2878.107
+
+ #CFLAGS = -O2 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.029; 3781.378
+ 1500; 0.239; 4144.896
+ 2500; 0.851; 3232.172
+ 3500; 1.848; 2916.913
+ 4500; 3.083; 2890.205
+
+ #CFLAGS = -O2 -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.039; 2787.637
+ 1500; 0.341; 2898.991
+ 2500; 1.212; 2268.760
+ 3500; 2.358; 2285.494
+ 4500; 3.842; 2318.876
+
+ #CFLAGS = -O3 -xhost -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.086; 1276.176
+ 1500; 0.984; 1006.419
+ 2500; 4.318; 636.795
+ 3500; 8.163; 660.291
+ 4500; 14.607; 609.961
+
+ #CFLAGS = -O3 -xCORE-AVX512 -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.087; 1267.252
+ 1500; 0.908; 1089.980
+ 2500; 4.307; 638.552
+ 3500; 8.152; 661.189
+ 4500; 14.581; 611.087
+
+ #CFLAGS = -O3 -xCORE-AVX512 -ipo -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.081; 1351.152
+ 1500; 0.945; 1047.757
+ 2500; 4.226; 650.762
+ 3500; 8.002; 673.598
+ 4500; 14.515; 613.855
