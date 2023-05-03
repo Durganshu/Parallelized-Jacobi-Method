@@ -1,0 +1,175 @@
+Compiler flags used: CFLAGS = -O1 -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.115; 959.969
+ 1500; 1.274; 776.979
+ 2500; 4.502; 610.892
+ 3500; 10.513; 512.701
+ 4500; 16.781; 530.969
+---------------------------------------------
+Compiler flags used: CFLAGS = -O2 -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.094; 1171.811
+ 1500; 1.097; 902.552
+ 2500; 4.399; 625.188
+ 3500; 9.184; 586.866
+ 4500; 15.133; 588.791
+---------------------------------------------
+Compiler flags used: CFLAGS = -O3 -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.094; 1164.673
+ 1500; 1.041; 950.933
+ 2500; 4.380; 627.809
+ 3500; 9.162; 588.285
+ 4500; 15.102; 590.001
+---------------------------------------------
+Compiler flags used: CFLAGS = -Ofast -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.094; 1169.541
+ 1500; 1.056; 937.077
+ 2500; 4.423; 621.763
+ 3500; 9.178; 587.247
+ 4500; 15.090; 590.440
+---------------------------------------------
+Compiler flags used: CFLAGS = -O2 -xhost -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.087; 1263.075
+ 1500; 1.081; 916.135
+ 2500; 4.344; 632.995
+ 3500; 8.190; 658.144
+ 4500; 14.683; 606.836
+---------------------------------------------
+Compiler flags used: CFLAGS = -O2 -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.085; 1287.515
+ 1500; 0.970; 1021.080
+ 2500; 4.239; 648.683
+ 3500; 8.081; 666.957
+ 4500; 14.504; 614.332
+---------------------------------------------
+Compiler flags used: CFLAGS = -O2 -xCORE-AVX512 -qopt-zmm-usage=high -ipo -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.087; 1264.121
+ 1500; 0.958; 1033.282
+ 2500; 4.248; 647.402
+ 3500; 8.224; 655.359
+ 4500; 14.635; 608.797
+---------------------------------------------
+Compiler flags used: CFLAGS = -O2 -ipo -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.096; 1147.830
+ 1500; 1.026; 965.064
+ 2500; 4.425; 621.469
+ 3500; 9.293; 579.984
+ 4500; 15.299; 582.377
+---------------------------------------------
+Compiler flags used: CFLAGS = -O2 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.027; 4112.319
+ 1500; 0.214; 4623.186
+ 2500; 0.857; 3207.588
+ 3500; 1.848; 2916.597
+ 4500; 3.096; 2878.107
+---------------------------------------------
+Compiler flags used: CFLAGS = -O2 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.029; 3781.378
+ 1500; 0.239; 4144.896
+ 2500; 0.851; 3232.172
+ 3500; 1.848; 2916.913
+ 4500; 3.083; 2890.205
+---------------------------------------------
+Compiler flags used: CFLAGS = -O2 -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.039; 2787.637
+ 1500; 0.341; 2898.991
+ 2500; 1.212; 2268.760
+ 3500; 2.358; 2285.494
+ 4500; 3.842; 2318.876
+---------------------------------------------
+Compiler flags used: CFLAGS = -O3 -xhost -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.086; 1276.176
+ 1500; 0.984; 1006.419
+ 2500; 4.318; 636.795
+ 3500; 8.163; 660.291
+ 4500; 14.607; 609.961
+---------------------------------------------
+Compiler flags used: CFLAGS = -O3 -xCORE-AVX512 -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.087; 1267.252
+ 1500; 0.908; 1089.980
+ 2500; 4.307; 638.552
+ 3500; 8.152; 661.189
+ 4500; 14.581; 611.087
+---------------------------------------------
+Compiler flags used: CFLAGS = -O3 -xCORE-AVX512 -ipo -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.081; 1351.152
+ 1500; 0.945; 1047.757
+ 2500; 4.226; 650.762
+ 3500; 8.002; 673.598
+ 4500; 14.515; 613.855
+---------------------------------------------
+Compiler flags used: CFLAGS = -O3 -ipo -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.094; 1170.487
+ 1500; 0.993; 997.357
+ 2500; 4.538; 606.029
+ 3500; 9.775; 551.379
+ 4500; 15.954; 558.482
+---------------------------------------------
+Compiler flags used: CFLAGS = -O3 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.029; 3780.851
+ 1500; 0.206; 4817.051
+ 2500; 0.853; 3222.869
+ 3500; 1.862; 2894.711
+ 4500; 3.103; 2871.074
+---------------------------------------------
+Compiler flags used: CFLAGS = -O3 -xCORE-AVX512 -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.028; 3917.813
+ 1500; 0.230; 4298.123
+ 2500; 0.872; 3155.117
+ 3500; 1.861; 2896.319
+ 4500; 3.118; 2857.851
+---------------------------------------------
+Compiler flags used: CFLAGS = -O3 -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.038; 2883.963
+ 1500; 0.345; 2870.896
+ 2500; 1.195; 2300.812
+ 3500; 2.326; 2317.147
+ 4500; 3.766; 2365.802
+---------------------------------------------
+Compiler flags used: CFLAGS = -Ofast -xhost -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.086; 1274.002
+ 1500; 0.946; 1046.334
+ 2500; 4.317; 636.957
+ 3500; 8.126; 663.296
+ 4500; 14.575; 611.328
+---------------------------------------------
+Compiler flags used: CFLAGS = -Ofast -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.093; 1188.326
+ 1500; 1.040; 951.913
+ 2500; 4.282; 642.212
+ 3500; 8.152; 661.193
+ 4500; 14.517; 613.747
+---------------------------------------------
+Compiler flags used: CFLAGS = -Ofast -xCORE-AVX512 -ipo -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.083; 1322.926
+ 1500; 1.018; 972.550
+ 2500; 4.206; 653.815
+ 3500; 8.061; 668.639
+ 4500; 14.624; 609.254
+---------------------------------------------
+Compiler flags used: CFLAGS = -Ofast -ipo -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.093; 1185.179
+ 1500; 0.992; 997.821
+ 2500; 4.481; 613.702
+ 3500; 9.787; 550.757
+ 4500; 16.134; 552.234
+---------------------------------------------
+Compiler flags used: CFLAGS = -Ofast -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.029; 3758.643
+ 1500; 0.228; 4343.951
+ 2500; 0.858; 3206.945
+ 3500; 1.860; 2898.420
+ 4500; 3.114; 2861.322
+---------------------------------------------
+Compiler flags used: CFLAGS = -Ofast -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.028; 3982.782
+ 1500; 0.227; 4364.713
+ 2500; 0.861; 3195.126
+ 3500; 1.852; 2910.477
+ 4500; 3.105; 2869.270
+---------------------------------------------
+Compiler flags used: CFLAGS = -Ofast -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop
+  500; 0.038; 2876.267
+ 1500; 0.343; 2888.840
+ 2500; 1.143; 2404.914
+ 3500; 2.324; 2318.782
+ 4500; 3.746; 2378.409
+---------------------------------------------
