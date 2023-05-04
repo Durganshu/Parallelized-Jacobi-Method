@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 
 resolution = np.array([500, 1500, 2500, 3500, 4500])
 
-# file_batch = open('/home/diogenes/Efficient_lab/heatdir/results/graph_2/Ofast/log_graph2_batch_Ofast.txt', 'r')
-file_batch = open('/home/diogenes/Efficient_lab/heatdir/results/graph_2/Ofast/log_graph2_login_Ofast.txt', 'r')
+file_batch = open('/home/diogenes/Efficient_lab/heatdir/results/graph_2/Ofast/log_graph2_batch_Ofast.txt', 'r')
+# file_batch = open('/home/diogenes/Efficient_lab/heatdir/results/graph_2/Ofast/log_graph2_login_Ofast.txt', 'r')
 lines_batch = file_batch.readlines()
 # lines_login = file_login.readlines()
 
@@ -30,18 +30,17 @@ data = [res1, res2, res3, res4, res5]
 MFlops = np.stack((res1,res2,res3,res4,res5))
 lst = np.arange(1,len(tags))
 
-fig = plt.figure(figsize = (10,7))
+# fig = plt.figure(figsize = (10,7))
 
-# Creating axes instance
-ax = fig.add_axes([0, 0, 1, 1])
+data = [res1,res2,res3,res4,res5] 
+
+fig = plt.figure(figsize =(10, 7))
+# ax = fig.add_axes([0, 0, 1, 1])
+ 
+# # Creating plot
+plt.boxplot(data)
+plt.xticks([1,2,3,4,5],['500','1500','2500','3500','4500'])
 plt.xlabel('Resolution', fontsize = "10")
-plt.ylabel('MFlop/s', fontsize = "10")
-plt.title('Group 6 initial performance data vs different compiler flags', fontsize = "10")
-# Creating plot
-bp = ax.boxplot(data, labels =["1", "2", "3", "4", "5"])
-# sax.set_yticklabels(['data_1', 'data_2', 'data_3', 'data_4'])
-# plt.figure(figsize=(30,15))
-# for i,tag in enumerate(tags_kept):
-#     plt.plot(resolution, MFlops[:,i], label = tag)
-#     plt.legend(loc = "upper right", fontsize = "10")
+plt.ylabel('MFlop/s', fontsize = "10") 
+plt.title('Group 6: Box Plot for batch node', fontsize = "10")
 plt.show()
