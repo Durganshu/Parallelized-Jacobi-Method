@@ -187,3 +187,9 @@ CFLAGS = -O3 -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-annotate -qopt-repo
  3500; 8.110; 664.601
  4500; 14.452; 616.507
 ---------------------------------------------
+CFLAGS = -O3 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop with ivdep
+  500; 0.110; 996.287
+ 1500; 1.269; 780.147
+ 2500; 4.937; 557.014
+ 3500; 9.749; 552.877
+ 4500; 16.610; 536.436

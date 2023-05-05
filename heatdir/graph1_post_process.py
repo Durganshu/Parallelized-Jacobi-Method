@@ -24,7 +24,7 @@ lines = file1.readlines()
 # 13        "CFLAGS = -O3 -xCORE-AVX512 -ipo -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop"
 # 14        "CFLAGS = -O3 -ipo -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop"
 # 15 %       "CFLAGS = -O3 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop"
-# 16        "CFLAGS = -O3 -xCORE-AVX512 -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop"
+# 16 %       "CFLAGS = -O3 -xCORE-AVX512 -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop"
 # 17        "CFLAGS = -O3 -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop"
 # 18        "CFLAGS = -Ofast -xhost -qopt-report-annotate -qopt-report-phase=vec,loop"
 # 19        "CFLAGS = -Ofast -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop"
@@ -34,11 +34,12 @@ lines = file1.readlines()
 # 23 %       "CFLAGS = -Ofast -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop"
 # 24        "CFLAGS = -Ofast -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop"
 # 25 %      "CFLAGS = -O0"
-# 26         "CFLAGS = -O3 -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop]"
+# 26         "CFLAGS = -O3 -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop"
+# 27 %        "CFLAGS = -O3 -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop] with ivdep"
 
-idx_to_keep = [0,1,2,3,4,5,7,8,10,15,23,25]
+idx_to_keep = [25,0,1,2,3,4,5,7,10,8,15,16,27, 23]
 
-tags_kept = ['-O1','-O2','-O3','-Ofast','-O2 -xhost','-O2 -xCORE-AVX512','-O2 -ipo','-O2 -xCORE-AVX512 -fno-alias','-O2 -fno-alias','-O3 -xCORE-AVX512 -fno-alias','-Ofast -xCORE-AVX512 -fno-alias', '-O0']
+tags_kept = ['-O0', '-O1','-O2','-O3','-Ofast','-O2 -xhost','-O2 -xCORE-AVX512','-O2 -ipo','-O2 -fno-alias','-O2 -xCORE-AVX512 -fno-alias','-O3 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high','-O3 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=low' ,'-O3 -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high (with ivdep)','-Ofast -xCORE-AVX512 -fno-alias']
 
 count = 0
 tags = []
@@ -64,7 +65,7 @@ plt.figure(figsize=(30,15))
 plt.xlabel('Resolution', fontsize = "10")
 plt.ylabel('MFlop/s', fontsize = "10")
 plt.title('Group 6: Initial performance data vs different compiler flags', fontsize = "10")
-for i,tag in enumerate(tags_kept):
-    plt.plot(resolution, MFlops[:,i], label = tag)
+for i,tag in enumerate(idx_to_keep):
+    plt.plot(resolution, MFlops[:,tag], label = tags_kept[i])
     plt.legend(loc = "upper right", fontsize = "10")
 plt.show()
