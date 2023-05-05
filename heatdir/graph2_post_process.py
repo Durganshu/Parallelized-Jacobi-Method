@@ -59,6 +59,6 @@ bp2 = plt.boxplot(data_login, notch=False, widths=0.35,
 plt.xticks([1,2,3,4,5],['500','1500','2500','3500','4500'])
 plt.xlabel('Resolution', fontsize = "10")
 plt.ylabel('MFlop/s', fontsize = "10") 
-plt.title('Group 6: Box Plots for batch and login node', fontsize = "10")
+plt.title('Group 6: Box Plots for batch and login node (10 runs each)', fontsize = "10")
 plt.legend([bp1["boxes"][0], bp2["boxes"][0]], ['Batch node', 'Login node'], loc='upper right')
 plt.show()
