@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 resolution = np.array([500, 1500, 2500, 3500, 4500])
 
-file1 = open('log_graph_1.txt', 'r')
+file1 = open('/home/diogenes/Efficient_lab/heatdir/results/graph_1/log_graph_1.txt', 'r')
 lines = file1.readlines()
 
 # flags =
@@ -32,11 +32,13 @@ lines = file1.readlines()
 # 21        "CFLAGS = -Ofast -ipo -qopt-report-annotate -qopt-report-phase=vec,loop"
 # 22        "CFLAGS = -Ofast -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop"
 # 23 %       "CFLAGS = -Ofast -xCORE-AVX512 -fno-alias -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop"
-# 24        "CFLAGS = -Ofast -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop"]
+# 24        "CFLAGS = -Ofast -fno-alias -qopt-report-annotate -qopt-report-phase=vec,loop"
+# 25 %      "CFLAGS = -O0"
+# 26         "CFLAGS = -O3 -xCORE-AVX512 -qopt-zmm-usage=high -qopt-report-annotate -qopt-report-phase=vec,loop]"
 
-idx_to_keep = [0,1,2,3,4,5,7,8,10,15,23]
+idx_to_keep = [0,1,2,3,4,5,7,8,10,15,23,25]
 
-tags_kept = ['-O1','-O2','-O3','-Ofast','-O2 -xhost','-O2 -xCORE-AVX512','-O2 -ipo','-O2 -xCORE-AVX512 -fno-alias','-O2 -fno-alias','-O3 -xCORE-AVX512 -fno-alias','-Ofast -xCORE-AVX512 -fno-alias']
+tags_kept = ['-O1','-O2','-O3','-Ofast','-O2 -xhost','-O2 -xCORE-AVX512','-O2 -ipo','-O2 -xCORE-AVX512 -fno-alias','-O2 -fno-alias','-O3 -xCORE-AVX512 -fno-alias','-Ofast -xCORE-AVX512 -fno-alias', '-O0']
 
 count = 0
 tags = []
@@ -61,7 +63,7 @@ lst = np.arange(1,len(tags))
 plt.figure(figsize=(30,15))
 plt.xlabel('Resolution', fontsize = "10")
 plt.ylabel('MFlop/s', fontsize = "10")
-plt.title('Group 6 initial performance data vs different compiler flags', fontsize = "10")
+plt.title('Group 6: Initial performance data vs different compiler flags', fontsize = "10")
 for i,tag in enumerate(tags_kept):
     plt.plot(resolution, MFlops[:,i], label = tag)
     plt.legend(loc = "upper right", fontsize = "10")
