@@ -1,4 +1,3 @@
-h039var@login01:~/Efficient_lab/heatdir> bash login_node_batch.sh > login_node_Ofast.out
 Resolutions       : (500, 1500, ... 4800)
 Iterations        : 40
 Algorithm         : 0 (Jacobi)
@@ -109,4 +108,3 @@ Resolution:  1500, Time: 0.253 (0.990 GFlop => 3917.16 MFlop/s, residual 0.23867
 Resolution:  2500, Time: 1.066 (2.750 GFlop => 2579.30 MFlop/s, residual 0.397703, 40 iterations)
 Resolution:  3500, Time: 2.179 (5.390 GFlop => 2473.25 MFlop/s, residual 0.556728, 40 iterations)
 Resolution:  4500, Time: 3.641 (8.910 GFlop => 2447.01 MFlop/s, residual 0.715752, 40 iterations)
-h039var@login01:~/Efficient_lab/heatdir>
