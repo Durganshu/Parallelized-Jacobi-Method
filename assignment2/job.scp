@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Job Name and Files (also --job-name)
+#SBATCH -J heat
+#SBATCH --ear=off
+#Output and error (also --output, --error):
+#SBATCH -o job.out
+#SBATCH -e job.out
+
+# Wall clock limit:
+#SBATCH --time=00:02:00
+#SBATCH --account=h039v
+#SBATCH --partition=test
+
+likwid-perfctr -C 0 -g L2CACHE -m ./heat test.dat >> logO3L2.txt
+
+
+
