@@ -1,0 +1,42 @@
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Xeon(R) Platinum 8174 CPU @ 3.10GHz
+CPU type:	Intel Skylake SP processor
+CPU clock:	2.69 GHz
+--------------------------------------------------------------------------------
+  200; 0.042; 2091.306
+--------------------------------------------------------------------------------
+Region JACOBI, Group 1: FLOPS_DP
++-------------------+------------+
+|    Region Info    | HWThread 0 |
++-------------------+------------+
+| RDTSC Runtime [s] |   0.004947 |
+|     call count    |        200 |
++-------------------+------------+
+
++------------------------------------------+---------+------------+
+|                   Event                  | Counter | HWThread 0 |
++------------------------------------------+---------+------------+
+|             INSTR_RETIRED_ANY            |  FIXC0  |   29940440 |
+|           CPU_CLK_UNHALTED_CORE          |  FIXC1  |   12285660 |
+|           CPU_CLK_UNHALTED_REF           |  FIXC2  |   14422430 |
+| FP_ARITH_INST_RETIRED_128B_PACKED_DOUBLE |   PMC0  |          0 |
+|    FP_ARITH_INST_RETIRED_SCALAR_DOUBLE   |   PMC1  |     642200 |
+| FP_ARITH_INST_RETIRED_256B_PACKED_DOUBLE |   PMC2  |    7840000 |
+| FP_ARITH_INST_RETIRED_512B_PACKED_DOUBLE |   PMC3  |          0 |
++------------------------------------------+---------+------------+
+
++----------------------+------------+
+|        Metric        | HWThread 0 |
++----------------------+------------+
+|  Runtime (RDTSC) [s] |     0.0049 |
+| Runtime unhalted [s] |     0.0046 |
+|      Clock [MHz]     |  2294.5816 |
+|          CPI         |     0.4103 |
+|     DP [MFLOP/s]     |  6468.6036 |
+|   AVX DP [MFLOP/s]   |  6338.7957 |
+|  AVX512 DP [MFLOP/s] |          0 |
+|   Packed [MUOPS/s]   |  1584.6989 |
+|   Scalar [MUOPS/s]   |   129.8079 |
+|  Vectorization ratio |    92.4289 |
++----------------------+------------+
+
