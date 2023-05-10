@@ -35,7 +35,6 @@ double residual_jacobi(double *u, unsigned sizex, unsigned sizey) {
  */
 void relax_jacobi(double *u, double *utmp, unsigned sizex, unsigned sizey) {
 	int i, j;
-	LIKWID_MARKER_START("JACOBI");
 	for (j = 1; j < sizex - 1; j++) {
 		for (i = 1; i < sizey - 1; i++) {
 			utmp[i * sizex + j] = 0.25 * (u[i * sizex + (j - 1)] +  // left
@@ -44,7 +43,6 @@ void relax_jacobi(double *u, double *utmp, unsigned sizex, unsigned sizey) {
 						u[(i + 1) * sizex + j]); // bottom
 		}
 	}
-	LIKWID_MARKER_STOP("JACOBI");
 	// copy from utmp to u
 
 	for (j = 1; j < sizex - 1; j++) {

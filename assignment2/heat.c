@@ -103,9 +103,10 @@ int main(int argc, char *argv[]) {
 			switch (param.algorithm) {
 
 			case 0: // JACOBI
-
+				LIKWID_MARKER_START("JACOBI");
 				relax_jacobi(param.u, param.uhelp, np, np);
 				residual = residual_jacobi(param.u, np, np);
+				LIKWID_MARKER_STOP("JACOBI");
 				break;
 
 			case 1: // GAUSS
