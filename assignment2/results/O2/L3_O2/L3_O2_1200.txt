@@ -3,36 +3,36 @@ CPU name:	Intel(R) Xeon(R) Platinum 8174 CPU @ 3.10GHz
 CPU type:	Intel Skylake SP processor
 CPU clock:	2.69 GHz
 --------------------------------------------------------------------------------
- 1200; 2.732; 1159.550
+ 1200; 2.660; 1191.152
 --------------------------------------------------------------------------------
 Region JACOBI, Group 1: L3CACHE
 +-------------------+------------+
 |    Region Info    | HWThread 0 |
 +-------------------+------------+
-| RDTSC Runtime [s] |   1.215046 |
+| RDTSC Runtime [s] |   2.629739 |
 |     call count    |        200 |
 +-------------------+------------+
 
 +--------------------------+---------+------------+
 |           Event          | Counter | HWThread 0 |
 +--------------------------+---------+------------+
-|     INSTR_RETIRED_ANY    |  FIXC0  | 3501290000 |
-|   CPU_CLK_UNHALTED_CORE  |  FIXC1  | 2698515000 |
-|   CPU_CLK_UNHALTED_REF   |  FIXC2  | 3167821000 |
-|  MEM_LOAD_RETIRED_L3_HIT |   PMC0  |    5014627 |
-| MEM_LOAD_RETIRED_L3_MISS |   PMC1  |      21181 |
-|     UOPS_RETIRED_ALL     |   PMC2  | 4372051000 |
+|     INSTR_RETIRED_ANY    |  FIXC0  | 7161787000 |
+|   CPU_CLK_UNHALTED_CORE  |  FIXC1  | 5986959000 |
+|   CPU_CLK_UNHALTED_REF   |  FIXC2  | 7028212000 |
+|  MEM_LOAD_RETIRED_L3_HIT |   PMC0  |   41328760 |
+| MEM_LOAD_RETIRED_L3_MISS |   PMC1  |     342037 |
+|     UOPS_RETIRED_ALL     |   PMC2  | 8425797000 |
 +--------------------------+---------+------------+
 
 +----------------------+--------------+
 |        Metric        |  HWThread 0  |
 +----------------------+--------------+
-|  Runtime (RDTSC) [s] |       1.2150 |
-| Runtime unhalted [s] |       1.0018 |
-|      Clock [MHz]     |    2294.5798 |
-|          CPI         |       0.7707 |
-|    L3 request rate   |       0.0012 |
-|     L3 miss rate     | 4.844637e-06 |
-|     L3 miss ratio    |       0.0042 |
+|  Runtime (RDTSC) [s] |       2.6297 |
+| Runtime unhalted [s] |       2.2227 |
+|      Clock [MHz]     |    2294.4973 |
+|          CPI         |       0.8360 |
+|    L3 request rate   |       0.0049 |
+|     L3 miss rate     | 4.059402e-05 |
+|     L3 miss ratio    |       0.0082 |
 +----------------------+--------------+
 

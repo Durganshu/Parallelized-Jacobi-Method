@@ -3,35 +3,35 @@ CPU name:	Intel(R) Xeon(R) Platinum 8174 CPU @ 3.10GHz
 CPU type:	Intel Skylake SP processor
 CPU clock:	2.69 GHz
 --------------------------------------------------------------------------------
- 2200; 16.947; 628.317
+ 2200; 16.939; 628.623
 --------------------------------------------------------------------------------
 Region JACOBI, Group 1: L2CACHE
 +-------------------+------------+
 |    Region Info    | HWThread 0 |
 +-------------------+------------+
-| RDTSC Runtime [s] |   8.517131 |
+| RDTSC Runtime [s] |  16.912940 |
 |     call count    |        200 |
 +-------------------+------------+
 
 +-----------------------+---------+-------------+
 |         Event         | Counter |  HWThread 0 |
 +-----------------------+---------+-------------+
-|   INSTR_RETIRED_ANY   |  FIXC0  | 11753480000 |
-| CPU_CLK_UNHALTED_CORE |  FIXC1  | 19246310000 |
-|  CPU_CLK_UNHALTED_REF |  FIXC2  | 22593500000 |
-| L2_TRANS_ALL_REQUESTS |   PMC0  |  3845779000 |
-|     L2_RQSTS_MISS     |   PMC1  |   246718800 |
+|   INSTR_RETIRED_ANY   |  FIXC0  | 24019390000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 38340440000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 45008490000 |
+| L2_TRANS_ALL_REQUESTS |   PMC0  |  8403764000 |
+|     L2_RQSTS_MISS     |   PMC1  |   658031900 |
 +-----------------------+---------+-------------+
 
 +----------------------+------------+
 |        Metric        | HWThread 0 |
 +----------------------+------------+
-|  Runtime (RDTSC) [s] |     8.5171 |
-| Runtime unhalted [s] |     7.1450 |
-|      Clock [MHz]     |  2294.6026 |
-|          CPI         |     1.6375 |
-|    L2 request rate   |     0.3272 |
-|     L2 miss rate     |     0.0210 |
-|     L2 miss ratio    |     0.0642 |
+|  Runtime (RDTSC) [s] |    16.9129 |
+| Runtime unhalted [s] |    14.2337 |
+|      Clock [MHz]     |  2294.5721 |
+|          CPI         |     1.5962 |
+|    L2 request rate   |     0.3499 |
+|     L2 miss rate     |     0.0274 |
+|     L2 miss ratio    |     0.0783 |
 +----------------------+------------+
 
