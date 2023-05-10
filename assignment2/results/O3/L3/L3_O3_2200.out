@@ -5,4 +5,4 @@ Num. Heat sources : 2
    1: (0.00, 0.00) 1.00 1.00 
    2: (1.00, 1.00) 1.00 0.50 
 Resolution:  2200residual 0.090270, 100 iterations
-Resolution:  2200, Time: 3.119 (10.648 GFlop => 3413.43 MFlop/s, residual 0.032121, 200 iterations)
+Resolution:  2200, Time: 3.242 (10.648 GFlop => 3284.22 MFlop/s, residual 0.032121, 200 iterations)

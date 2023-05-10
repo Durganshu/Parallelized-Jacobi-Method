@@ -3,36 +3,36 @@ CPU name:	Intel(R) Xeon(R) Platinum 8174 CPU @ 3.10GHz
 CPU type:	Intel Skylake SP processor
 CPU clock:	2.69 GHz
 --------------------------------------------------------------------------------
- 3200; 7.768; 2900.043
+ 3200; 7.756; 2904.756
 --------------------------------------------------------------------------------
 Region JACOBI, Group 1: L3CACHE
 +-------------------+------------+
 |    Region Info    | HWThread 0 |
 +-------------------+------------+
-| RDTSC Runtime [s] |   2.733414 |
+| RDTSC Runtime [s] |   7.729148 |
 |     call count    |        200 |
 +-------------------+------------+
 
-+--------------------------+---------+------------+
-|           Event          | Counter | HWThread 0 |
-+--------------------------+---------+------------+
-|     INSTR_RETIRED_ANY    |  FIXC0  | 6351361000 |
-|   CPU_CLK_UNHALTED_CORE  |  FIXC1  | 6169412000 |
-|   CPU_CLK_UNHALTED_REF   |  FIXC2  | 7242349000 |
-|  MEM_LOAD_RETIRED_L3_HIT |   PMC0  |    2364241 |
-| MEM_LOAD_RETIRED_L3_MISS |   PMC1  |    9866354 |
-|     UOPS_RETIRED_ALL     |   PMC2  | 8275038000 |
-+--------------------------+---------+------------+
++--------------------------+---------+-------------+
+|           Event          | Counter |  HWThread 0 |
++--------------------------+---------+-------------+
+|     INSTR_RETIRED_ANY    |  FIXC0  | 12736030000 |
+|   CPU_CLK_UNHALTED_CORE  |  FIXC1  | 17537190000 |
+|   CPU_CLK_UNHALTED_REF   |  FIXC2  | 20587230000 |
+|  MEM_LOAD_RETIRED_L3_HIT |   PMC0  |     2451826 |
+| MEM_LOAD_RETIRED_L3_MISS |   PMC1  |    14903490 |
+|     UOPS_RETIRED_ALL     |   PMC2  | 17739430000 |
++--------------------------+---------+-------------+
 
 +----------------------+------------+
 |        Metric        | HWThread 0 |
 +----------------------+------------+
-|  Runtime (RDTSC) [s] |     2.7334 |
-| Runtime unhalted [s] |     2.2903 |
-|      Clock [MHz]     |  2294.6034 |
-|          CPI         |     0.9714 |
-|    L3 request rate   |     0.0015 |
-|     L3 miss rate     |     0.0012 |
-|     L3 miss ratio    |     0.8067 |
+|  Runtime (RDTSC) [s] |     7.7291 |
+| Runtime unhalted [s] |     6.5106 |
+|      Clock [MHz]     |  2294.5760 |
+|          CPI         |     1.3770 |
+|    L3 request rate   |     0.0010 |
+|     L3 miss rate     |     0.0008 |
+|     L3 miss ratio    |     0.8587 |
 +----------------------+------------+
 
