@@ -3,35 +3,35 @@ CPU name:	Intel(R) Xeon(R) Platinum 8174 CPU @ 3.10GHz
 CPU type:	Intel Skylake SP processor
 CPU clock:	2.69 GHz
 --------------------------------------------------------------------------------
-  200; 0.029; 3023.219
+  200; 0.029; 3011.723
 --------------------------------------------------------------------------------
 Region JACOBI, Group 1: L2CACHE
 +-------------------+------------+
 |    Region Info    | HWThread 0 |
 +-------------------+------------+
-| RDTSC Runtime [s] |   0.004997 |
+| RDTSC Runtime [s] |   0.012029 |
 |     call count    |        200 |
 +-------------------+------------+
 
 +-----------------------+---------+------------+
 |         Event         | Counter | HWThread 0 |
 +-----------------------+---------+------------+
-|   INSTR_RETIRED_ANY   |  FIXC0  |   29889250 |
-| CPU_CLK_UNHALTED_CORE |  FIXC1  |   12065320 |
-|  CPU_CLK_UNHALTED_REF |  FIXC2  |   14160100 |
-| L2_TRANS_ALL_REQUESTS |   PMC0  |    3415779 |
-|     L2_RQSTS_MISS     |   PMC1  |      27255 |
+|   INSTR_RETIRED_ANY   |  FIXC0  |   66469090 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |   27830650 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |   32671730 |
+| L2_TRANS_ALL_REQUESTS |   PMC0  |    8241670 |
+|     L2_RQSTS_MISS     |   PMC1  |     207711 |
 +-----------------------+---------+------------+
 
 +----------------------+------------+
 |        Metric        | HWThread 0 |
 +----------------------+------------+
-|  Runtime (RDTSC) [s] |     0.0050 |
-| Runtime unhalted [s] |     0.0045 |
-|      Clock [MHz]     |  2295.1759 |
-|          CPI         |     0.4037 |
-|    L2 request rate   |     0.1143 |
-|     L2 miss rate     |     0.0009 |
-|     L2 miss ratio    |     0.0080 |
+|  Runtime (RDTSC) [s] |     0.0120 |
+| Runtime unhalted [s] |     0.0103 |
+|      Clock [MHz]     |  2294.5220 |
+|          CPI         |     0.4187 |
+|    L2 request rate   |     0.1240 |
+|     L2 miss rate     |     0.0031 |
+|     L2 miss ratio    |     0.0252 |
 +----------------------+------------+
 

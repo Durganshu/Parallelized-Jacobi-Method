@@ -3,35 +3,35 @@ CPU name:	Intel(R) Xeon(R) Platinum 8174 CPU @ 3.10GHz
 CPU type:	Intel Skylake SP processor
 CPU clock:	2.69 GHz
 --------------------------------------------------------------------------------
- 3200; 7.761; 2902.820
+ 3200; 7.726; 2915.945
 --------------------------------------------------------------------------------
 Region JACOBI, Group 1: L2CACHE
 +-------------------+------------+
 |    Region Info    | HWThread 0 |
 +-------------------+------------+
-| RDTSC Runtime [s] |   2.723195 |
+| RDTSC Runtime [s] |   7.706077 |
 |     call count    |        200 |
 +-------------------+------------+
 
-+-----------------------+---------+------------+
-|         Event         | Counter | HWThread 0 |
-+-----------------------+---------+------------+
-|   INSTR_RETIRED_ANY   |  FIXC0  | 6351335000 |
-| CPU_CLK_UNHALTED_CORE |  FIXC1  | 6146637000 |
-|  CPU_CLK_UNHALTED_REF |  FIXC2  | 7215611000 |
-| L2_TRANS_ALL_REQUESTS |   PMC0  | 3333192000 |
-|     L2_RQSTS_MISS     |   PMC1  |  512746800 |
-+-----------------------+---------+------------+
++-----------------------+---------+-------------+
+|         Event         | Counter |  HWThread 0 |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 12736000000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 17525720000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 20573760000 |
+| L2_TRANS_ALL_REQUESTS |   PMC0  |  7468674000 |
+|     L2_RQSTS_MISS     |   PMC1  |  1281666000 |
++-----------------------+---------+-------------+
 
 +----------------------+------------+
 |        Metric        | HWThread 0 |
 +----------------------+------------+
-|  Runtime (RDTSC) [s] |     2.7232 |
-| Runtime unhalted [s] |     2.2819 |
-|      Clock [MHz]     |  2294.5796 |
-|          CPI         |     0.9678 |
-|    L2 request rate   |     0.5248 |
-|     L2 miss rate     |     0.0807 |
-|     L2 miss ratio    |     0.1538 |
+|  Runtime (RDTSC) [s] |     7.7061 |
+| Runtime unhalted [s] |     6.5063 |
+|      Clock [MHz]     |  2294.5931 |
+|          CPI         |     1.3761 |
+|    L2 request rate   |     0.5864 |
+|     L2 miss rate     |     0.1006 |
+|     L2 miss ratio    |     0.1716 |
 +----------------------+------------+
 

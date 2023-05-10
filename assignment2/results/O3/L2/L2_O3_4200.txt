@@ -3,35 +3,35 @@ CPU name:	Intel(R) Xeon(R) Platinum 8174 CPU @ 3.10GHz
 CPU type:	Intel Skylake SP processor
 CPU clock:	2.69 GHz
 --------------------------------------------------------------------------------
- 4200; 13.519; 2870.604
+ 4200; 13.562; 2861.488
 --------------------------------------------------------------------------------
 Region JACOBI, Group 1: L2CACHE
 +-------------------+------------+
 |    Region Info    | HWThread 0 |
 +-------------------+------------+
-| RDTSC Runtime [s] |   4.758491 |
+| RDTSC Runtime [s] |  13.541030 |
 |     call count    |        200 |
 +-------------------+------------+
 
 +-----------------------+---------+-------------+
 |         Event         | Counter |  HWThread 0 |
 +-----------------------+---------+-------------+
-|   INSTR_RETIRED_ANY   |  FIXC0  | 10905500000 |
-| CPU_CLK_UNHALTED_CORE |  FIXC1  | 10736320000 |
-|  CPU_CLK_UNHALTED_REF |  FIXC2  | 12603510000 |
-| L2_TRANS_ALL_REQUESTS |   PMC0  |  5382668000 |
-|     L2_RQSTS_MISS     |   PMC1  |   883115000 |
+|   INSTR_RETIRED_ANY   |  FIXC0  | 21843180000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 30693780000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 36031900000 |
+| L2_TRANS_ALL_REQUESTS |   PMC0  | 12576340000 |
+|     L2_RQSTS_MISS     |   PMC1  |  2207440000 |
 +-----------------------+---------+-------------+
 
 +----------------------+------------+
 |        Metric        | HWThread 0 |
 +----------------------+------------+
-|  Runtime (RDTSC) [s] |     4.7585 |
-| Runtime unhalted [s] |     3.9859 |
-|      Clock [MHz]     |  2294.5129 |
-|          CPI         |     0.9845 |
-|    L2 request rate   |     0.4936 |
-|     L2 miss rate     |     0.0810 |
-|     L2 miss ratio    |     0.1641 |
+|  Runtime (RDTSC) [s] |    13.5410 |
+| Runtime unhalted [s] |    11.3948 |
+|      Clock [MHz]     |  2294.5966 |
+|          CPI         |     1.4052 |
+|    L2 request rate   |     0.5758 |
+|     L2 miss rate     |     0.1011 |
+|     L2 miss ratio    |     0.1755 |
 +----------------------+------------+
 
