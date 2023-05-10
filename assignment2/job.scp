@@ -4,15 +4,15 @@
 #SBATCH -J heat
 #SBATCH --ear=off
 #Output and error (also --output, --error):
-#SBATCH -o job.out
-#SBATCH -e job.out
+#SBATCH -o results/O2/FLOPS_O2/FLOPS_O2_3200.out
+#SBATCH -e results/O2/FLOPS_O2/FLOPS_O2_3200.out
 
 # Wall clock limit:
 #SBATCH --time=00:02:00
 #SBATCH --account=h039v
 #SBATCH --partition=test
 
-likwid-perfctr -C 0 -g L2CACHE -m ./heat test.dat >> logO3L2.txt
+likwid-perfctr -C 0 -g FLOPS_DP -m ./heat test.dat > results/O2/FLOPS_O2/FLOPS_O2_3200.txt
 
 
 

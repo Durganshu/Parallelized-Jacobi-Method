@@ -3,24 +3,24 @@ CPU name:	Intel(R) Xeon(R) Platinum 8174 CPU @ 3.10GHz
 CPU type:	Intel Skylake SP processor
 CPU clock:	2.69 GHz
 --------------------------------------------------------------------------------
- 3200; 36.733; 613.288
+ 3200; 36.998; 608.898
 --------------------------------------------------------------------------------
 Region JACOBI, Group 1: FLOPS_DP
 +-------------------+------------+
 |    Region Info    | HWThread 0 |
 +-------------------+------------+
-| RDTSC Runtime [s] |  19.620300 |
+| RDTSC Runtime [s] |  36.958570 |
 |     call count    |        200 |
 +-------------------+------------+
 
 +------------------------------------------+---------+-------------+
 |                   Event                  | Counter |  HWThread 0 |
 +------------------------------------------+---------+-------------+
-|             INSTR_RETIRED_ANY            |  FIXC0  | 24855740000 |
-|           CPU_CLK_UNHALTED_CORE          |  FIXC1  | 44507290000 |
-|           CPU_CLK_UNHALTED_REF           |  FIXC2  | 52247650000 |
-| FP_ARITH_INST_RETIRED_128B_PACKED_DOUBLE |   PMC0  |  4096000000 |
-|    FP_ARITH_INST_RETIRED_SCALAR_DOUBLE   |   PMC1  |        2200 |
+|             INSTR_RETIRED_ANY            |  FIXC0  | 50777090000 |
+|           CPU_CLK_UNHALTED_CORE          |  FIXC1  | 83674480000 |
+|           CPU_CLK_UNHALTED_REF           |  FIXC2  | 98226610000 |
+| FP_ARITH_INST_RETIRED_128B_PACKED_DOUBLE |   PMC0  | 11259520000 |
+|    FP_ARITH_INST_RETIRED_SCALAR_DOUBLE   |   PMC1  |     9602600 |
 | FP_ARITH_INST_RETIRED_256B_PACKED_DOUBLE |   PMC2  |           0 |
 | FP_ARITH_INST_RETIRED_512B_PACKED_DOUBLE |   PMC3  |           0 |
 +------------------------------------------+---------+-------------+
@@ -28,15 +28,15 @@ Region JACOBI, Group 1: FLOPS_DP
 +----------------------+------------+
 |        Metric        | HWThread 0 |
 +----------------------+------------+
-|  Runtime (RDTSC) [s] |    19.6203 |
-| Runtime unhalted [s] |    16.5230 |
-|      Clock [MHz]     |  2294.5960 |
-|          CPI         |     1.7906 |
-|     DP [MFLOP/s]     |   417.5269 |
+|  Runtime (RDTSC) [s] |    36.9586 |
+| Runtime unhalted [s] |    31.0638 |
+|      Clock [MHz]     |  2294.5748 |
+|          CPI         |     1.6479 |
+|     DP [MFLOP/s]     |   609.5648 |
 |   AVX DP [MFLOP/s]   |          0 |
 |  AVX512 DP [MFLOP/s] |          0 |
-|   Packed [MUOPS/s]   |   208.7634 |
-|   Scalar [MUOPS/s]   |     0.0001 |
-|  Vectorization ratio |    99.9999 |
+|   Packed [MUOPS/s]   |   304.6525 |
+|   Scalar [MUOPS/s]   |     0.2598 |
+|  Vectorization ratio |    99.9148 |
 +----------------------+------------+
 
