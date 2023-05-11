@@ -8,7 +8,7 @@
 #define JACOBI_H_INCLUDED
 
 #include <stdio.h>
-#include "likwid-marker.h"
+//#include "likwid-marker.h"
 
 // configuration
 

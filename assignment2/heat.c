@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 	unsigned iter;
 	FILE *infile, *resfile;
 	char *resfilename;
-	LIKWID_MARKER_INIT;
+	//LIKWID_MARKER_INIT;
 	// algorithmic parameters
 	algoparam_t param;
 	int np,i;
@@ -103,10 +103,10 @@ int main(int argc, char *argv[]) {
 			switch (param.algorithm) {
 
 			case 0: // JACOBI
-				LIKWID_MARKER_START("JACOBI");
+				//LIKWID_MARKER_START("JACOBI");
 				relax_jacobi(param.u, param.uhelp, np, np);
 				residual = residual_jacobi(param.u, np, np);
-				LIKWID_MARKER_STOP("JACOBI");
+				//LIKWID_MARKER_STOP("JACOBI");
 				break;
 
 			case 1: // GAUSS
@@ -163,7 +163,7 @@ int main(int argc, char *argv[]) {
 
 	finalize(&param);
 
-	LIKWID_MARKER_CLOSE;
+	//LIKWID_MARKER_CLOSE;
 
 	return 0;
 }
