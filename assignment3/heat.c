@@ -104,8 +104,8 @@ int main(int argc, char *argv[]) {
 
 			case 0: // JACOBI
 				//LIKWID_MARKER_START("JACOBI");
-				relax_jacobi(param.u, param.uhelp, np, np);
-				residual = residual_jacobi(param.u, np, np);
+				residual = relax_jacobi(param.u, param.uhelp, np, np);
+				// residual = residual_jacobi(param.u, np, np);
 				//LIKWID_MARKER_STOP("JACOBI");
 				break;
 

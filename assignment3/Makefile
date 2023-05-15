@@ -1,6 +1,6 @@
 # Intel compiler
-CC =  icc
-CFLAGS = -O2
+CC =  gcc
+CFLAGS = -O3
 
 #-xhost -I/dss/lrzsys/sys/spack/release/22.2.1/opt/skylake_avx512/likwid/5.2.2-intel-kajex7c/include -L/dss/lrzsys/sys/spack/release/22.2.1/opt/skylake_avx512/likwid/5.2.2-intel-kajex7c/lib/ -DLIKWID_PERFMON
 
