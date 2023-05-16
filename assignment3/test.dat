@@ -1,4 +1,4 @@
-300     # iterations
+5     # iterations
 2200   # initial resolution
 2200   # max resolution (spatial resolution)
 1000   # resolution step size

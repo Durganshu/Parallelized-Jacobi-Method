@@ -58,7 +58,13 @@ int initialize( algoparam_t *param )
 		    (param->heatsrcs[i].range-dist) /
 		    param->heatsrcs[i].range *
 		    param->heatsrcs[i].temp;
+
+		(param->uhelp)[j] +=
+		    (param->heatsrcs[i].range-dist) /
+		    param->heatsrcs[i].range *
+		    param->heatsrcs[i].temp;
 	    }
+		
 	}
       
 	/* bottom row */
@@ -71,6 +77,11 @@ int initialize( algoparam_t *param )
 	    if( dist <= param->heatsrcs[i].range )
 	    {
 		(param->u)[(np-1)*np+j]+=
+		    (param->heatsrcs[i].range-dist) / 
+		    param->heatsrcs[i].range * 
+		    param->heatsrcs[i].temp;
+
+		(param->uhelp)[(np-1)*np+j]+=
 		    (param->heatsrcs[i].range-dist) / 
 		    param->heatsrcs[i].range * 
 		    param->heatsrcs[i].temp;
@@ -90,6 +101,10 @@ int initialize( algoparam_t *param )
 		    (param->heatsrcs[i].range-dist) / 
 		    param->heatsrcs[i].range *
 		    param->heatsrcs[i].temp;
+		(param->uhelp)[ j*np ]+=
+		    (param->heatsrcs[i].range-dist) / 
+		    param->heatsrcs[i].range *
+		    param->heatsrcs[i].temp;
 	    }
 	}
       
@@ -103,6 +118,10 @@ int initialize( algoparam_t *param )
 	    if( dist <= param->heatsrcs[i].range )
 	    {
 		(param->u)[ j*np+(np-1) ]+=
+		    (param->heatsrcs[i].range-dist) /
+		    param->heatsrcs[i].range *
+		    param->heatsrcs[i].temp;
+		(param->uhelp)[ j*np+(np-1) ]+=
 		    (param->heatsrcs[i].range-dist) /
 		    param->heatsrcs[i].range *
 		    param->heatsrcs[i].temp;

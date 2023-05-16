@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 
-			iter++;
+			iter = iter + 2;
 
 			// solution good enough ?
 			if (residual < 0.000005)
@@ -126,10 +126,10 @@ int main(int argc, char *argv[]) {
 			if (param.maxiter > 0 && iter >= param.maxiter)
 				break;
 
-			if (iter % 100 == 0)
+			// if (iter % 100 == 0)
 				fprintf(stderr, "residual %f, %d iterations\n", residual, iter);
 		}
-
+		
 		// Flop count after <i> iterations
 		flop = iter * 11.0 * param.act_res * param.act_res;
 		// stopping time
