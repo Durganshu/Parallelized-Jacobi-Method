@@ -104,8 +104,8 @@ int main(int argc, char *argv[]) {
 
 			case 0: // JACOBI
 				//LIKWID_MARKER_START("JACOBI");
-				residual = relax_jacobi(param.u, param.uhelp, np, np);
-				// residual = residual_jacobi(param.u, np, np);
+				relax_jacobi(&param.u, &param.uhelp, np, np);
+				residual = residual_jacobi(param.u, np, np);
 				//LIKWID_MARKER_STOP("JACOBI");
 				break;
 
@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 
-			iter = iter + 2;
+			iter++;
 
 			// solution good enough ?
 			if (residual < 0.000005)
@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
 			if (param.maxiter > 0 && iter >= param.maxiter)
 				break;
 
-			// if (iter % 100 == 0)
+			if (iter % 100 == 0)
 				fprintf(stderr, "residual %f, %d iterations\n", residual, iter);
 		}
 		
