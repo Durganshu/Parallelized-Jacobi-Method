@@ -37,13 +37,13 @@ double residual_jacobi(double *u, unsigned sizex, unsigned sizey) {
 double relax_jacobi( double **u, double **utmp, unsigned sizex, unsigned sizey ){
 	double diff, unew = 0.0, sum = 0.0;
 
-	int block_size = (sizex/2) - 1;
-	//block_size = 4 = 10/2 - 1
+	int block_size = (sizex / 2) + 1;
+	//block_size = 6 = 10/2 + 1
 
-	for (int i = 1; i < (sizey-1); i=i+block_size) {
-		for (int j = 1; j < (sizex-1); j=j+block_size) {
-			for (int ib = 0; ib < block_size; ib++) {
-				for (int jb = 0; jb < block_size; jb++) {
+	for (int i = 0; i < (sizey-2); i = i + block_size - 2) {
+		for (int j = 0; j < (sizex-2); j = j + block_size - 2) {
+			for (int ib = 1; ib < block_size - 1; ib++) {
+				for (int jb = 1; jb < block_size - 1; jb++) {
 		
 					(*utmp)[(i+ib) * sizex + (j+jb)] = 0.25 * ((*u)[(i+ib) * sizex + (j+jb - 1)] +  // left
 						(*u)[(i+ib) * sizex + (j+jb + 1)] +  // right
