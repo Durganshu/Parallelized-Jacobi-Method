@@ -35,26 +35,26 @@ double residual_jacobi(double *u, unsigned sizex, unsigned sizey) {
  * One Jacobi iteration step
  */
 double relax_jacobi( double **u, double **utmp, unsigned sizex, unsigned sizey ){
-	double diff, unew = 0.0, sum = 0.0;
+	 int i, j;
+    double diff, sum = 0.0;
+    double *temp = *u;
+    
+    int block_size = (64 / sizeof(double))/4;
 
-	int block_size = (sizex / 2) + 1;
-	//block_size = 6 = 10/2 + 1
-
-	for (int i = 0; i < (sizey-2); i = i + block_size - 2) {
-		for (int j = 0; j < (sizex-2); j = j + block_size - 2) {
-			for (int ib = 1; ib < block_size - 1; ib++) {
-				for (int jb = 1; jb < block_size - 1; jb++) {
-		
-					(*utmp)[(i+ib) * sizex + (j+jb)] = 0.25 * ((*u)[(i+ib) * sizex + (j+jb - 1)] +  // left
-						(*u)[(i+ib) * sizex + (j+jb + 1)] +  // right
-						(*u)[(i+ib - 1) * sizex + j+jb] +  // top
-						(*u)[(i+ib + 1) * sizex + j+jb]); // bottom
-				}
-			}
-		}
-	}
-
-	double* temp = *u;
+    for (i = 1; i < sizey - 1; i += block_size) {
+        for (j = 1; j < sizex - 1; j += block_size) {
+            for (int ib = i; ib < i + block_size; ib++) {
+                for (int jb = j; jb < j + block_size; jb++) {
+                    (*utmp)[ib * sizex + jb] = 0.25 * ((*u)[ib * sizex + (jb - 1)] +  // left
+                                                       (*u)[ib * sizex + (jb + 1)] +  // right
+                                                       (*u)[(ib - 1) * sizex + jb] +  // top
+                                                       (*u)[(ib + 1) * sizex + jb]); // bottom
+                }
+            }
+        }
+    }
+    
+    // Swap pointers to update the main array
     *u = *utmp;
     *utmp = temp;
 	// for (i = 1; i < sizey - 1; i++) {
