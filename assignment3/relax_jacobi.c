@@ -35,46 +35,17 @@ double residual_jacobi(double *u, unsigned sizex, unsigned sizey) {
  * One Jacobi iteration step
  */
 double relax_jacobi( double **u, double **utmp, unsigned sizex, unsigned sizey ){
-	double diff, unew = 0.0, sum = 0.0;
+	double diff, sum = 0.0;
+	double *temp = *u;
+	for (int i = 1; i < sizey - 1; i++) {
+		for (int j = 1; j < sizex - 1; j++) {
+			(*utmp)[i * sizex + j] = 0.25 * ((*u)[i * sizex + (j - 1)] +  // left
+						(*u)[i * sizex + (j + 1)] +  // right
+						(*u)[(i - 1) * sizex + j] +  // top
+						(*u)[(i + 1) * sizex + j]); // bottom
 
-	int block_size = (sizex/2) - 1;
-	//block_size = 4 = 10/2 - 1
-
-	for (int i = 1; i < (sizey-1); i=i+block_size) {
-		for (int j = 1; j < (sizex-1); j=j+block_size) {
-			for (int ib = 0; ib < block_size; ib++) {
-				for (int jb = 0; jb < block_size; jb++) {
-		
-					(*utmp)[(i+ib) * sizex + (j+jb)] = 0.25 * ((*u)[(i+ib) * sizex + (j+jb - 1)] +  // left
-						(*u)[(i+ib) * sizex + (j+jb + 1)] +  // right
-						(*u)[(i+ib - 1) * sizex + j+jb] +  // top
-						(*u)[(i+ib + 1) * sizex + j+jb]); // bottom
-				}
-			}
 		}
 	}
-
-	double* temp = *u;
-    *u = *utmp;
-    *utmp = temp;
-	// for (i = 1; i < sizey - 1; i++) {
-	// 	for (j = 1; j < sizex - 1; j++) {
-			
-	// 		u[i * sizex + j] = 0.25 * (utmp[i * sizex + (j - 1)] +  // left
-	// 					utmp[i * sizex + (j + 1)] +  // right
-	// 					utmp[(i - 1) * sizex + j] +  // top
-	// 					utmp[(i + 1) * sizex + j]); // bottom
-			
-	// 		diff = u[i * sizex + j] - utmp[i * sizex + j];
-	// 		sum += diff * diff;
-	// 	}
-	// }
-	// // copy from utmp to u
-	// for (i = 1; i < sizey - 1; i++) {
-	// 	for (j = 1; j < sizex - 1; j++) {
-		
-	// 		u[i * sizex + j] = utmp[i * sizex + j];
-	// 	}
-	// }
-	//return sum;
+	*u = *utmp;
+  	*utmp = temp;
 }
