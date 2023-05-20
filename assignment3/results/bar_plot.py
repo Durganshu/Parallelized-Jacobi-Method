@@ -33,7 +33,7 @@ ax.legend(prop = { "size": 15 })
 plt.title("Group 6: Sequential optimization",fontsize=15)
 
 plt.show()
-fig.savefig('Sequential_optimization.png',
-            format='png',
-            dpi=100,
-            bbox_inches='tight')
+# fig.savefig('Sequential_optimization.png',
+#             format='png',
+#             dpi=100,
+#             bbox_inches='tight')
