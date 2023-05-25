@@ -1,0 +1,48 @@
+2
+Resolutions       : (2000, 6000, ... 6500)
+Iterations        : 50
+Num. Heat sources : 2
+   1: (0.00, 0.00) 1.00 1.00 
+   2: (1.00, 1.00) 1.00 0.50 
+4
+Resolutions       : (2000, 6000, ... 6500)
+Iterations        : 50
+Num. Heat sources : 2
+   1: (0.00, 0.00) 1.00 1.00 
+   2: (1.00, 1.00) 1.00 0.50 
+8
+Resolutions       : (2000, 6000, ... 6500)
+Iterations        : 50
+Num. Heat sources : 2
+   1: (0.00, 0.00) 1.00 1.00 
+   2: (1.00, 1.00) 1.00 0.50 
+12
+Resolutions       : (2000, 6000, ... 6500)
+Iterations        : 50
+Num. Heat sources : 2
+   1: (0.00, 0.00) 1.00 1.00 
+   2: (1.00, 1.00) 1.00 0.50 
+16
+Resolutions       : (2000, 6000, ... 6500)
+Iterations        : 50
+Num. Heat sources : 2
+   1: (0.00, 0.00) 1.00 1.00 
+   2: (1.00, 1.00) 1.00 0.50 
+24
+Resolutions       : (2000, 6000, ... 6500)
+Iterations        : 50
+Num. Heat sources : 2
+   1: (0.00, 0.00) 1.00 1.00 
+   2: (1.00, 1.00) 1.00 0.50 
+32
+Resolutions       : (2000, 6000, ... 6500)
+Iterations        : 50
+Num. Heat sources : 2
+   1: (0.00, 0.00) 1.00 1.00 
+   2: (1.00, 1.00) 1.00 0.50 
+48
+Resolutions       : (2000, 6000, ... 6500)
+Iterations        : 50
+Num. Heat sources : 2
+   1: (0.00, 0.00) 1.00 1.00 
+   2: (1.00, 1.00) 1.00 0.50 

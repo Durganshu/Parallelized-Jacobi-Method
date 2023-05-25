@@ -1,0 +1,196 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+Intel(R) C Intel(R) 64 Compiler Classic for applications running on Intel(R) 64, Version 2021.4.0 Build 20210910_000000
+
+Compiler options: -O3 -fno-alias -xhost -parallel -qopt-report-phase=par -qopt-report:5 -c -o misc.o
+
+Begin optimization report for: initialize(algoparam_t *)
+
+    Report from: Auto-parallelization optimizations [par]
+
+
+LOOP BEGIN at misc.c(40,5)
+<Multiversioned v1>
+   remark #17108: loop was not parallelized: insufficient computational work
+
+   LOOP BEGIN at misc.c(41,6)
+   <Peeled loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at misc.c(41,6)
+      remark #17108: loop was not parallelized: insufficient computational work
+   LOOP END
+
+   LOOP BEGIN at misc.c(41,6)
+   <Remainder loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at misc.c(41,6)
+   <Remainder loop for vectorization>
+   LOOP END
+LOOP END
+
+LOOP BEGIN at misc.c(40,5)
+<Multiversioned v2>
+   remark #17104: loop was not parallelized: existence of parallel dependence
+   remark #17106: parallel dependence: assumed OUTPUT dependence between param->u[i*np+j] (42:7) and param->uhelp[i*np+j] (43:4)
+   remark #17106: parallel dependence: assumed OUTPUT dependence between param->uhelp[i*np+j] (43:4) and param->u[i*np+j] (42:7)
+
+   LOOP BEGIN at misc.c(41,6)
+      remark #17104: loop was not parallelized: existence of parallel dependence
+      remark #17106: parallel dependence: assumed OUTPUT dependence between param->u[i*np+j] (42:7) and param->uhelp[i*np+j] (43:4)
+      remark #17106: parallel dependence: assumed OUTPUT dependence between param->uhelp[i*np+j] (43:4) and param->u[i*np+j] (42:7)
+   LOOP END
+
+   LOOP BEGIN at misc.c(41,6)
+   <Remainder>
+   LOOP END
+LOOP END
+
+LOOP BEGIN at misc.c(53,5)
+   remark #17104: loop was not parallelized: existence of parallel dependence
+   remark #17106: parallel dependence: assumed OUTPUT dependence between param->u[j] (64:4) and param->u[j*np+np-1] (112:4)
+   remark #17106: parallel dependence: assumed OUTPUT dependence between param->u[j*np+np-1] (112:4) and param->u[j] (64:4)
+
+   LOOP BEGIN at misc.c(56,2)
+   <Peeled loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at misc.c(56,2)
+      remark #17108: loop was not parallelized: insufficient computational work
+   LOOP END
+
+   LOOP BEGIN at misc.c(72,2)
+   <Peeled loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at misc.c(72,2)
+      remark #17108: loop was not parallelized: insufficient computational work
+   LOOP END
+
+   LOOP BEGIN at misc.c(88,2)
+      remark #17108: loop was not parallelized: insufficient computational work
+   LOOP END
+
+   LOOP BEGIN at misc.c(88,2)
+   <Remainder loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at misc.c(104,2)
+      remark #17108: loop was not parallelized: insufficient computational work
+   LOOP END
+
+   LOOP BEGIN at misc.c(104,2)
+   <Remainder loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at misc.c(56,2)
+   <Remainder loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at misc.c(72,2)
+   <Remainder loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at misc.c(88,2)
+   <Remainder loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at misc.c(104,2)
+   <Remainder loop for vectorization>
+   LOOP END
+LOOP END
+===========================================================================
+
+Begin optimization report for: write_image(FILE *, double *, unsigned int, unsigned int)
+
+    Report from: Auto-parallelization optimizations [par]
+
+
+LOOP BEGIN at misc.c(163,5)
+   remark #17108: loop was not parallelized: insufficient computational work
+LOOP END
+
+LOOP BEGIN at misc.c(168,5)
+   remark #17108: loop was not parallelized: insufficient computational work
+LOOP END
+
+LOOP BEGIN at misc.c(173,5)
+   remark #17108: loop was not parallelized: insufficient computational work
+LOOP END
+
+LOOP BEGIN at misc.c(178,5)
+   remark #17108: loop was not parallelized: insufficient computational work
+LOOP END
+
+LOOP BEGIN at misc.c(188,5)
+   remark #17108: loop was not parallelized: insufficient computational work
+
+   LOOP BEGIN at misc.c(190,2)
+   <Peeled loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at misc.c(190,2)
+      remark #17108: loop was not parallelized: insufficient computational work
+   LOOP END
+
+   LOOP BEGIN at misc.c(190,2)
+   <Remainder loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at misc.c(190,2)
+   <Remainder loop for vectorization>
+   LOOP END
+LOOP END
+
+LOOP BEGIN at misc.c(204,5)
+   remark #17104: loop was not parallelized: existence of parallel dependence
+   remark #17106: parallel dependence: assumed OUTPUT dependence between call:fprintf(FILE *__restrict__, const char *__restrict__, ...) (209:6) and call:fprintf(FILE *__restrict__, const char *__restrict__, ...) (211:2)
+   remark #17106: parallel dependence: assumed OUTPUT dependence between call:fprintf(FILE *__restrict__, const char *__restrict__, ...) (211:2) and call:fprintf(FILE *__restrict__, const char *__restrict__, ...) (209:6)
+
+   LOOP BEGIN at misc.c(206,2)
+      remark #17104: loop was not parallelized: existence of parallel dependence
+      remark #17106: parallel dependence: assumed OUTPUT dependence between call:fprintf(FILE *__restrict__, const char *__restrict__, ...) (209:6) and call:fprintf(FILE *__restrict__, const char *__restrict__, ...) (209:6)
+      remark #17106: parallel dependence: assumed OUTPUT dependence between call:fprintf(FILE *__restrict__, const char *__restrict__, ...) (209:6) and call:fprintf(FILE *__restrict__, const char *__restrict__, ...) (209:6)
+   LOOP END
+LOOP END
+===========================================================================
+
+Begin optimization report for: coarsen(double *, unsigned int, unsigned int, double *, unsigned int, unsigned int)
+
+    Report from: Auto-parallelization optimizations [par]
+
+
+LOOP BEGIN at misc.c(241,5)
+   remark #17104: loop was not parallelized: existence of parallel dependence
+   remark #17106: parallel dependence: assumed OUTPUT dependence between unew[i*newx+j] (252:8) and unew[i*newx+j] (252:8)
+   remark #17106: parallel dependence: assumed OUTPUT dependence between unew[i*newx+j] (252:8) and unew[i*newx+j] (252:8)
+
+   LOOP BEGIN at misc.c(243,8)
+      remark #17109: LOOP WAS AUTO-PARALLELIZED
+      remark #17101: parallel loop shared={ .2 } private={ } firstprivate={ stopx jj temp l k stepx oldx ii uold oldy stepy newx unew j i } lastprivate={ } firstlastprivate={ } reduction={ }
+
+      LOOP BEGIN at misc.c(246,11)
+         remark #25460: No loop optimizations reported
+
+         LOOP BEGIN at misc.c(247,10)
+            remark #25460: No loop optimizations reported
+         LOOP END
+      LOOP END
+   LOOP END
+LOOP END
+
+LOOP BEGIN at misc.c(243,8)
+   remark #25460: No loop optimizations reported
+
+   LOOP BEGIN at misc.c(246,11)
+      remark #17102: loop was not parallelized: not a parallelization candidate
+
+      LOOP BEGIN at misc.c(247,10)
+         remark #17102: loop was not parallelized: not a parallelization candidate
+      LOOP END
+   LOOP END
+LOOP END
+===========================================================================

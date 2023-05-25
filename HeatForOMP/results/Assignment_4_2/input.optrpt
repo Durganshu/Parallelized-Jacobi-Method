@@ -1,0 +1,27 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+Intel(R) C Intel(R) 64 Compiler Classic for applications running on Intel(R) 64, Version 2021.4.0 Build 20210910_000000
+
+Compiler options: -O3 -fno-alias -xhost -parallel -qopt-report-phase=par -qopt-report:5 -c -o input.o
+
+Begin optimization report for: read_input(FILE *, algoparam_t *)
+
+    Report from: Auto-parallelization optimizations [par]
+
+
+LOOP BEGIN at input.c(53,3)
+   remark #17102: loop was not parallelized: not a parallelization candidate
+LOOP END
+===========================================================================
+
+Begin optimization report for: print_params(algoparam_t *)
+
+    Report from: Auto-parallelization optimizations [par]
+
+
+LOOP BEGIN at input.c(81,3)
+   remark #17102: loop was not parallelized: not a parallelization candidate
+LOOP END
+===========================================================================

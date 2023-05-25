@@ -1,0 +1,59 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+Intel(R) C Intel(R) 64 Compiler Classic for applications running on Intel(R) 64, Version 2021.4.0 Build 20210910_000000
+
+Compiler options: -O3 -fno-alias -xhost -parallel -qopt-report-phase=par -qopt-report:5 -c -o relax_jacobi.o
+
+Begin optimization report for: relax_jacobi(double **, double **, unsigned int, unsigned int)
+
+    Report from: Auto-parallelization optimizations [par]
+
+
+LOOP BEGIN at relax_jacobi.c(22,3)
+   remark #17109: LOOP WAS AUTO-PARALLELIZED
+   remark #17101: parallel loop shared={ .2 } private={ } firstprivate={ sizey ii iim1 iip1 j diff sizex u utmp i } lastprivate={ } firstlastprivate={ } reduction={ sum }
+
+   LOOP BEGIN at relax_jacobi.c(28,5)
+   <Peeled loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at relax_jacobi.c(28,5)
+      remark #25460: No loop optimizations reported
+   LOOP END
+
+   LOOP BEGIN at relax_jacobi.c(28,5)
+   <Remainder loop for vectorization>
+   LOOP END
+LOOP END
+
+LOOP BEGIN at relax_jacobi.c(28,5)
+<Peeled loop for vectorization>
+LOOP END
+
+LOOP BEGIN at relax_jacobi.c(28,5)
+   remark #25460: No loop optimizations reported
+LOOP END
+
+LOOP BEGIN at relax_jacobi.c(28,5)
+<Remainder loop for vectorization>
+LOOP END
+
+LOOP BEGIN at relax_jacobi.c(22,3)
+   remark #25460: No loop optimizations reported
+
+   LOOP BEGIN at relax_jacobi.c(28,5)
+   <Peeled loop for vectorization>
+   LOOP END
+
+   LOOP BEGIN at relax_jacobi.c(28,5)
+      remark #17109: LOOP WAS AUTO-PARALLELIZED
+      remark #17101: parallel loop shared={ .2 } private={ } firstprivate={ sizex diff iip1 u iim1 ii utmp j i } lastprivate={ } firstlastprivate={ } reduction={ sum }
+   LOOP END
+
+   LOOP BEGIN at relax_jacobi.c(28,5)
+   <Remainder loop for vectorization>
+   LOOP END
+LOOP END
+===========================================================================
