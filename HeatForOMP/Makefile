@@ -1,5 +1,7 @@
-CC = icc 
-CFLAGS = -O3 -fno-alias -xhost -parallel -qopt-report-phase=par -qopt-report:5 -par-num-threads=2
+CC = icc -fopenmp
+CFLAGS = -O3 -fno-alias -xhost 
+#-parallel -qopt-report-phase=par -qopt-report:5 
+#-par-num-threads=2
 
 
 all: heat 

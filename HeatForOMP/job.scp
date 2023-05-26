@@ -20,36 +20,39 @@
 
 # vtune -collect performance-snapshot -call-stack-mode user-plus-one -result-dir VtuneData/PerformanceSnapshotO2 -app-working-dir . ./heat test.dat
 
-export OMP_NUM_THREADS=2
-echo $OMP_NUM_THREADS
-./heat test.dat >> log2.txt
+export OMP_NUM_THREADS=1
+./heat test.dat >> results/Assignment_4_3/normal_log1.txt
 
-export OMP_NUM_THREADS=4
-echo $OMP_NUM_THREADS
-./heat test.dat >> log4.txt
+# export OMP_NUM_THREADS=2
+# echo $OMP_NUM_THREADS
+# ./heat test.dat >> results/Assignment_4_3/normal_log2.txt
 
-export OMP_NUM_THREADS=8
-echo $OMP_NUM_THREADS
-./heat test.dat >> log8.txt
+# export OMP_NUM_THREADS=4
+# echo $OMP_NUM_THREADS
+# ./heat test.dat >> results/Assignment_4_3/normal_log4.txt
 
-export OMP_NUM_THREADS=12
-echo $OMP_NUM_THREADS
-./heat test.dat >> log12.txt
+# export OMP_NUM_THREADS=8
+# echo $OMP_NUM_THREADS
+# ./heat test.dat >> results/Assignment_4_3/normal_log8.txt
 
-export OMP_NUM_THREADS=16
-echo $OMP_NUM_THREADS
-./heat test.dat >> log16.txt
+# export OMP_NUM_THREADS=12
+# echo $OMP_NUM_THREADS
+# ./heat test.dat >> results/Assignment_4_3/normal_log12.txt
 
-export OMP_NUM_THREADS=24
-echo $OMP_NUM_THREADS
-./heat test.dat >> log24.txt
+# export OMP_NUM_THREADS=16
+# echo $OMP_NUM_THREADS
+# ./heat test.dat >> results/Assignment_4_3/normal_log16.txt
 
-export OMP_NUM_THREADS=32
-echo $OMP_NUM_THREADS
-./heat test.dat >> log32.txt
+# export OMP_NUM_THREADS=24
+# echo $OMP_NUM_THREADS
+# ./heat test.dat >> results/Assignment_4_3/normal_log24.txt
 
-export OMP_NUM_THREADS=48
-echo $OMP_NUM_THREADS
-./heat test.dat >> log48.txt
+# export OMP_NUM_THREADS=32
+# echo $OMP_NUM_THREADS
+# ./heat test.dat >> results/Assignment_4_3/normal_log32.txt
+
+# export OMP_NUM_THREADS=48
+# echo $OMP_NUM_THREADS
+# ./heat test.dat >> results/Assignment_4_3/normal_log48.txt
 
 

@@ -8,6 +8,7 @@
 #define JACOBI_H_INCLUDED
 
 #include <stdio.h>
+#include <omp.h>
 
 // configuration
 
