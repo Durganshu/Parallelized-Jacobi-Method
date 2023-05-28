@@ -1,0 +1,18 @@
+
+
+Resolution: 2000
+===================
+Execution time: 0.027917
+Residual: 0.236070
+
+megaflops:  50148.4
+  flop instructions (M):  1400.000
+
+
+Resolution: 6000
+===================
+Execution time: 0.402040
+Residual: 0.708009
+
+megaflops:  31340.2
+  flop instructions (M):  12600.000
