@@ -37,14 +37,14 @@ xlabels = [f"2{superscripts[str(i)]}" for i in range(25)]
 data1 = pd.read_csv('first_wala_thread.csv', header=None).to_numpy()
 data2 = pd.read_csv('second_wala_core.csv', header=None).to_numpy()
 data3 = pd.read_csv('third_wala_socket.csv', header=None).to_numpy()
+data4 = pd.read_csv('node.csv', header=None).to_numpy()
 
 # Extract the desired columns
 column_0 = data1[:, 0]
 column_1 = data1[:,1]
 column_2 = data2[:,1]
 column_3 = data3[:,1]
-
-
+column_4 = data4[:,1]
 
 # #Plot the columns
 # plt.plot(column_0, column_1, label='Processes in the same processor', linewidth=3)
@@ -60,16 +60,17 @@ column_3 = data3[:,1]
 # # Display the plot
 # plt.show()
 
-import matplotlib.pyplot as plt
+
 
 # Plot the columns
-plt.plot(column_0, column_1, label='Same socket', linewidth=3)
-plt.plot(column_0, column_2, label='Across sockets', linewidth=3)
-plt.plot(column_0, column_3, label='Across nodes', linewidth=3)
+plt.plot(column_0, column_1, label='Same core, different threads (same socket)', linewidth=3)
+plt.plot(column_0, column_2, label='Different cores (same socket)', linewidth=3)
+plt.plot(column_0, column_3, label='Different sockets (same node)', linewidth=3)
+plt.plot(column_0, column_4, label='Different nodes', linewidth=3)
 
-ylabels = [str(i) for i in range(0, 11000, 1000)]  # Generate y-axis labels at the interval of 1000
+ylabels = [str(i) for i in range(0, 13000, 1000)]  # Generate y-axis labels at the interval of 1000
 
-plt.yticks(range(0, 11000, 1000), ylabels)  # Set y-axis ticks and labels
+plt.yticks(range(0, 13000, 1000), ylabels)  # Set y-axis ticks and labels
 
 plt.xticks(column_0, xlabels)  # Use existing x-axis ticks
 plt.xlabel('Bytes')

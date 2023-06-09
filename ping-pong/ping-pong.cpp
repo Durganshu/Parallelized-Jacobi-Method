@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    int count = 100;
+    int count = 10000;
     double start_time, end_time, elapsed_time;
 
     for(int k = 0; k <= 24; k++)
@@ -30,7 +30,21 @@ int main(int argc, char *argv[])
             recv.resize(2 << (k - 1), 0);
             message_size = (2 << (k - 1));
         }
-        
+
+        for(int i = 0;i < 10; i++)
+        {
+            if(rank == 0)
+            {
+                MPI_Send(send.data(), message_size, MPI_CHAR, 1, 999, MPI_COMM_WORLD);
+                MPI_Recv(recv.data(), message_size, MPI_CHAR, 1, 999, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            }
+            else
+            {
+                MPI_Recv(recv.data(), message_size, MPI_CHAR, 0, 999, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                MPI_Send(send.data(), message_size, MPI_CHAR, 0, 999, MPI_COMM_WORLD);
+            }
+        }
+
         start_time = MPI_Wtime();
         for(int i = 0;i < count; i++)
         {
@@ -47,7 +61,7 @@ int main(int argc, char *argv[])
         }
         end_time = MPI_Wtime();
 
-        auto transfer_time = (end_time - start_time) / (count * 2);
+        auto transfer_time = (end_time - start_time) / (count  * 2);
         double size_in_mb = static_cast<double>(message_size) * 1 / 1048576;
 
         if(rank == 0)
