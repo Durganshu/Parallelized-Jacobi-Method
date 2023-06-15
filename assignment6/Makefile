@@ -1,5 +1,5 @@
-CC = icc -fopenmp
-CFLAGS = -O3 -fno-alias -xhost 
+CC = mpicc 
+CFLAGS = -O3
 #-parallel -qopt-report-phase=par -qopt-report:5 
 #-par-num-threads=2
 

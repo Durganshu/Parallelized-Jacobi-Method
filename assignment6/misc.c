@@ -50,29 +50,37 @@ int initialize( algoparam_t *param )
 	return 0;
     }
 
+	//printf("param->col_rnk = %d, param->global_res = %d, param->num_process_x=%d, param->extra_x= %d \n", param->col_rnk, param->global_res, param->num_process_x, param->extra_x);
+	// exit(0);
+	//printf("param->col_rnk = %d, np_x = %d\n", param->col_rnk, np_x);
     for( i=0; i<param->numsrcs; i++ )
     {	
 		/* top row */
-		// if(param->top_rank < 0)
-		// {	
-		// 	int tmp = (param->col_rnk < param->extra_x) ? (param->col_rnk * (param->global_res/param->num_process_x + 1)) : (param->col_rnk * (param->global_res/param->num_process_x) + param->extra_x);		
-		// 	for( j=0; j<np_x; j++ )
-		// 	{	
-		// 		tmp += j;
-		// 		fprintf("rank_x = %d, min = %d, max = %d\n", param->col_rnk, tmp, (tmp + np_x -1));
-		// 		dist = sqrt( pow((double)tmp/(double)(param->global_res + 1) -
-		// 				param->heatsrcs[i].posx, 2)+
-		// 			pow(param->heatsrcs[i].posy, 2));
+		if(param->top_rank < 0)
+		{	
+			
+			//printf("rank_x = %d, col_rank = %d, top_rank = %d\n", param->my_rank, param->col_rnk, param->top_rank);
+			for( j=0; j<np_x - 1; j++ )
+			{	
+			// 	A[i] = (rank < extra) ? (rank * (N/size + 1) + i) : (rank * (N/size) + i + extra);
+			 	int tmp = (param->col_rnk < param->extra_x) ? (param->col_rnk * ((param->global_res + 2)/param->num_process_x + 1)) : (param->col_rnk * ((param->global_res + 2)/param->num_process_x) + param->extra_x);			
+				tmp += j;
+			// 	//if (j == 0 || j == np_x -1)	
+				//printf("rank_x = %d, min = %d, max = %d\n", param->col_rnk, tmp, (tmp + np_x -1));
+				printf("rank_x = %d, min = %d\n", param->col_rnk, tmp);
+			// 	dist = sqrt( pow((double)tmp/(double)(param->global_res + 1) -
+			// 			param->heatsrcs[i].posx, 2)+
+			// 		pow(param->heatsrcs[i].posy, 2));
 
-		// 		if( dist <= param->heatsrcs[i].range )
-		// 		{
-		// 		(param->u)[j] +=
-		// 			(param->heatsrcs[i].range-dist) /
-		// 			param->heatsrcs[i].range *
-		// 			param->heatsrcs[i].temp;
-		// 		}
-		// 	}
-		// }
+			// 	if( dist <= param->heatsrcs[i].range )
+			// 	{
+			// 	(param->u)[j] +=
+			// 		(param->heatsrcs[i].range-dist) /
+			// 		param->heatsrcs[i].range *
+			// 		param->heatsrcs[i].temp;
+			// 	}
+			}
+		}
 		
 		/* bottom row */
 		// if(param->bottom_rank < 0)

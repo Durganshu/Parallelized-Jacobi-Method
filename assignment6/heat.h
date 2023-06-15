@@ -32,7 +32,7 @@ typedef struct
     unsigned res_step_size;
     unsigned visres;        // visualization resolution
 
-    int top_rank, bottom_rank, left_rank, right_rank, extra_x, extra_y, row_rnk, col_rnk;     
+    int my_rank, top_rank, bottom_rank, left_rank, right_rank, extra_x, extra_y, row_rnk, col_rnk;     
   
     double *u, *uhelp;
     double *uvis;
