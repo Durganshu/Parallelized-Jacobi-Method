@@ -24,21 +24,33 @@ heatsrc_t;
 typedef struct
 {
     unsigned maxiter;       // maximum number of iterations
-    unsigned act_res;
+    unsigned act_res_x;
+    unsigned act_res_y;
+    unsigned global_res;
     unsigned max_res;       // spatial resolution
     unsigned initial_res;
     unsigned res_step_size;
     unsigned visres;        // visualization resolution
+
+    int top_rank, bottom_rank, left_rank, right_rank, extra_x, extra_y, row_rnk, col_rnk;     
   
     double *u, *uhelp;
     double *uvis;
 
     unsigned   numsrcs;     // number of heat sources
     heatsrc_t *heatsrcs;
-    unsigned num_process_x;
+
+    unsigned num_process_x; // num processors in x direction
     unsigned num_process_y;
 }
 algoparam_t;
+
+// typedef struct 
+// {
+//     unsigned num_process_x;
+//     unsigned num_process_y;
+// }
+// parallel_params_t;
 
 
 // function declarations

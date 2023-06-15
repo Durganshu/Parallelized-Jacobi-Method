@@ -9,7 +9,7 @@
 
 #define BUFSIZE 100
 
-int read_input( FILE *infile, algoparam_t *param )
+int read_input( FILE *infile, algoparam_t *param)
 {
   int i, n, alg;
   char buf[BUFSIZE];
@@ -77,14 +77,17 @@ void print_params( algoparam_t *param )
 	  param->max_res);
   fprintf(stderr, "Iterations        : %u\n", param->maxiter);
   fprintf(stderr, "Num. Heat sources : %u\n", param->numsrcs);
+  fprintf(stderr, "Num. proc x : %u\n", param->num_process_x);
+  fprintf(stderr, "Num. proc y : %u\n", param->num_process_y);
 
   for( i=0; i<param->numsrcs; i++ )
     {
-      fprintf(stderr, "  %2d: (%2.2f, %2.2f) %2.2f %2.2f \n",
+      fprintf(stderr, "  %2d: (%2.2f, %2.2f) %2.2f %2.2f\n",
 	     i+1,
 	     param->heatsrcs[i].posx,
 	     param->heatsrcs[i].posy,
 	     param->heatsrcs[i].range,
-	     param->heatsrcs[i].temp );
+	     param->heatsrcs[i].temp
+      );
     }
 }

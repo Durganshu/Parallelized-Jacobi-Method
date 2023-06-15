@@ -25,21 +25,22 @@ int initialize( algoparam_t *param )
     double dist;
 
     // total number of points (including border)
-    const int np = param->act_res + 2;
+    const int np_x = param->act_res_x + 2;
+	const int np_y = param->act_res_y + 2;
 
     //
     // allocate memory
     //
-    (param->u)     = (double*)malloc( sizeof(double)* np*np );
-    (param->uhelp) = (double*)malloc( sizeof(double)* np*np );
+    (param->u)     = (double*)malloc( sizeof(double)* np_x*np_y );
+    (param->uhelp) = (double*)malloc( sizeof(double)* np_x*np_y );
     (param->uvis)  = (double*)calloc( sizeof(double),
 				      (param->visres+2) *
 				      (param->visres+2) );
 
-    for (i=0;i<np;i++){
-    	for (j=0;j<np;j++){
-    		param->u[i*np+j]=0;
-			param->uhelp[i*np+j]=0;
+    for (i=0;i<np_y;i++){
+    	for (j=0;j<np_x;j++){
+    		param->u[i*np_x+j]=0;
+			param->uhelp[i*np_x+j]=0;
     	}
     }
 
@@ -50,73 +51,87 @@ int initialize( algoparam_t *param )
     }
 
     for( i=0; i<param->numsrcs; i++ )
-    {
-	/* top row */
-	for( j=0; j<np; j++ )
-	{
-	    dist = sqrt( pow((double)j/(double)(np-1) -
-			     param->heatsrcs[i].posx, 2)+
-			 pow(param->heatsrcs[i].posy, 2));
+    {	
+		/* top row */
+		// if(param->top_rank < 0)
+		// {	
+		// 	int tmp = (param->col_rnk < param->extra_x) ? (param->col_rnk * (param->global_res/param->num_process_x + 1)) : (param->col_rnk * (param->global_res/param->num_process_x) + param->extra_x);		
+		// 	for( j=0; j<np_x; j++ )
+		// 	{	
+		// 		tmp += j;
+		// 		fprintf("rank_x = %d, min = %d, max = %d\n", param->col_rnk, tmp, (tmp + np_x -1));
+		// 		dist = sqrt( pow((double)tmp/(double)(param->global_res + 1) -
+		// 				param->heatsrcs[i].posx, 2)+
+		// 			pow(param->heatsrcs[i].posy, 2));
 
-	    if( dist <= param->heatsrcs[i].range )
-	    {
-		(param->u)[j] +=
-		    (param->heatsrcs[i].range-dist) /
-		    param->heatsrcs[i].range *
-		    param->heatsrcs[i].temp;
-	    }
+		// 		if( dist <= param->heatsrcs[i].range )
+		// 		{
+		// 		(param->u)[j] +=
+		// 			(param->heatsrcs[i].range-dist) /
+		// 			param->heatsrcs[i].range *
+		// 			param->heatsrcs[i].temp;
+		// 		}
+		// 	}
+		// }
+		
+		/* bottom row */
+		// if(param->bottom_rank < 0)
+		// {
+		// 	for( j=0; j<np_x; j++ )
+		// 	{
+		// 		dist = sqrt( pow((double)j/(double)(np-1) -
+		// 				param->heatsrcs[i].posx, 2)+
+		// 			pow(1-param->heatsrcs[i].posy, 2));
+
+		// 		if( dist <= param->heatsrcs[i].range )
+		// 		{
+		// 		(param->u)[(np-1)*np+j]+=
+		// 			(param->heatsrcs[i].range-dist) /
+		// 			param->heatsrcs[i].range *
+		// 			param->heatsrcs[i].temp;
+		// 		}
+		// 	}
+		// }
+
+		// /* leftmost column */
+		// if(param->left_rank < 0)
+		// {
+		// 	for( j=1; j<np_x-1; j++ )
+		// 	{
+		// 		dist = sqrt( pow(param->heatsrcs[i].posx, 2)+
+		// 			pow((double)j/(double)(np-1) -
+		// 				param->heatsrcs[i].posy, 2));
+
+		// 		if( dist <= param->heatsrcs[i].range )
+		// 		{
+		// 		(param->u)[ j*np ]+=
+		// 			(param->heatsrcs[i].range-dist) /
+		// 			param->heatsrcs[i].range *
+		// 			param->heatsrcs[i].temp;
+		// 		}
+		// 	}
+		// }
+		
+		// /* rightmost column */
+		// if(param->right_rank < 0)
+		// {
+		// 	for( j=1; j<np_x-1; j++ )
+		// 	{
+		// 		dist = sqrt( pow(1-param->heatsrcs[i].posx, 2)+
+		// 			pow((double)j/(double)(np-1) -
+		// 				param->heatsrcs[i].posy, 2));
+
+		// 		if( dist <= param->heatsrcs[i].range )
+		// 		{
+		// 		(param->u)[ j*np+(np-1) ]+=
+		// 			(param->heatsrcs[i].range-dist) /
+		// 			param->heatsrcs[i].range *
+		// 			param->heatsrcs[i].temp;
+		// 		}
+		// 	}
+		// }    
 	}
-
-	/* bottom row */
-	for( j=0; j<np; j++ )
-	{
-	    dist = sqrt( pow((double)j/(double)(np-1) -
-			     param->heatsrcs[i].posx, 2)+
-			 pow(1-param->heatsrcs[i].posy, 2));
-
-	    if( dist <= param->heatsrcs[i].range )
-	    {
-		(param->u)[(np-1)*np+j]+=
-		    (param->heatsrcs[i].range-dist) /
-		    param->heatsrcs[i].range *
-		    param->heatsrcs[i].temp;
-	    }
-	}
-
-	/* leftmost column */
-	for( j=1; j<np-1; j++ )
-	{
-	    dist = sqrt( pow(param->heatsrcs[i].posx, 2)+
-			 pow((double)j/(double)(np-1) -
-			     param->heatsrcs[i].posy, 2));
-
-	    if( dist <= param->heatsrcs[i].range )
-	    {
-		(param->u)[ j*np ]+=
-		    (param->heatsrcs[i].range-dist) /
-		    param->heatsrcs[i].range *
-		    param->heatsrcs[i].temp;
-	    }
-	}
-
-	/* rightmost column */
-	for( j=1; j<np-1; j++ )
-	{
-	    dist = sqrt( pow(1-param->heatsrcs[i].posx, 2)+
-			 pow((double)j/(double)(np-1) -
-			     param->heatsrcs[i].posy, 2));
-
-	    if( dist <= param->heatsrcs[i].range )
-	    {
-		(param->u)[ j*np+(np-1) ]+=
-		    (param->heatsrcs[i].range-dist) /
-		    param->heatsrcs[i].range *
-		    param->heatsrcs[i].temp;
-	    }
-	}
-    }
-
-    return 1;
+	return 1;
 }
 
 /*

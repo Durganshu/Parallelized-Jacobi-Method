@@ -9,7 +9,7 @@
 
 #include "heat.h"
 
-int read_input( FILE *infile, algoparam_t *param );
+int read_input( FILE *infile, algoparam_t *param);
 void print_params( algoparam_t *param );
 
 
