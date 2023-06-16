@@ -51,11 +51,11 @@ int main(int argc, char *argv[]) {
 	// Determine the process coordinates in the grid
     int coords[2];
     MPI_Cart_coords(cart_comm, rank, 2, coords);
-    param.row_rnk = coords[0];
-    param.col_rnk = coords[1];
-	//printf("rank = %d, param.row_rnk = %d, param.col_rnk = %d\n", rank, param.row_rnk, param.col_rnk);
+    param.x_rnk = coords[1];
+    param.y_rnk = coords[0];
+	// printf("rank = %d, param.row_rnk = %d, param.col_rnk = %d\n", rank, param.x_rnk, param.y_rnk);
 
-	MPI_Cart_shift(cart_comm, 0, 1, &(param.bottom_rank), &(param.top_rank));
+	MPI_Cart_shift(cart_comm, 0, -1, &(param.bottom_rank), &(param.top_rank));
     MPI_Cart_shift(cart_comm, 1, 1, &(param.left_rank), &(param.right_rank));
 	//printf ("rank = %d, left_rank = %d, right_rank= %d, top_rank= %d, bottom_rank= %d\n", rank, (param.left_rank), (param.right_rank), (param.top_rank) ,(param.bottom_rank));
 
@@ -94,14 +94,21 @@ int main(int argc, char *argv[]) {
 	for (param.global_res = param.initial_res; param.global_res <= param.max_res; param.global_res = param.global_res + param.res_step_size) {
 		//printf("hello****92\n");
 		
-		param.extra_x = param.global_res % dims[1];
-		param.act_res_x = (param.col_rnk < param.extra_x) ? (param.global_res/dims[1] + 1) : (param.global_res/dims[1]);
+		param.x_start = (coords[1] *param.global_res)/dims[1];
+		param.x_end = ((coords[1] + 1) *param.global_res)/ dims[1]+1;
+		param.y_start = (coords[0] *param.global_res)/dims[0];
+		param.y_end = ((coords[0] + 1) * param.global_res)/dims[0]+1;
 
-		param.extra_y = param.global_res % dims[0];
-		param.act_res_y = (param.row_rnk  < param.extra_y) ? (param.global_res/dims[0] + 1) : (param.global_res/dims[0]);
+		param.act_res_x = param.x_end - param.x_start - 1;
+		param.act_res_y = param.y_end - param.y_start - 1;
+		// param.extra_x = param.global_res % dims[1];
+		// param.act_res_x = (param.col_rnk < param.extra_x) ? (param.global_res/dims[1] + 1) : (param.global_res/dims[1]);
+
+		// param.extra_y = param.global_res % dims[0];
+		// param.act_res_y = (param.row_rnk  < param.extra_y) ? (param.global_res/dims[0] + 1) : (param.global_res/dims[0]);
 		//printf("hello****98\n");
 		// if (rank == 1){
-		// 	printf("param.extra_y = %d, param.act_res_y = %d\n", param.extra_y, param.act_res_y);
+		// printf("param.act_res_x = %d, param.act_res_y = %d\n", param.act_res_x, param.act_res_y);
 		// }
 		if (!initialize(&param)) {
 			fprintf(stderr, "Error in Jacobi initialization.\n\n");
@@ -124,7 +131,7 @@ int main(int argc, char *argv[]) {
 		np_y = param.act_res_y + 2;
 
 		// for (iter = 0; iter < param.maxiter; iter++) {
-		// 	residual = relax_jacobi(&(param.u), &(param.uhelp), np, np);
+		// 	residual = relax_jacobi(&(param.u), &(param.uhelp), np_x, np_y);
 		// }
 
 		time[exp_number] = wtime() - time[exp_number];

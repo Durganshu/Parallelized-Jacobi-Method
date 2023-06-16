@@ -25,8 +25,8 @@ int initialize( algoparam_t *param )
     double dist;
 
     // total number of points (including border)
-    const int np_x = param->act_res_x + 2;
-	const int np_y = param->act_res_y + 2;
+    const int np_x = param->act_res_x+2;
+	const int np_y = param->act_res_y+2;
 
     //
     // allocate memory
@@ -49,7 +49,8 @@ int initialize( algoparam_t *param )
 	fprintf(stderr, "Error: Cannot allocate memory\n");
 	return 0;
     }
-
+// printf("rank = %d, param.row_rnk = %d, param.col_rnk = %d\n", param->my_rank, param->x_rnk, param->y_rnk);
+	// printf("******************************************num_src= %d",param->numsrcs);
 	//printf("param->col_rnk = %d, param->global_res = %d, param->num_process_x=%d, param->extra_x= %d \n", param->col_rnk, param->global_res, param->num_process_x, param->extra_x);
 	// exit(0);
 	//printf("param->col_rnk = %d, np_x = %d\n", param->col_rnk, np_x);
@@ -58,87 +59,97 @@ int initialize( algoparam_t *param )
 		/* top row */
 		if(param->top_rank < 0)
 		{	
-			
-			//printf("rank_x = %d, col_rank = %d, top_rank = %d\n", param->my_rank, param->col_rnk, param->top_rank);
-			for( j=0; j<np_x - 1; j++ )
+			for( j=0; j<np_x; j++ )
 			{	
-			// 	A[i] = (rank < extra) ? (rank * (N/size + 1) + i) : (rank * (N/size) + i + extra);
-			 	int tmp = (param->col_rnk < param->extra_x) ? (param->col_rnk * ((param->global_res + 2)/param->num_process_x + 1)) : (param->col_rnk * ((param->global_res + 2)/param->num_process_x) + param->extra_x);			
-				tmp += j;
-			// 	//if (j == 0 || j == np_x -1)	
-				//printf("rank_x = %d, min = %d, max = %d\n", param->col_rnk, tmp, (tmp + np_x -1));
-				printf("rank_x = %d, min = %d\n", param->col_rnk, tmp);
-			// 	dist = sqrt( pow((double)tmp/(double)(param->global_res + 1) -
-			// 			param->heatsrcs[i].posx, 2)+
-			// 		pow(param->heatsrcs[i].posy, 2));
-
-			// 	if( dist <= param->heatsrcs[i].range )
-			// 	{
-			// 	(param->u)[j] +=
-			// 		(param->heatsrcs[i].range-dist) /
-			// 		param->heatsrcs[i].range *
-			// 		param->heatsrcs[i].temp;
-			// 	}
+				int tmp = param->x_start + j;
+				dist = sqrt( pow((double)tmp/(double)(param->global_res + 1) -
+						param->heatsrcs[i].posx, 2)+
+					pow(param->heatsrcs[i].posy, 2));
+				// printf("rank= %d, i=%d, dist=%f\n",param->my_rank, i, dist);
+				if( dist <= param->heatsrcs[i].range )
+				{
+					// printf("tmp= %d\n", tmp);
+				(param->u)[j] +=
+					(param->heatsrcs[i].range-dist) /
+					param->heatsrcs[i].range *
+					param->heatsrcs[i].temp;
+				}
 			}
 		}
 		
 		/* bottom row */
-		// if(param->bottom_rank < 0)
-		// {
-		// 	for( j=0; j<np_x; j++ )
-		// 	{
-		// 		dist = sqrt( pow((double)j/(double)(np-1) -
-		// 				param->heatsrcs[i].posx, 2)+
-		// 			pow(1-param->heatsrcs[i].posy, 2));
+		if(param->bottom_rank < 0)
+		{
+			for( j=0; j<np_x; j++ )
+			{
+				int tmp = param->x_start + j;
+				dist = sqrt( pow((double)tmp/(double)(param->global_res + 1) -
+						param->heatsrcs[i].posx, 2)+
+					pow(1-param->heatsrcs[i].posy, 2));
 
-		// 		if( dist <= param->heatsrcs[i].range )
-		// 		{
-		// 		(param->u)[(np-1)*np+j]+=
-		// 			(param->heatsrcs[i].range-dist) /
-		// 			param->heatsrcs[i].range *
-		// 			param->heatsrcs[i].temp;
-		// 		}
-		// 	}
-		// }
+				if( dist <= param->heatsrcs[i].range )
+				{
+				(param->u)[(np_y-1)*np_x+j]+=
+					(param->heatsrcs[i].range-dist) /
+					param->heatsrcs[i].range *
+					param->heatsrcs[i].temp;
+				}
+			}
+		}
 
 		// /* leftmost column */
-		// if(param->left_rank < 0)
-		// {
-		// 	for( j=1; j<np_x-1; j++ )
-		// 	{
-		// 		dist = sqrt( pow(param->heatsrcs[i].posx, 2)+
-		// 			pow((double)j/(double)(np-1) -
-		// 				param->heatsrcs[i].posy, 2));
+		if(param->left_rank < 0)
+		{
+			for( j=1; j<np_y-1; j++ )
+			{
+				int tmp = param->y_start + j;
+				dist = sqrt( pow(param->heatsrcs[i].posx, 2)+
+					pow((double)tmp/(double)(param->global_res + 1) -
+						param->heatsrcs[i].posy, 2));
 
-		// 		if( dist <= param->heatsrcs[i].range )
-		// 		{
-		// 		(param->u)[ j*np ]+=
-		// 			(param->heatsrcs[i].range-dist) /
-		// 			param->heatsrcs[i].range *
-		// 			param->heatsrcs[i].temp;
-		// 		}
-		// 	}
-		// }
+				if( dist <= param->heatsrcs[i].range )
+				{
+				(param->u)[ j*np_x ]+=
+					(param->heatsrcs[i].range-dist) /
+					param->heatsrcs[i].range *
+					param->heatsrcs[i].temp;
+				}
+			}
+		}
 		
 		// /* rightmost column */
-		// if(param->right_rank < 0)
-		// {
-		// 	for( j=1; j<np_x-1; j++ )
-		// 	{
-		// 		dist = sqrt( pow(1-param->heatsrcs[i].posx, 2)+
-		// 			pow((double)j/(double)(np-1) -
-		// 				param->heatsrcs[i].posy, 2));
+		if(param->right_rank < 0)
+		{
+			for( j=1; j<np_y-1; j++ )
+			{
+				int tmp = param->y_start + j;
+				dist = sqrt( pow(1-param->heatsrcs[i].posx, 2)+
+					pow((double)tmp/(double)(param->global_res + 1) -
+						param->heatsrcs[i].posy, 2));
 
-		// 		if( dist <= param->heatsrcs[i].range )
-		// 		{
-		// 		(param->u)[ j*np+(np-1) ]+=
-		// 			(param->heatsrcs[i].range-dist) /
-		// 			param->heatsrcs[i].range *
-		// 			param->heatsrcs[i].temp;
-		// 		}
-		// 	}
-		// }    
+				if( dist <= param->heatsrcs[i].range )
+				{
+				(param->u)[ j*np_x+(np_x-1) ]+=
+					(param->heatsrcs[i].range-dist) /
+					param->heatsrcs[i].range *
+					param->heatsrcs[i].temp;
+				}
+			}
+		}    
 	}
+
+	if(param->my_rank == 5){
+
+	for (i=0;i<np_y;i++){
+    	for (j=0;j<np_x;j++){
+    		printf("%f, ",param->u[i*np_x+j]);
+    	}
+		printf("\n");
+    }
+	}
+
+
+
 	return 1;
 }
 

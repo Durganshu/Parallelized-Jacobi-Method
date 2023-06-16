@@ -31,8 +31,13 @@ typedef struct
     unsigned initial_res;
     unsigned res_step_size;
     unsigned visres;        // visualization resolution
+    unsigned x_start;
+    unsigned y_start;
+    unsigned x_end;
+    unsigned y_end;
+    
 
-    int my_rank, top_rank, bottom_rank, left_rank, right_rank, extra_x, extra_y, row_rnk, col_rnk;     
+    int my_rank, top_rank, bottom_rank, left_rank, right_rank, extra_x, extra_y, x_rnk, y_rnk;     
   
     double *u, *uhelp;
     double *uvis;
