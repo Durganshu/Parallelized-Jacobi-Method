@@ -138,17 +138,15 @@ int initialize( algoparam_t *param )
 		}    
 	}
 
-	if(param->my_rank == 5){
+	// if(param->my_rank == 1){
 
-	for (i=0;i<np_y;i++){
-    	for (j=0;j<np_x;j++){
-    		printf("%f, ",param->u[i*np_x+j]);
-    	}
-		printf("\n");
-    }
-	}
-
-
+	// for (i=0;i<np_y;i++){
+    // 	for (j=0;j<np_x;j++){
+    // 		printf("%f, ",param->u[i*np_x+j]);
+    // 	}
+	// 	printf("\n");
+    // }
+	// }
 
 	return 1;
 }
