@@ -49,11 +49,7 @@ int initialize( algoparam_t *param )
 	fprintf(stderr, "Error: Cannot allocate memory\n");
 	return 0;
     }
-// printf("rank = %d, param.row_rnk = %d, param.col_rnk = %d\n", param->my_rank, param->x_rnk, param->y_rnk);
-	// printf("******************************************num_src= %d",param->numsrcs);
-	//printf("param->col_rnk = %d, param->global_res = %d, param->num_process_x=%d, param->extra_x= %d \n", param->col_rnk, param->global_res, param->num_process_x, param->extra_x);
-	// exit(0);
-	//printf("param->col_rnk = %d, np_x = %d\n", param->col_rnk, np_x);
+
     for( i=0; i<param->numsrcs; i++ )
     {	
 		/* top row */
@@ -65,10 +61,10 @@ int initialize( algoparam_t *param )
 				dist = sqrt( pow((double)tmp/(double)(param->global_res + 1) -
 						param->heatsrcs[i].posx, 2)+
 					pow(param->heatsrcs[i].posy, 2));
-				// printf("rank= %d, i=%d, dist=%f\n",param->my_rank, i, dist);
+
 				if( dist <= param->heatsrcs[i].range )
 				{
-					// printf("tmp= %d\n", tmp);
+
 				(param->u)[j] +=
 					(param->heatsrcs[i].range-dist) /
 					param->heatsrcs[i].range *
@@ -137,16 +133,6 @@ int initialize( algoparam_t *param )
 			}
 		}    
 	}
-
-	// if(param->my_rank == 1){
-
-	// for (i=0;i<np_y;i++){
-    // 	for (j=0;j<np_x;j++){
-    // 		printf("%f, ",param->u[i*np_x+j]);
-    // 	}
-	// 	printf("\n");
-    // }
-	// }
 
 	return 1;
 }
