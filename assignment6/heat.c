@@ -56,10 +56,6 @@ int main(int argc, char *argv[]) {
     param.x_rnk = coords[1];
     param.y_rnk = coords[0];
 
-	MPI_Cart_coords(cart_comm, 0, 2, coords_baju);
-	printf("rank=%d, cordsx of baju = %d, cordsy of baju = %d",param.my_rank, coords_baju[1],coords_baju[1]);
-
-
 	MPI_Cart_shift(cart_comm, 0, -1, &(param.bottom_rank), &(param.top_rank));
     MPI_Cart_shift(cart_comm, 1, 1, &(param.left_rank), &(param.right_rank));
 
@@ -72,7 +68,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	// check result file
-	resfilename = (argc >= 3) ? argv[2] : "heat.ppm";
+	// resfilename = (argc >= 3) ? argv[2] : "heat.ppm";
+	resfilename = "heat.ppm";
 
 	if (!(resfile = fopen(resfilename, "w"))) {
 		fprintf(stderr, "\nError: Cannot open \"%s\" for writing.\n\n", resfilename);
@@ -177,7 +174,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	// param.act_res = param.act_res - param.res_step_size;
-
+	
+	
 	int vis_xstart = (coords[1] *param.global_visres)/dims[1];
 	int vis_xend = ((coords[1] + 1) *param.global_visres)/ dims[1]+1;
 	int vis_ystart = (coords[0] *param.global_visres)/dims[0];
@@ -187,17 +185,59 @@ int main(int argc, char *argv[]) {
 	param.local_visres_y = vis_yend - vis_ystart - 1;
 
 	coarsen(param.u, param.act_res_x + 2, param.act_res_y + 2, param.uvis, param.local_visres_x + 2, param.local_visres_y + 2);
-
-
-
-
-	if (rank == 0){
-		// double u_buffer[(param.local_visres_x+1)*(param.local_visres_y+1)]
-		double global_uvis[param.global_visres+2*param.global_visres+2];
+	
+	if(rank == 0){	
+		int coordsx[size];
+		int coordsy[size];
+		int vis_xstart[size], vis_xend[size], vis_ystart[size], vis_yend[size], root_visres_x[size], root_visres_y[size];	
+		int global_uvis[(param.global_visres+2)*(param.global_visres+2)];
 		
-		// write_image(resfile, param.global_u_vis, param.global_visres+2, param.global_visres+2);
+		for(int i =1;i < size; i++){	
+			MPI_Cart_coords(cart_comm, i, 2, coords);
+			coordsx[i] = coords[1];
+			coordsy[i] = coords[0];
+
+			vis_xstart[i] = (coordsx[i] *param.global_visres)/dims[1];
+			vis_xend[i] = ((coordsx[i] + 1) *param.global_visres)/ dims[1]+1;
+			vis_ystart[i] = (coordsy[i] *param.global_visres)/dims[0];
+			vis_yend[i] = ((coordsy[i] + 1) * param.global_visres)/dims[0]+1;
+
+			root_visres_x[i] = vis_xend[i] - vis_xstart[i] + 1;
+			root_visres_y[i] = vis_yend[i] - vis_ystart[i] + 1;
+
+			double buffer[root_visres_x[i]*root_visres_y[i]];
+			// double *buffer = (double*)malloc( sizeof(double)* root_visres_x[i]*root_visres_y[i] );
+			MPI_Recv(&buffer, root_visres_x[i]*root_visres_y[i], MPI_DOUBLE, i, 99, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			printf("rank=%d, cordsx of baju = %d, cordsy of baju = %d",param.my_rank, coords_baju[1],coords_baju[0]);
+
+			int l = 0;
+			for(int j = vis_ystart[i]; j < vis_yend[i]; j++)
+			{	
+				int m = 0;
+				for(int k = vis_xstart[i]; k < vis_xend[i]; k++){
+					global_uvis[j*param.global_visres + k] = buffer[l*root_visres_x[i] + m];
+					m++;
+					printf("m=%d", m);
+				}
+				l++;
+				printf("l=%d", l);
+			}
+			// free(buffer);
+			
+		}		
 	}
-	//write_image(resfile, param.uvis, param.visres, param.visres);
+	else{
+		MPI_Send(param.uvis, (param.local_visres_x+2)*(param.local_visres_y+2), MPI_DOUBLE, 0, 99, MPI_COMM_WORLD);
+	}
+
+	// if (rank == 0){
+	// 	// double u_buffer[(param.local_visres_x+1)*(param.local_visres_y+1)]
+	// 	double global_uvis[param.global_visres+2*param.global_visres+2];
+		
+	// 	// write_image(resfile, param.global_u_vis, param.global_visres+2, param.global_visres+2);
+	// }
+	if (rank == 0)
+		write_image(resfile, param.uvis, param.global_visres+2, param.global_visres+2);
 
 	finalize(&param);
 	MPI_Finalize();
