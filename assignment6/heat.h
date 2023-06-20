@@ -30,7 +30,9 @@ typedef struct
     unsigned max_res;       // spatial resolution
     unsigned initial_res;
     unsigned res_step_size;
-    unsigned visres;        // visualization resolution
+    unsigned global_visres;        // visualization resolution
+    unsigned local_visres_x;
+    unsigned local_visres_y;
     unsigned x_start;
     unsigned y_start;
     unsigned x_end;

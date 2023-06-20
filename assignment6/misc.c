@@ -34,8 +34,8 @@ int initialize( algoparam_t *param )
     (param->u)     = (double*)malloc( sizeof(double)* np_x*np_y );
     (param->uhelp) = (double*)malloc( sizeof(double)* np_x*np_y );
     (param->uvis)  = (double*)calloc( sizeof(double),
-				      (param->visres+2) *
-				      (param->visres+2) );
+				      (param->global_visres+2) *
+				      (param->global_visres+2) );
 
     for (i=0;i<np_y;i++){
     	for (j=0;j<np_x;j++){
@@ -237,7 +237,7 @@ int coarsen( double *uold, unsigned oldx, unsigned oldy ,
     int stopx = newx;
     int stopy = newy;
     float temp;
-    float stepx = (float) oldx/(float)newx;
+    float stepx = (float) oldx/(float)newx; 
     float stepy = (float)oldy/(float)newy;
 
     if (oldx<newx){

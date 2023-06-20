@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 	double global_residual;
 
 	// set the visualization resolution
-	param.visres = 100;
+	param.global_visres = 100;
 
 	// check arguments
 	if (argc < 2) {
@@ -51,9 +51,14 @@ int main(int argc, char *argv[]) {
 
 	// Determine the process coordinates in the grid
     int coords[2];
+	int coords_baju[2];
     MPI_Cart_coords(cart_comm, rank, 2, coords);
     param.x_rnk = coords[1];
     param.y_rnk = coords[0];
+
+	MPI_Cart_coords(cart_comm, 0, 2, coords_baju);
+	printf("rank=%d, cordsx of baju = %d, cordsy of baju = %d",param.my_rank, coords_baju[1],coords_baju[1]);
+
 
 	MPI_Cart_shift(cart_comm, 0, -1, &(param.bottom_rank), &(param.top_rank));
     MPI_Cart_shift(cart_comm, 1, 1, &(param.left_rank), &(param.right_rank));
@@ -94,6 +99,7 @@ int main(int argc, char *argv[]) {
 		param.y_start = (coords[0] *param.global_res)/dims[0];
 		param.y_end = ((coords[0] + 1) * param.global_res)/dims[0]+1;
 
+		
 		param.act_res_x = param.x_end - param.x_start - 1;
 		param.act_res_y = param.y_end - param.y_start - 1;
 		
@@ -172,23 +178,25 @@ int main(int argc, char *argv[]) {
 
 	// param.act_res = param.act_res - param.res_step_size;
 
-	// int vis_xstart = (coords[1] *param.global_visres)/dims[1];
-	// int vis_xend = ((coords[1] + 1) *param.global_visres)/ dims[1]+1;
-	// int vis_ystart = (coords[0] *param.global_visres)/dims[0];
-	// int vis_yend = ((coords[0] + 1) * param.global_visres)/dims[0]+1;
+	int vis_xstart = (coords[1] *param.global_visres)/dims[1];
+	int vis_xend = ((coords[1] + 1) *param.global_visres)/ dims[1]+1;
+	int vis_ystart = (coords[0] *param.global_visres)/dims[0];
+	int vis_yend = ((coords[0] + 1) * param.global_visres)/dims[0]+1;
 
-	// param.local_visres_x = vis_xend - vis_xstart - 1;
-	// param.local_visres_y = vis_yend - vis_ystart - 1;
+	param.local_visres_x = vis_xend - vis_xstart - 1;
+	param.local_visres_y = vis_yend - vis_ystart - 1;
 
-	
-	// coarsen(param.u, param.act_res_x + 2, param.act_res_y + 2, param.uvis, param.local_visres_x + 2, param.local_visres_y + 2);
+	coarsen(param.u, param.act_res_x + 2, param.act_res_y + 2, param.uvis, param.local_visres_x + 2, param.local_visres_y + 2);
 
 
-	// if (rank == 0){
-	// 	double global_uvis[param.global_visres];
+
+
+	if (rank == 0){
+		// double u_buffer[(param.local_visres_x+1)*(param.local_visres_y+1)]
+		double global_uvis[param.global_visres+2*param.global_visres+2];
 		
-	// 	write_image(resfile, param.global_visres, param.global_visres, param.global_visres);
-	// }
+		// write_image(resfile, param.global_u_vis, param.global_visres+2, param.global_visres+2);
+	}
 	//write_image(resfile, param.uvis, param.visres, param.visres);
 
 	finalize(&param);
