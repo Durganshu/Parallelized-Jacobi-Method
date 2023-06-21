@@ -34,8 +34,9 @@ int initialize( algoparam_t *param )
     (param->u)     = (double*)malloc( sizeof(double)* np_x*np_y );
     (param->uhelp) = (double*)malloc( sizeof(double)* np_x*np_y );
     (param->uvis)  = (double*)calloc( sizeof(double),
-				      (param->global_visres+2) *
-				      (param->global_visres+2) );
+				      (param->local_visres_x+2) *
+				      (param->local_visres_y+2) );
+
 
     for (i=0;i<np_y;i++){
     	for (j=0;j<np_x;j++){
@@ -213,7 +214,6 @@ void write_image( FILE * f, double *u,
 	}
     }
 
-
     fprintf(f, "P3\n");
     fprintf(f, "%u %u\n", sizex, sizey);
     fprintf(f, "%u\n", 255);
@@ -227,7 +227,9 @@ void write_image( FILE * f, double *u,
 	}
 	fprintf(f, "\n");
     }
+	
 }
+	
 
 int coarsen( double *uold, unsigned oldx, unsigned oldy ,
 	     double *unew, unsigned newx, unsigned newy )
@@ -254,6 +256,7 @@ int coarsen( double *uold, unsigned oldx, unsigned oldy ,
     //printf("rx=%f, ry=%f\n",stepx,stepy);
     // NOTE: this only takes the top-left corner,
     // and doesnt' do any real coarsening
+	
 
     for( i=0; i<stopy; i++ ){
        ii=stepy*i;
