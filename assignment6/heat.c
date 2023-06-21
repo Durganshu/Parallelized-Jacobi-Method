@@ -196,7 +196,8 @@ int main(int argc, char *argv[]) {
 	param.act_res_x = param.act_res_x - param.res_step_size;
 	param.act_res_y = param.act_res_y - param.res_step_size;
 	
-	coarsen(param.u, param.act_res_x + 2, param.act_res_y + 2, param.uvis, param.local_visres_x + 2, param.local_visres_y + 2);
+	// coarsen(param.u, param.act_res_x + 2, param.act_res_y + 2, param.uvis, param.local_visres_x + 2, param.local_visres_y + 2);
+	// coarsen(param.u, param.act_res_x + 2, param.act_res_y + 2, param.uvis, 102, 102);
 	
 	// if(rank == 0){	
 	// 	int coordsx[size];
@@ -246,11 +247,18 @@ int main(int argc, char *argv[]) {
 	// 	// double u_buffer[(param.local_visres_x+1)*(param.local_visres_y+1)]
 	// 	double global_uvis[param.global_visres+2*param.global_visres+2];
 		
-	// 	// write_image(resfile, param.global_u_vis, param.global_visres+2, param.global_visres+2);
+		// write_image(resfile, param.global_u_vis, param.global_visres+2, param.global_visres+2);
 	// }
 	// if (rank == 0)
-	write_image(resfile, param.uvis, param.local_visres_x + 2, param.local_visres_y + 2);
-
+	// write_image(resfile, param.uvis, 102, 102);
+	for(int i=0; i < np_y; i++){
+		for(int j=0; j < np_x;j++){
+			printf("%lf ", param.u[i*np_x + j]);
+		}
+		printf("\n");
+	}
+	printf("act_res_x=%d, act_res_y=%d, sizeof(u) = %d\n", param.act_res_x, param.act_res_y, sizeof(param.u));
+	write_image(resfile, param.u, 22, 22);
 	finalize(&param);
 	MPI_Finalize();
 	return 0;

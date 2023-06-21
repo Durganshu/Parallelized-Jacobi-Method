@@ -36,6 +36,8 @@ int initialize( algoparam_t *param )
     (param->uvis)  = (double*)calloc( sizeof(double),
 				      (param->local_visres_x+2) *
 				      (param->local_visres_y+2) );
+	// (param->uvis)  = (double*)calloc( sizeof(double),
+	// 			      102 * 102);
 
 
     for (i=0;i<np_y;i++){
@@ -239,7 +241,7 @@ int coarsen( double *uold, unsigned oldx, unsigned oldy ,
     int stopx = newx;
     int stopy = newy;
     float temp;
-    float stepx = (float) oldx/(float)newx; 
+    float stepx = (float) oldx/(float)newx;
     float stepy = (float)oldy/(float)newy;
 
     if (oldx<newx){
@@ -256,7 +258,6 @@ int coarsen( double *uold, unsigned oldx, unsigned oldy ,
     //printf("rx=%f, ry=%f\n",stepx,stepy);
     // NOTE: this only takes the top-left corner,
     // and doesnt' do any real coarsening
-	
 
     for( i=0; i<stopy; i++ ){
        ii=stepy*i;
