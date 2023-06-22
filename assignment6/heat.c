@@ -137,18 +137,29 @@ int main(int argc, char *argv[]) {
 		local_residual = 999999999;
 		np_x = param.act_res_x + 2;
 		np_y = param.act_res_y + 2;
-
+		printf("rank = %d, np_x = %d, np_y = %d\n", rank, np_x, np_y);
 		double buffer_send_col[np_y]; //double buffer_send_row[np_x];
 		double buffer_recv_col[np_y]; //double buffer_recv_row[np_x];
 		for (iter = 0; iter < param.maxiter; iter++) {
 
-			local_residual = relax_jacobi(&(param.u), &(param.uhelp), np_x, np_y);
+			local_residual = inner_relax_jacobi(&param, &(param.u), &(param.uhelp), np_x, np_y);
+
+			local_residual += outer_relax_jacobi(&param, &(param.u), &(param.uhelp), np_x, np_y);
+			// local_residual = relax_jacobi(&(param.u), &(param.uhelp), np_x, np_y);
 
 			MPI_Allreduce(&local_residual, &global_residual, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-
+			
 			//send right
 			for(i=0; i< np_y; i++) { buffer_send_col[i] = param.u[np_x*i + np_x - 2];} 
-			MPI_Sendrecv(&buffer_send_col, np_y, MPI_DOUBLE, param.right_rank, 99, &buffer_recv_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+			
+			// MPI_Sendrecv(&buffer_send_col, np_y, MPI_DOUBLE, param.right_rank, 99, &buffer_recv_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+			
+			// Sending operation
+			MPI_Send(&buffer_send_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm);
+
+			// Receiving operation
+			MPI_Recv(&buffer_recv_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+
 			
 			if (param.left_rank >= 0){
 				for(i=0; i< np_y; i++) { 
@@ -158,19 +169,38 @@ int main(int argc, char *argv[]) {
 
 			//send left
 			for(i=0; i< np_y; i++) { buffer_send_col[i] = param.u[np_x*i + 1];}  
-			MPI_Sendrecv(&buffer_send_col, np_y, MPI_DOUBLE, param.left_rank, 99, &buffer_recv_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+			//MPI_Sendrecv(&buffer_send_col, np_y, MPI_DOUBLE, param.left_rank, 99, &buffer_recv_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, MPI_STATUS_IGNORE);
 			
+			// Sending operation
+			MPI_Send(&buffer_send_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm);
+
+			// Receiving operation
+			MPI_Recv(&buffer_recv_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+
 			if (param.right_rank >= 0){
 				for(i=0; i< np_y; i++) {
 					param.u[np_x*i + np_x - 1] = buffer_recv_col[i];
 				} 	
 			}
 
-			// //send top
-			MPI_Sendrecv(&param.u[np_x], np_x, MPI_DOUBLE, param.top_rank, 99, &param.u[np_x*(np_y - 1)], np_x, MPI_DOUBLE, param.bottom_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+			// // //send top
+			// MPI_Sendrecv(&param.u[np_x], np_x, MPI_DOUBLE, param.top_rank, 99, &param.u[np_x*(np_y - 1)], np_x, MPI_DOUBLE, param.bottom_rank, 99, cart_comm, MPI_STATUS_IGNORE);
 
-			// //send bottom
-			MPI_Sendrecv(&param.u[np_x*(np_y - 2)], np_x, MPI_DOUBLE, param.bottom_rank, 99, &param.u[0], np_x, MPI_DOUBLE, param.top_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+			// Sending the top data
+			MPI_Send(&param.u[np_x], np_x, MPI_DOUBLE, param.top_rank, 99, cart_comm);
+
+			// Receiving the bottom data
+			MPI_Recv(&param.u[np_x*(np_y - 1)], np_x, MPI_DOUBLE, param.bottom_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+
+			// // //send bottom
+			// MPI_Sendrecv(&param.u[np_x*(np_y - 2)], np_x, MPI_DOUBLE, param.bottom_rank, 99, &param.u[0], np_x, MPI_DOUBLE, param.top_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+
+			// Sending the bottom data
+			MPI_Send(&param.u[np_x*(np_y - 2)], np_x, MPI_DOUBLE, param.bottom_rank, 99, cart_comm);
+
+			// Receiving the top data
+			MPI_Recv(&param.u[0], np_x, MPI_DOUBLE, param.top_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+
 
 		}
 
@@ -251,13 +281,13 @@ int main(int argc, char *argv[]) {
 	// }
 	// if (rank == 0)
 	// write_image(resfile, param.uvis, 102, 102);
-	for(int i=0; i < np_y; i++){
-		for(int j=0; j < np_x;j++){
-			printf("%lf ", param.u[i*np_x + j]);
-		}
-		printf("\n");
-	}
-	printf("act_res_x=%d, act_res_y=%d, sizeof(u) = %d\n", param.act_res_x, param.act_res_y, sizeof(param.u));
+	// for(int i=0; i < np_y; i++){
+	// 	for(int j=0; j < np_x;j++){
+	// 		printf("%lf ", param.u[i*np_x + j]);
+	// 	}
+	// 	printf("\n");
+	// }
+	// printf("act_res_x=%d, act_res_y=%d, sizeof(u) = %d\n", param.act_res_x, param.act_res_y, sizeof(param.u));
 	write_image(resfile, param.u, 22, 22);
 	finalize(&param);
 	MPI_Finalize();

@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <mpi.h>
+#include <stdbool.h>
 
 // configuration
 
@@ -80,6 +81,11 @@ void relax_gauss( double *u,
 double residual_jacobi( double *u,
 			unsigned sizex, unsigned sizey );
 double relax_jacobi( double **u, double **utmp,
+ 		   unsigned sizex, unsigned sizey ); 
+double inner_relax_jacobi( algoparam_t *param, double **u, double **utmp,
+		   unsigned sizex, unsigned sizey ); 
+
+double outer_relax_jacobi( algoparam_t *param, double **u, double **utmp,
 		   unsigned sizex, unsigned sizey ); 
 
 
