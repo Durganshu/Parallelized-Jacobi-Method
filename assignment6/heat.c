@@ -137,76 +137,101 @@ int main(int argc, char *argv[]) {
 		local_residual = 999999999;
 		np_x = param.act_res_x + 2;
 		np_y = param.act_res_y + 2;
-		printf("rank = %d, np_x = %d, np_y = %d\n", rank, np_x, np_y);
+		// printf("rank = %d, np_x = %d, np_y = %d\n", rank, np_x, np_y);
 		double buffer_send_col[np_y]; //double buffer_send_row[np_x];
-		double buffer_recv_col[np_y]; //double buffer_recv_row[np_x];
+		double buffer_recv_right_col[np_y]; //double buffer_recv_row[np_x];
+		double buffer_recv_left_col[np_y];
 		for (iter = 0; iter < param.maxiter; iter++) {
+			MPI_Status request_status;
+			MPI_Request request_left_out, request_left_in;
+  			MPI_Request request_right_out, request_right_in;
+			MPI_Request request_top_out, request_top_in;
+			MPI_Request request_bottom_out, request_bottom_in;
 
-			local_residual = inner_relax_jacobi(&param, &(param.u), &(param.uhelp), np_x, np_y);
-
-			local_residual += outer_relax_jacobi(&param, &(param.u), &(param.uhelp), np_x, np_y);
 			// local_residual = relax_jacobi(&(param.u), &(param.uhelp), np_x, np_y);
-
-			MPI_Allreduce(&local_residual, &global_residual, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 			
+			// printf("rank = %d, local_res =%lf\n", rank, local_residual);
 			//send right
 			for(i=0; i< np_y; i++) { buffer_send_col[i] = param.u[np_x*i + np_x - 2];} 
 			
-			// MPI_Sendrecv(&buffer_send_col, np_y, MPI_DOUBLE, param.right_rank, 99, &buffer_recv_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, MPI_STATUS_IGNORE);
-			
+			// MPI_Sendrecv(&buffer_send_col, np_y, MPI_DOUBLE, param.right_rank, 99, &buffer_recv_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, MPI_STATUS_IGNORE); 
 			// Sending operation
-			MPI_Send(&buffer_send_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm);
+			MPI_Isend(&buffer_send_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, &request_right_out);
 
 			// Receiving operation
-			MPI_Recv(&buffer_recv_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+			MPI_Irecv(&buffer_recv_left_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, &request_right_in);
 
-			
-			if (param.left_rank >= 0){
-				for(i=0; i< np_y; i++) { 
-					param.u[np_x*i] = buffer_recv_col[i];
-				}  
-			}
+			// printf("done right\n");
 
 			//send left
 			for(i=0; i< np_y; i++) { buffer_send_col[i] = param.u[np_x*i + 1];}  
 			//MPI_Sendrecv(&buffer_send_col, np_y, MPI_DOUBLE, param.left_rank, 99, &buffer_recv_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, MPI_STATUS_IGNORE);
 			
 			// Sending operation
-			MPI_Send(&buffer_send_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm);
+			MPI_Isend(&buffer_send_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, &request_left_out);
 
 			// Receiving operation
-			MPI_Recv(&buffer_recv_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, MPI_STATUS_IGNORE);
-
-			if (param.right_rank >= 0){
-				for(i=0; i< np_y; i++) {
-					param.u[np_x*i + np_x - 1] = buffer_recv_col[i];
-				} 	
-			}
+			MPI_Irecv(&buffer_recv_right_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, &request_left_in);
 
 			// // //send top
 			// MPI_Sendrecv(&param.u[np_x], np_x, MPI_DOUBLE, param.top_rank, 99, &param.u[np_x*(np_y - 1)], np_x, MPI_DOUBLE, param.bottom_rank, 99, cart_comm, MPI_STATUS_IGNORE);
 
 			// Sending the top data
-			MPI_Send(&param.u[np_x], np_x, MPI_DOUBLE, param.top_rank, 99, cart_comm);
+			MPI_Isend(&param.u[np_x], np_x, MPI_DOUBLE, param.top_rank, 99, cart_comm, &request_top_out);
 
 			// Receiving the bottom data
-			MPI_Recv(&param.u[np_x*(np_y - 1)], np_x, MPI_DOUBLE, param.bottom_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+			MPI_Irecv(&param.u[np_x*(np_y - 1)], np_x, MPI_DOUBLE, param.bottom_rank, 99, cart_comm, &request_top_in);
 
 			// // //send bottom
 			// MPI_Sendrecv(&param.u[np_x*(np_y - 2)], np_x, MPI_DOUBLE, param.bottom_rank, 99, &param.u[0], np_x, MPI_DOUBLE, param.top_rank, 99, cart_comm, MPI_STATUS_IGNORE);
 
 			// Sending the bottom data
-			MPI_Send(&param.u[np_x*(np_y - 2)], np_x, MPI_DOUBLE, param.bottom_rank, 99, cart_comm);
+			MPI_Isend(&param.u[np_x*(np_y - 2)], np_x, MPI_DOUBLE, param.bottom_rank, 99, cart_comm, &request_bottom_out);
 
 			// Receiving the top data
-			MPI_Recv(&param.u[0], np_x, MPI_DOUBLE, param.top_rank, 99, cart_comm, MPI_STATUS_IGNORE);
+			MPI_Irecv(&param.u[0], np_x, MPI_DOUBLE, param.top_rank, 99, cart_comm, &request_bottom_in);
+			local_residual = inner_relax_jacobi(&param, &(param.u), &(param.uhelp), np_x, np_y);
+			
+			MPI_Wait(&request_right_out, &request_status);
+      		MPI_Wait(&request_right_in, &request_status);			
 
+			MPI_Wait(&request_left_out, &request_status);
+			MPI_Wait(&request_left_in, &request_status);
+			// printf("done left\n");
 
+			MPI_Wait(&request_top_out, &request_status);
+			MPI_Wait(&request_top_in, &request_status);
+
+			MPI_Wait(&request_bottom_out, &request_status);
+			MPI_Wait(&request_bottom_in, &request_status);
+
+			if (param.right_rank >= 0){
+				for(i=0; i< np_y; i++) {
+					param.u[np_x*i + np_x - 1] = buffer_recv_right_col[i];
+				} 	
+			}
+			if (param.left_rank >= 0){
+				for(i=0; i< np_y; i++) { 
+					param.u[np_x*i] = buffer_recv_left_col[i];
+				}  
+			}
+			local_residual += outer_relax_jacobi(&param, &(param.u), &(param.uhelp), np_x, np_y);
+
+			MPI_Allreduce(&local_residual, &global_residual, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+			// if(rank == 1)
+			// {
+			// 	//  printf(" New_values: \n");
+			// 	for(int i=0; i < np_y; i++){
+			// 		for(int j=0; j < np_x;j++){
+			// 		printf("%lf ", param.u[i*np_x + j]);
+			// 		}
+			// 		printf("\n");
+			// 	}
+			// }		
 		}
 
 		time[exp_number] = wtime() - time[exp_number];
 
-		
 		if (param.my_rank == 0){
 			
 			printf("\n\nResolution: %u\n", param.global_res);
