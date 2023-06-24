@@ -249,72 +249,68 @@ int main(int argc, char *argv[]) {
 		exp_number++;
 	}
 
-	param.act_res_x = param.act_res_x - param.res_step_size;
-	param.act_res_y = param.act_res_y - param.res_step_size;
+	coarsen(param.u, param.act_res_x + 2, param.act_res_y + 2, param.uvis, param.local_visres_x + 2, param.local_visres_y + 2);
 	
-	// coarsen(param.u, param.act_res_x + 2, param.act_res_y + 2, param.uvis, param.local_visres_x + 2, param.local_visres_y + 2);
-	// coarsen(param.u, param.act_res_x + 2, param.act_res_y + 2, param.uvis, 102, 102);
-	
-	// if(rank == 0){	
-	// 	int coordsx[size];
-	// 	int coordsy[size];
-	// 	int vis_xstart[size], vis_xend[size], vis_ystart[size], vis_yend[size], root_visres_x[size], root_visres_y[size];	
-	// 	int global_uvis[(param.global_visres+2)*(param.global_visres+2)];
+	double* global_uvis;
+	global_uvis = (double*)malloc( sizeof(double)* (param.global_visres+2)*(param.global_visres+2));
+	if(rank == 0){	
+		int coordsx[size];
+		int coordsy[size];
+		int vis_xstart_ranks[size], vis_xend_ranks[size], vis_ystart_ranks[size], vis_yend_ranks[size], root_visres_x[size], root_visres_y[size];	
 		
-	// 	for(int i =1;i < size; i++){	
-	// 		MPI_Cart_coords(cart_comm, i, 2, coords);
-	// 		coordsx[i] = coords[1];
-	// 		coordsy[i] = coords[0];
+		int l,m;
 
-	// 		vis_xstart[i] = (coordsx[i] *param.global_visres)/dims[1];
-	// 		vis_xend[i] = ((coordsx[i] + 1) *param.global_visres)/ dims[1]+1;
-	// 		vis_ystart[i] = (coordsy[i] *param.global_visres)/dims[0];
-	// 		vis_yend[i] = ((coordsy[i] + 1) * param.global_visres)/dims[0]+1;
+		l = 0;
+		for(int j = vis_ystart; j <= vis_yend; j++){	
+			m = 0;
+			for(int k = vis_xstart; k <= vis_xend; k++){
+				global_uvis[j*(param.global_visres+2) + k] = param.uvis[l*(param.local_visres_x+2) + m];
+				m++;
+			}
+			l++;
+		}
+		for(int i =1;i < size; i++){	
+			MPI_Cart_coords(cart_comm, i, 2, coords);
+			coordsx[i] = coords[1];
+			coordsy[i] = coords[0];
+			vis_xstart_ranks[i] = (coordsx[i] *param.global_visres)/dims[1];
+			vis_xend_ranks[i] = ((coordsx[i] + 1) *param.global_visres)/ dims[1]+1;
+			vis_ystart_ranks[i] = (coordsy[i] *param.global_visres)/dims[0];
+			vis_yend_ranks[i] = ((coordsy[i] + 1) * param.global_visres)/dims[0]+1;
 
-	// 		root_visres_x[i] = vis_xend[i] - vis_xstart[i] + 1;
-	// 		root_visres_y[i] = vis_yend[i] - vis_ystart[i] + 1;
-
-	// 		double buffer[root_visres_x[i]*root_visres_y[i]];
-	// 		// double *buffer = (double*)malloc( sizeof(double)* root_visres_x[i]*root_visres_y[i] );
-	// 		MPI_Recv(&buffer, root_visres_x[i]*root_visres_y[i], MPI_DOUBLE, i, 99, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	// 		printf("rank=%d, cordsx of baju = %d, cordsy of baju = %d",param.my_rank, coords_baju[1],coords_baju[0]);
-
-	// 		int l = 0;
-	// 		for(int j = vis_ystart[i]; j < vis_yend[i]; j++)
-	// 		{	
-	// 			int m = 0;
-	// 			for(int k = vis_xstart[i]; k < vis_xend[i]; k++){
-	// 				global_uvis[j*param.global_visres + k] = buffer[l*root_visres_x[i] + m];
-	// 				m++;
-	// 				printf("m=%d", m);
-	// 			}
-	// 			l++;
-	// 			printf("l=%d", l);
-	// 		}
-	// 		// free(buffer);
+			root_visres_x[i] = vis_xend_ranks[i] - vis_xstart_ranks[i] + 1;
+			root_visres_y[i] = vis_yend_ranks[i] - vis_ystart_ranks[i] + 1;
 			
-	// 	}		
-	// }
-	// else{
-	// 	MPI_Send(param.uvis, (param.local_visres_x+2)*(param.local_visres_y+2), MPI_DOUBLE, 0, 99, MPI_COMM_WORLD);
-	// }
+			if(size>1){
+				double buffer[root_visres_x[i]*root_visres_y[i]];
+				MPI_Recv(&buffer, root_visres_x[i]*root_visres_y[i], MPI_DOUBLE, i, 99, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			
+				l = 0;
+				for(int j = vis_ystart_ranks[i]; j <= vis_yend_ranks[i]; j++)
+				{	
+					m = 0;
+					for(int k = vis_xstart_ranks[i]; k <= vis_xend_ranks[i]; k++){
+						global_uvis[j*(param.global_visres+2) + k] = buffer[l*root_visres_x[i] + m];
+						m++;
+					}
+					l++;
+				}
+				
+			}
+		}		
+	}
+	else{
+		MPI_Send(param.uvis, (param.local_visres_x+2)*(param.local_visres_y+2), MPI_DOUBLE, 0, 99, MPI_COMM_WORLD);
+		free(global_uvis);
+	}
 
-	// if (rank == 0){
-	// 	// double u_buffer[(param.local_visres_x+1)*(param.local_visres_y+1)]
-	// 	double global_uvis[param.global_visres+2*param.global_visres+2];
-		
-		// write_image(resfile, param.global_u_vis, param.global_visres+2, param.global_visres+2);
-	// }
-	// if (rank == 0)
-	// write_image(resfile, param.uvis, 102, 102);
-	// for(int i=0; i < np_y; i++){
-	// 	for(int j=0; j < np_x;j++){
-	// 		printf("%lf ", param.u[i*np_x + j]);
-	// 	}
-	// 	printf("\n");
-	// }
-	// printf("act_res_x=%d, act_res_y=%d, sizeof(u) = %d\n", param.act_res_x, param.act_res_y, sizeof(param.u));
-	write_image(resfile, param.u, 22, 22);
+	if (rank == 0){
+
+		write_image(resfile, global_uvis, param.global_visres+2, param.global_visres+2);
+		free(global_uvis);
+	}
+
+
 	finalize(&param);
 	MPI_Finalize();
 	return 0;
