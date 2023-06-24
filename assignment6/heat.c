@@ -138,7 +138,8 @@ int main(int argc, char *argv[]) {
 		np_x = param.act_res_x + 2;
 		np_y = param.act_res_y + 2;
 		// printf("rank = %d, np_x = %d, np_y = %d\n", rank, np_x, np_y);
-		double buffer_send_col[np_y]; //double buffer_send_row[np_x];
+		double buffer_send_right_col[np_y]; //double buffer_send_row[np_x];
+		double buffer_send_left_col[np_y]; //double buffer_send_row[np_x];
 		double buffer_recv_right_col[np_y]; //double buffer_recv_row[np_x];
 		double buffer_recv_left_col[np_y];
 		for (iter = 0; iter < param.maxiter; iter++) {
@@ -152,11 +153,11 @@ int main(int argc, char *argv[]) {
 			
 			// printf("rank = %d, local_res =%lf\n", rank, local_residual);
 			//send right
-			for(i=0; i< np_y; i++) { buffer_send_col[i] = param.u[np_x*i + np_x - 2];} 
+			for(i=0; i< np_y; i++) { buffer_send_right_col[i] = param.u[np_x*i + np_x - 2];} 
 			
 			// MPI_Sendrecv(&buffer_send_col, np_y, MPI_DOUBLE, param.right_rank, 99, &buffer_recv_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, MPI_STATUS_IGNORE); 
 			// Sending operation
-			MPI_Isend(&buffer_send_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, &request_right_out);
+			MPI_Isend(&buffer_send_right_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, &request_right_out);
 
 			// Receiving operation
 			MPI_Irecv(&buffer_recv_left_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, &request_right_in);
@@ -164,11 +165,11 @@ int main(int argc, char *argv[]) {
 			// printf("done right\n");
 
 			//send left
-			for(i=0; i< np_y; i++) { buffer_send_col[i] = param.u[np_x*i + 1];}  
+			for(i=0; i< np_y; i++) { buffer_send_left_col[i] = param.u[np_x*i + 1];}  
 			//MPI_Sendrecv(&buffer_send_col, np_y, MPI_DOUBLE, param.left_rank, 99, &buffer_recv_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, MPI_STATUS_IGNORE);
 			
 			// Sending operation
-			MPI_Isend(&buffer_send_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, &request_left_out);
+			MPI_Isend(&buffer_send_left_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, &request_left_out);
 
 			// Receiving operation
 			MPI_Irecv(&buffer_recv_right_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, &request_left_in);
