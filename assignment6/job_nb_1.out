@@ -1,0 +1,70 @@
+1 1
+
+
+Resolution: 6000
+===================
+Execution time: 3.493565
+Residual: 0.708009
+
+megaflops:  3606.6
+  flop instructions (M):  12600.000
+1 2
+
+
+Resolution: 6000
+===================
+Execution time: 1.766484
+Residual: 0.708009
+
+megaflops:  3566.4
+  flop instructions (M):  6300.000
+1 4
+
+
+Resolution: 6000
+===================
+Execution time: 0.869200
+Residual: 0.708009
+
+megaflops:  3624.0
+  flop instructions (M):  3150.000
+1 8
+
+
+Resolution: 6000
+===================
+Execution time: 1.575799
+Residual: 0.708009
+
+megaflops:  999.5
+  flop instructions (M):  1575.000
+1 16
+
+
+Resolution: 6000
+===================
+Execution time: 0.416042
+Residual: 0.708009
+
+megaflops:  1892.8
+  flop instructions (M):  787.500
+8 4
+
+
+Resolution: 6000
+===================
+Execution time: 0.314071
+Residual: 0.708009
+
+megaflops:  1253.7
+  flop instructions (M):  393.750
+8 6
+
+
+Resolution: 6000
+===================
+Execution time: 0.204190
+Residual: 0.708009
+
+megaflops:  1285.6
+  flop instructions (M):  262.500
