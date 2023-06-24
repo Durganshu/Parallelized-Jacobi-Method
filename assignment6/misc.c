@@ -273,3 +273,4 @@ int coarsen( double *uold, unsigned oldx, unsigned oldy ,
 
   return 1;
 }
+}
