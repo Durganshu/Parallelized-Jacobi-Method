@@ -52,13 +52,6 @@ typedef struct
 }
 algoparam_t;
 
-// typedef struct 
-// {
-//     unsigned num_process_x;
-//     unsigned num_process_y;
-// }
-// parallel_params_t;
-
 
 // function declarations
 

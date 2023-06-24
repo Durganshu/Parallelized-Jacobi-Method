@@ -265,14 +265,9 @@ int coarsen( double *uold, unsigned oldx, unsigned oldy ,
           temp = 0;
           for ( k=0; k<stepy; k++ ){
 	       	for ( l=0; l<stepx; l++ ){
-	       		// if (ii+k<oldx && jj+l<oldy){
 		        temp += uold[(ii+k)*oldx+(jj+l)] ;
-				// 	count++;
-				// }
-	        }
 	      }
 	      unew[i*newx+j] = temp / (stepy*stepx);
-		//   printf("%f ",unew[i*newx+j]);
        }
     }
 
