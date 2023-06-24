@@ -4,56 +4,181 @@
 #SBATCH -J heat
 #SBATCH --ear=off
 #Output and error (also --output, --error):
-#SBATCH -o job.out
-#SBATCH -e job.out
+#SBATCH -o job_4.out
+#SBATCH -e job_4.out
+#SBATCH --nodes=4
 
 # Wall clock limit:
-#SBATCH --time=00:05:00
+#SBATCH --time=00:10:00
 #SBATCH --account=h039v
 #SBATCH --partition=test
 
-#vtune -collect memory-access -call-stack-mode user-plus-one -result-dir VtuneData/MemoryAccessO2 -app-working-dir . ./heat test.dat
+#echo "64 1"
+#mpirun -np 64 --map-by core ./heat test.dat 64 1
 
-#vtune -collect uarch-exploration -call-stack-mode user-plus-one -result-dir VtuneData/MicroArchitectureO2 -app-working-dir . ./heat test.dat
+#echo "1 64"
+#mpirun -np 64 --map-by core ./heat test.dat 1 64
 
-#vtune -collect hotspots -call-stack-mode user-plus-one -result-dir VtuneData/HotspotsO2 -app-working-dir . ./heat test.dat
+#echo "8 8"
+#mpirun -np 64 --map-by core ./heat test.dat 8 8
 
-# vtune -collect performance-snapshot -call-stack-mode user-plus-one -result-dir VtuneData/PerformanceSnapshotO2 -app-working-dir . ./heat test.dat
+#echo "4 16"
+#mpirun -np 64 --map-by core ./heat test.dat 4 16
 
-export KMP_AFFINITY="granularity=thread,compact,1,0"
-export OMP_NUM_THREADS=1
-./heat test.dat >> results/Assignment_4_3_3_static_compact_affinity_granularitythread/static_first_touch_compact_affinitylog1.txt
+#echo "16 4"
+#mpirun -np 64 --map-by core ./heat test.dat 16 4
 
-export OMP_NUM_THREADS=2
-echo $OMP_NUM_THREADS
-./heat test.dat >> results/Assignment_4_3_3_static_compact_affinity_granularitythread/static_first_touch_compact_affinitylog2.txt
+#echo "32 2"
+#mpirun -np 64 --map-by core ./heat test.dat 32 2
 
-export OMP_NUM_THREADS=4
-echo $OMP_NUM_THREADS
-./heat test.dat >> results/Assignment_4_3_3_static_compact_affinity_granularitythread/static_first_touch_compact_affinitylog4.txt
+#echo "2 32"
+#mpirun -np 64 --map-by core ./heat test.dat 2 32
 
-export OMP_NUM_THREADS=8
-echo $OMP_NUM_THREADS
-./heat test.dat >> results/Assignment_4_3_3_static_compact_affinity_granularitythread/static_first_touch_compact_affinitylog8.txt
+#echo "96 1"
+#mpirun -np 96 --map-by core ./heat test.dat 96 1
 
-export OMP_NUM_THREADS=12
-echo $OMP_NUM_THREADS
-./heat test.dat >> results/Assignment_4_3_3_static_compact_affinity_granularitythread/static_first_touch_compact_affinitylog12.txt
+#echo "1 96"
+#mpirun -np 96 --map-by core ./heat test.dat 1 96
 
-export OMP_NUM_THREADS=16
-echo $OMP_NUM_THREADS
-./heat test.dat >> results/Assignment_4_3_3_static_compact_affinity_granularitythread/static_first_touch_compact_affinitylog16.txt
+#echo "24 4"
+#mpirun -np 96 --map-by core ./heat test.dat 24 4
 
-export OMP_NUM_THREADS=24
-echo $OMP_NUM_THREADS
-./heat test.dat >> results/Assignment_4_3_3_static_compact_affinity_granularitythread/static_first_touch_compact_affinitylog24.txt
+#echo "4 24"
+#mpirun -np 96 --map-by core ./heat test.dat 4 24
 
-export OMP_NUM_THREADS=32
-echo $OMP_NUM_THREADS
-./heat test.dat >> results/Assignment_4_3_3_static_compact_affinity_granularitythread/static_first_touch_compact_affinitylog32.txt
+#echo "12 8"
+#mpirun -np 96 --map-by core ./heat test.dat 12 8
 
-export OMP_NUM_THREADS=48
-echo $OMP_NUM_THREADS
-./heat test.dat >> results/Assignment_4_3_3_static_compact_affinity_granularitythread/static_first_touch_compact_affinitylog48.txt
+#echo "8 12"
+#mpirun -np 96 --map-by core ./heat test.dat 8 12
 
+#echo "2 48"
+#mpirun -np 96 --map-by core ./heat test.dat 2 48
+
+#echo "48 2"
+#mpirun -np 96 --map-by core ./heat test.dat 48 2
+
+#echo "3 32"
+#mpirun -np 96 --map-by core ./heat test.dat 3 32
+
+#echo "32 3"
+#mpirun -np 96 --map-by core ./heat test.dat 32 3
+
+#echo "8 12"
+#mpirun -np 96 --map-by core ./heat test.dat 8 12
+
+#echo "6 16"
+#mpirun -np 96 --map-by core ./heat test.dat 6 16
+
+#echo "16 6"
+#mpirun -np 96 --map-by core ./heat test.dat 16 6
+
+
+#echo "1 128"
+#mpirun -np 128 --map-by core ./heat test.dat 1 128
+
+#echo "128 1"
+#mpirun -np 128 --map-by core ./heat test.dat 128 1
+
+#echo "16 8"
+#mpirun -np 128 --map-by core ./heat test.dat 16 8
+
+#echo "8 16"
+#mpirun -np 128 --map-by core ./heat test.dat 8 16
+
+#echo "64 2"
+#mpirun -np 128 --map-by core ./heat test.dat 64 2
+
+#echo "2 64"
+#mpirun -np 128 --map-by core ./heat test.dat 2 64
+
+
+#echo "32 4"
+#mpirun -np 128 --map-by core ./heat test.dat 32 4
+
+#echo "4 32"
+#mpirun -np 128 --map-by core ./heat test.dat 4 32
+
+
+#echo "1 144"
+#mpirun -np 144 --map-by core ./heat test.dat 1 144
+
+#echo "144 1"
+#mpirun -np 144 --map-by core ./heat test.dat 144 1
+
+#echo "18 8"
+#mpirun -np 144 --map-by core ./heat test.dat 18 8
+
+# echo "8 18"
+# mpirun -np 144 --map-by core ./heat test.dat 8 18
+
+# echo "72 2"
+# mpirun -np 144 --map-by core ./heat test.dat 72 2
+
+# echo "2 72"
+# mpirun -np 144 --map-by core ./heat test.dat 2 72
+
+
+# echo "36 4"
+# mpirun -np 144 --map-by core ./heat test.dat 36 4
+
+# echo "4 36"
+# mpirun -np 144 --map-by core ./heat test.dat 4 36
+
+# echo "3 48"
+# mpirun -np 144 --map-by core ./heat test.dat 3 48
+
+# echo "48 3"
+# mpirun -np 144 --map-by core ./heat test.dat 48 3
+
+# echo "9 16"
+# mpirun -np 144 --map-by core ./heat test.dat 9 16
+
+# echo "16 9"
+# mpirun -np 144 --map-by core ./heat test.dat 16 9
+
+# echo "12 12"
+# mpirun -np 144 --map-by core ./heat test.dat 12 12
+
+# echo "6 24"
+# mpirun -np 144 --map-by core ./heat test.dat 6 24
+
+# echo "24 6"
+# mpirun -np 144 --map-by core ./heat test.dat 24 6
+
+echo "192 1"
+mpirun -np 192 --map-by core ./heat test.dat 192 1
+
+echo "1 192"
+mpirun -np 192 --map-by core ./heat test.dat 1 192
+
+echo "2 96"
+mpirun -np 192 --map-by core ./heat test.dat 2 96
+
+echo "96 2"
+mpirun -np 192 --map-by core ./heat test.dat 96 2
+
+echo "48 4"
+mpirun -np 192 --map-by core ./heat test.dat 48 4
+
+echo "4 48"
+mpirun -np 192 --map-by core ./heat test.dat 4 48
+
+echo "6 32"
+mpirun -np 192 --map-by core ./heat test.dat 6 32
+
+echo "32 6"
+mpirun -np 192 --map-by core ./heat test.dat 32 6
+
+echo "8 24"
+mpirun -np 192 --map-by core ./heat test.dat 8 24
+
+echo "24 8"
+mpirun -np 192 --map-by core ./heat test.dat 24 8
+
+echo "12 16"
+mpirun -np 192 --map-by core ./heat test.dat 12 16
+
+echo "16 12"
+mpirun -np 192 --map-by core ./heat test.dat 16 12
 
