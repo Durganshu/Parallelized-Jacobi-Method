@@ -68,19 +68,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// check result file
-	// resfilename = (argc >= 3) ? argv[2] : "heat.ppm";
-	//resfilename = "heat.ppm";
-	if(rank == 0) resfilename = "heat_0.ppm";
-
-	if(rank == 1) resfilename = "heat_1.ppm";
-	
-	if(rank == 2) resfilename = "heat_2.ppm";
-
-	if(rank == 3) resfilename = "heat_3.ppm";
-
-	if(rank == 4) resfilename = "heat_4.ppm";
-
-	if(rank == 5) resfilename = "heat_5.ppm";
+	resfilename = "heat.ppm";
 
 	if (!(resfile = fopen(resfilename, "w"))) {
 		fprintf(stderr, "\nError: Cannot open \"%s\" for writing.\n\n", resfilename);
