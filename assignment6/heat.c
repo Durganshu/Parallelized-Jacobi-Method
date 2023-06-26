@@ -17,8 +17,9 @@ int main(int argc, char *argv[]) {
 	char *resfilename;
 	int np_x, np_y, iter, chkflag;
 	
+	//*************************
 	int rank, size;
-
+    // double diff, max_diff, local_diff, global_diff;
 	MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -67,6 +68,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// check result file
+	// resfilename = (argc >= 3) ? argv[2] : "heat.ppm";
 	resfilename = "heat.ppm";
 
 	if (!(resfile = fopen(resfilename, "w"))) {
@@ -200,11 +202,13 @@ int main(int argc, char *argv[]) {
 			}
 			l++;
 		}
+
 		for(int i =1;i < size; i++){	
 			MPI_Cart_coords(cart_comm, i, 2, coords);
 			coordsx[i] = coords[1];
 			coordsy[i] = coords[0];
-			vis_xstart_ranks[i] = (coordsx[i] *param.global_visres)/dims[1];
+
+ 			vis_xstart_ranks[i] = (coordsx[i] *param.global_visres)/dims[1];
 			vis_xend_ranks[i] = ((coordsx[i] + 1) *param.global_visres)/ dims[1]+1;
 			vis_ystart_ranks[i] = (coordsy[i] *param.global_visres)/dims[0];
 			vis_yend_ranks[i] = ((coordsy[i] + 1) * param.global_visres)/dims[0]+1;
@@ -215,6 +219,7 @@ int main(int argc, char *argv[]) {
 			if(size>1){
 				double buffer[root_visres_x[i]*root_visres_y[i]];
 				MPI_Recv(&buffer, root_visres_x[i]*root_visres_y[i], MPI_DOUBLE, i, 99, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
 				l = 0;
 				for(int j = vis_ystart_ranks[i]; j <= vis_yend_ranks[i]; j++)
 				{	

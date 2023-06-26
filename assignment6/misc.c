@@ -266,11 +266,11 @@ int coarsen( double *uold, unsigned oldx, unsigned oldy ,
           for ( k=0; k<stepy; k++ ){
 	       	for ( l=0; l<stepx; l++ ){
 		        temp += uold[(ii+k)*oldx+(jj+l)] ;
+	        }
 	      }
 	      unew[i*newx+j] = temp / (stepy*stepx);
        }
     }
 
   return 1;
-}
 }
