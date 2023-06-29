@@ -9,6 +9,7 @@
 #include "search.h"
 #include "board.h"
 #include "eval.h"
+#include <iostream>
 
 /**
  * To create your own search strategy:
@@ -52,9 +53,10 @@ int MinMaxStrategy::MinMax(int currentdepth)
     MoveList list;
     // _currentMaxDepth = 1;
     generateMoves(list);
-
+    // int i =0;
     while (list.getNext(m))
     {
+        // std::cout << i++ << "\n";
         playMove(m);
         int eval;
         if (currentdepth+1 < _maxDepth)
@@ -71,12 +73,10 @@ int MinMaxStrategy::MinMax(int currentdepth)
         {
             maxEval = eval;
             foundBestMove(currentdepth, m, eval);
-
-            if (currentdepth == 0)
-            {
-                _currentBestMove = m;
-            }
-
+            // if (currentdepth == 0)
+            // {
+            //     _currentBestMove = m;
+            // }
         }
 
     }
@@ -90,35 +90,8 @@ void MinMaxStrategy::searchBestMove()
     int bestEval = minEvaluation();
     int eval;
     _currentDepth = 0;
-    // Move m0;
-    // MoveList list0;
-
-    // generate list of allowed moves, put them into <list>
-    // generateMoves(list0);
-
-    // loop over all moves
-
     MinMax(_currentDepth);
-
-    // while (list.getNext(m))
-    // {
-    //     playMove(m);
-    //     eval = MinMax(_currentDepth);
-    //     takeBack();
-
-    //     // draw move, evalute, and restore position
-    //     playMove(m);
-    //     eval = evaluate();
-    //     takeBack();
-
-    //     if (eval > bestEval)
-    //     {
-    //         bestEval = eval;
-    //         foundBestMove(0, m, eval);
-    //     }
-    // }
-
-    finishedNode(0, 0);
+    finishedNode(_maxDepth, 0);
 }
 
 // register ourselve as a search strategy

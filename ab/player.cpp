@@ -43,10 +43,10 @@ extern int verbose;
 
 /* remote channel */
 char* host = 0;       /* not used on default */
-int rport = 23412;
+int rport = 3000;
 
 /* local channel */
-int lport = 23412;
+int lport = 3000;
 
 /* change evaluation after move? */
 bool changeEval = true;
