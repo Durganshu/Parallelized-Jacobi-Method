@@ -47,7 +47,7 @@ private:
 
 int MinMaxStrategy::MinMax(int currentdepth)
 {
-    int maxEval = -15000, min = 15000;
+    int maxEval = -999999, min = 15000;
     Move m;
 
     MoveList list;
@@ -59,14 +59,9 @@ int MinMaxStrategy::MinMax(int currentdepth)
     {
         return evaluate();
     }
+
     while (list.getNext(m))
     {
-        // std::cout << "*******Current Depth:  " << currentdepth << "\n";
-        // if (currentdepth == 0)
-        // {
-        //     std::cout << i++ << "\n";
-        // }
-
         playMove(m);
         int eval;
         if (currentdepth+1 < _maxDepth)
@@ -84,6 +79,7 @@ int MinMaxStrategy::MinMax(int currentdepth)
             // std::cout << i++ << "\n";
             maxEval = eval;
             foundBestMove(currentdepth, m, eval);
+            finishedNode(_maxDepth, 0);
             // if (currentdepth == 0)
             // {
             //     _currentBestMove = m;
@@ -101,8 +97,13 @@ void MinMaxStrategy::searchBestMove()
     int bestEval = minEvaluation();
     int eval;
     _currentDepth = 0;
-    MinMax(_currentDepth);
-    finishedNode(_maxDepth, 0);
+    // #pragma parallel{
+    //     #pragma single{
+            bestEval = MinMax(_currentDepth);
+        // }
+    // }
+    
+    
 }
 
 // register ourselve as a search strategy
