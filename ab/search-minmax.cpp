@@ -42,12 +42,13 @@ private:
     void searchBestMove();
 
     int MinMax(int currentdepth);
+    int MinMaxParallel(int currentdepth, Board& board);
     int _currentDepth;
 };
 
 int MinMaxStrategy::MinMax(int currentdepth)
 {
-    int maxEval = -999999, min = 15000;
+    int maxEval = -999999;
     Move m;
 
     MoveList list;
@@ -91,17 +92,74 @@ int MinMaxStrategy::MinMax(int currentdepth)
 
 }
 
+int MinMaxStrategy::MinMaxParallel(int currentdepth, Board& board)
+{
+    int maxEval = -999999;
+    Move m;
+
+    MoveList list;
+    // _currentMaxDepth = 1;
+    generateMoves(list);
+
+    int i =0;
+    if(currentdepth  >= _maxDepth)
+    {
+        return evaluate();
+    }
+
+    while (list.getNext(m))
+    {
+        #pragma omp task reduction (max: maxEval) firstprivate(m, currentdepth, board, maxEval)
+        {
+    
+            board.playMove(m);
+            int eval;
+            {
+                if (currentdepth+1 < _maxDepth)
+                {
+                    eval = -MinMax(currentdepth + 1);
+                }
+                else
+                {
+                    eval = evaluate();
+                }
+            }
+            takeBack();
+
+            if (eval > maxEval)
+            {
+                // std::cout << i++ << "\n";
+                maxEval = eval;
+                foundBestMove(currentdepth, m, eval);
+                finishedNode(_maxDepth, 0);
+                // if (currentdepth == 0)
+                // {
+                //     _currentBestMove = m;
+                // }
+            }
+        }
+    }
+
+    return maxEval;
+
+
+}
+
+
 void MinMaxStrategy::searchBestMove()
 {
     // we try to maximize bestEvaluation
     int bestEval = minEvaluation();
     int eval;
     _currentDepth = 0;
-    // #pragma parallel{
-    //     #pragma single{
-            bestEval = MinMax(_currentDepth);
-        // }
-    // }
+    #pragma parallel
+    {
+        #pragma single
+        {
+            // bestEval = MinMax(_currentDepth);
+            bestEval = MinMaxParallel(_currentDepth, *_board);
+        }
+    }
     
     
 }
