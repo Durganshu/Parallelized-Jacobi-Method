@@ -122,21 +122,25 @@ int main(int argc, char *argv[]) {
 		}
 
 		// starting time
-		time[exp_number] = wtime();
+		
 		local_residual = 999999999;
 		np_x = param.act_res_x + 2;
 		np_y = param.act_res_y + 2;
 
 		double buffer_send_col[np_y]; //double buffer_send_row[np_x];
 		double buffer_recv_col[np_y]; //double buffer_recv_row[np_x];
+		time[exp_number] = wtime();
 		for (iter = 0; iter < param.maxiter; iter++) {
 
 			local_residual = relax_jacobi(&(param.u), &(param.uhelp), np_x, np_y);
 
-			MPI_Allreduce(&local_residual, &global_residual, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+			MPI_Allreduce(&local_residual, &global_residual, 1, MPI_DOUBLE, MPI_SUM, cart_comm);
 
 			//send right
-			for(i=0; i< np_y; i++) { buffer_send_col[i] = param.u[np_x*i + np_x - 2];} 
+			if(param.right_rank >= 0){
+				for(i=0; i< np_y; i++) { buffer_send_col[i] = param.u[np_x*i + np_x - 2];}
+			}
+			 
 			MPI_Sendrecv(&buffer_send_col, np_y, MPI_DOUBLE, param.right_rank, 99, &buffer_recv_col, np_y, MPI_DOUBLE, param.left_rank, 99, cart_comm, MPI_STATUS_IGNORE);
 			
 			if (param.left_rank >= 0){
@@ -146,7 +150,10 @@ int main(int argc, char *argv[]) {
 			}
 
 			//send left
-			for(i=0; i< np_y; i++) { buffer_send_col[i] = param.u[np_x*i + 1];}  
+			if(param.left_rank >= 0){
+				for(i=0; i< np_y; i++) { buffer_send_col[i] = param.u[np_x*i + 1];} 
+			}
+			 
 			MPI_Sendrecv(&buffer_send_col, np_y, MPI_DOUBLE, param.left_rank, 99, &buffer_recv_col, np_y, MPI_DOUBLE, param.right_rank, 99, cart_comm, MPI_STATUS_IGNORE);
 			
 			if (param.right_rank >= 0){
@@ -162,7 +169,6 @@ int main(int argc, char *argv[]) {
 			MPI_Sendrecv(&param.u[np_x*(np_y - 2)], np_x, MPI_DOUBLE, param.bottom_rank, 99, &param.u[0], np_x, MPI_DOUBLE, param.top_rank, 99, cart_comm, MPI_STATUS_IGNORE);
 
 		}
-
 		time[exp_number] = wtime() - time[exp_number];
 
 		

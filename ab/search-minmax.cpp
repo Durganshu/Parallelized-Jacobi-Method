@@ -10,6 +10,7 @@
 #include "board.h"
 #include "eval.h"
 #include <iostream>
+#include <algorithm>
 
 /**
  * To create your own search strategy:
@@ -42,109 +43,173 @@ private:
     void searchBestMove();
 
     int MinMax(int currentdepth);
-    int MinMaxParallel(int currentdepth, Board& board);
+    int MinMaxParallel(int currentdepth, Board &board);
     int _currentDepth;
 };
 
-int MinMaxStrategy::MinMax(int currentdepth)
+int MinMaxStrategy::MinMax(int currentdepth)//0
 {
-    int maxEval = -999999;
-    Move m;
-
-    MoveList list;
-    // _currentMaxDepth = 1;
-    generateMoves(list);
-
-    int i =0;
-    if(currentdepth  >= _maxDepth)
+    
+    if (currentdepth == _maxDepth)
     {
         return evaluate();
     }
+    int eval;
+    int max = -999999;
+    int min = 999999;
+    Move m;
+    MoveList list;
+    generateMoves(list);
 
-    while (list.getNext(m))
-    {
+    while(list.getNext(m)){
         playMove(m);
-        int eval;
-        if (currentdepth+1 < _maxDepth)
-        {
-            eval = -MinMax(currentdepth + 1);
+        int eval; 
+        if(currentdepth + 1 < _maxDepth){
+            eval = -MinMax(currentdepth+1);
         }
-        else
-        {
+        else{
             eval = evaluate();
         }
         takeBack();
 
-        if (eval > maxEval)
-        {
-            // std::cout << i++ << "\n";
-            maxEval = eval;
-            foundBestMove(currentdepth, m, eval);
-            finishedNode(_maxDepth, 0);
-            // if (currentdepth == 0)
-            // {
-            //     _currentBestMove = m;
-            // }
+        if(eval > max){
+            max = eval;
+            foundBestMove(currentdepth, m ,max);
+
         }
     }
-    return maxEval;
+    finishedNode(currentdepth, 0);
+    return max;
 
+    // if (_board->actColor() == 1)
+    // {
+    //     while (list.getNext(m)){
+    //         playMove(m);
+    //         if(currentdepth + 1 < _maxDepth){
+    //             eval = -MinMax(currentdepth+1);
+    //         }
+    //         else{
+    //             eval = evaluate();
+    //         }
+    //         takeBack();
+    //         if(eval > max){
+    //             max = eval;
+    //             foundBestMove(currentdepth, m, max);
+    //         }
+    //     }
+    //     finishedNode(currentdepth, 0);
+    //     return max;
+    // }
+    // else{
+    //     while (list.getNext(m)){
+    //         playMove(m);
+    //         if(currentdepth + 1 < _maxDepth){
+    //             eval = -MinMax(currentdepth+1);
+    //         }
+    //         else{
+    //             eval = evaluate();
+    //         }
+    //         // min = std::min(min, MinMax(currentdepth + 1));
+    //         takeBack();
+    //         if(eval > max){
+    //             max = eval;
+    //             foundBestMove(currentdepth, m ,max);
+    //         }
+    //     }
+    //     finishedNode(currentdepth, 0);
+    //     return max;
+    // }
+    // while (list.getNext(m))
+    // {
+    //     playMove(m);
+    //     if (_board->actColor() == 1)
+    //     {
+    //         max = std::max(max, MinMax(currentdepth + 1));
+    //         foundBestMove(currentdepth, m, max);
+    //         finishedNode(currentdepth, 0);
+    //         return max;
+    //     }
+    //     else
+    //     {
+    //         min = std::min(min, MinMax(currentdepth + 1));
+    //         foundBestMove(currentdepth, m, min);
+    //         finishedNode(currentdepth, 0);
+    //         return min;
+    //     }
+    //     if ((currentdepth + 1) < _maxDepth)
+    //     {
+    //         eval = -MinMax(currentdepth + 1);
+    //     }
+    //     else
+    //     {
+    //         eval = evaluate();
+    //         // std::cout<<"Evaluation: "<<eval<<'\n';
+    //     }
 
+    //     takeBack();
+
+    //     if (eval > maxval)
+    //     {
+    //         maxval = eval;
+    //         foundBestMove(currentdepth, m, maxval);
+    //         finishedNode(currentdepth, 0);
+    //     }
+    //     // std::cout<<"MaxEval: "<<maxEval<<'\n';
+    // }
+    // return maxval;
 }
 
-int MinMaxStrategy::MinMaxParallel(int currentdepth, Board& board)
-{
-    int maxEval = -999999;
-    Move m;
+// int MinMaxStrategy::MinMaxParallel(int currentdepth, Board& board)
+// {
+//     int maxEval = -999999;
+//     Move m;
 
-    MoveList list;
-    // _currentMaxDepth = 1;
-    generateMoves(list);
+//     MoveList list;
+//     // _currentMaxDepth = 1;
+//     generateMoves(list);
 
-    int i =0;
-    if(currentdepth  >= _maxDepth)
-    {
-        return evaluate();
-    }
+//     int i =0;
+//     if(currentdepth  >= _maxDepth)
+//     {
+//         return evaluate();
+//     }
 
-    while (list.getNext(m))
-    {
-        #pragma omp task reduction (max: maxEval) firstprivate(m, currentdepth, board, maxEval)
-        {
-    
-            board.playMove(m);
-            int eval;
-            {
-                if (currentdepth+1 < _maxDepth)
-                {
-                    eval = -MinMax(currentdepth + 1);
-                }
-                else
-                {
-                    eval = evaluate();
-                }
-            }
-            takeBack();
+//     while (list.getNext(m))
+//     {
+//         #pragma omp task reduction (max: maxEval) firstprivate(m, currentdepth, board, maxEval)
+//         {
 
-            if (eval > maxEval)
-            {
-                // std::cout << i++ << "\n";
-                maxEval = eval;
-                foundBestMove(currentdepth, m, eval);
-                finishedNode(_maxDepth, 0);
-                // if (currentdepth == 0)
-                // {
-                //     _currentBestMove = m;
-                // }
-            }
-        }
-    }
+//             board.playMove(m);
+//             int eval;
+//             {
+//                 if (currentdepth+1 < _maxDepth)
+//                 {
+//                     eval = -MinMax(currentdepth + 1);
+//                 }
+//                 else
+//                 {
+//                     eval = evaluate();
+//                 }
+//             }
+//             takeBack();
 
-    return maxEval;
+//             if (eval > maxEval)
+//             {
+//                 // std::cout << i++ << "\n";
+//                 maxEval = eval;
+//                 foundBestMove(currentdepth, m, eval);
+//                 finishedNode(_maxDepth, 0);
+//                 // if (currentdepth == 0)
+//                 // {
+//                 //     _currentBestMove = m;
+//                 // }
+//             }
+//         }
+//     }
 
+//     return maxEval;
 
-}
-
+// }
 
 void MinMaxStrategy::searchBestMove()
 {
@@ -152,15 +217,7 @@ void MinMaxStrategy::searchBestMove()
     int bestEval = minEvaluation();
     int eval;
     _currentDepth = 0;
-    #pragma parallel
-    {
-        #pragma single
-        {
-            // bestEval = MinMax(_currentDepth);
-            bestEval = MinMaxParallel(_currentDepth, *_board);
-        }
-    }
-    
+    eval = MinMax(_currentDepth);
     
 }
 
