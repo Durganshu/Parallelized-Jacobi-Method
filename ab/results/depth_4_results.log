@@ -1,0 +1,41 @@
+For start:
+
+EvalRate 635 k/s (6417600 evals, 10094 msecs)
+ EvalRate 635 k/s (6417600 evals, 10094 msecs)
+Evaluations= -47
+ Search finished after 10.111 secs
+  Found move 'I9/LeftUp'
+  Leaves visited: 6428712 (635 k/s)
+  Nodes visited: 116495 (55 leaves per node)
+
+For midgame1:
+
+ EvalRate 695 k/s (31715400 evals, 45593 msecs)
+
+
+For midgame2:
+ EvalRate 689 k/s (13712400 evals, 19880 msecs)
+ EvalRate 689 k/s (13856800 evals, 20089 msecs)
+ EvalRate 689 k/s (14001200 evals, 20299 msecs)
+ EvalRate 689 k/s (14145600 evals, 20509 msecs)
+Evaluations= -1657
+ Search finished after 20.511 secs
+  Found move 'E6/Left/Push'
+  Leaves visited: 14147414 (689 k/s)
+
+
+
+For endgame:
+
+EvalRate 730 k/s (10648200 evals, 14582 msecs)
+ EvalRate 730 k/s (10804800 evals, 14797 msecs)
+Evaluations= 6495
+ Search finished after 14.959 secs
+  Found move 'D5/LeftDown/Push'
+  Leaves visited: 10923451 (730 k/s)
+  Nodes visited: 248748 (43 leaves per node)
+O draws 'D5/LeftDown/Push' (after 14.959 secs)...
+
+
+
+

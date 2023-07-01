@@ -1,0 +1,48 @@
+For start:
+
+ Search finished after 0.149 secs
+  Found move 'A1/RightDown'
+  Leaves visited: 98912 (663 k/s)
+  Nodes visited: 1981 (49 leaves per node)
+
+
+
+For midgame1:
+
+ EvalRate 555 k/s (447600 evals, 806 msecs)
+ EvalRate 555 k/s (558800 evals, 1006 msecs)
+ EvalRate 555 k/s (558800 evals, 1006 msecs)
+Evaluations= 774
+ Search finished after 1.096 secs
+  Found move 'C3/LeftDown'
+  Leaves visited: 608215 (554 k/s)
+  Nodes visited: 7054 (86 leaves per node)
+O draws 'C3/LeftDown' (after 1.096 secs)...
+
+
+For midgame2:
+ EvalRate 663 k/s (126000 evals, 190 msecs)
+ EvalRate 663 k/s (126000 evals, 190 msecs)
+ EvalRate 659 k/s (258600 evals, 392 msecs)
+ EvalRate 659 k/s (258600 evals, 392 msecs)
+Evaluations= -1646
+ Search finished after 0.413 secs
+  Found move 'F7/Left/Push'
+  Leaves visited: 272570 (659 k/s)
+  Nodes visited: 4377 (62 leaves per node)
+X draws 'F7/Left/Push' (after 0.413 secs)...
+
+
+For endgame:
+
+EvalRate 641 k/s (139200 evals, 217 msecs)
+ EvalRate 641 k/s (139200 evals, 217 msecs)
+Evaluations= 6599
+ Search finished after 0.386 secs
+  Found move 'D5/LeftDown/Push'
+  Leaves visited: 245383 (635 k/s)
+  Nodes visited: 3365 (72 leaves per node)
+O draws 'D5/LeftDown/Push' (after 0.386 secs)...
+
+
+
