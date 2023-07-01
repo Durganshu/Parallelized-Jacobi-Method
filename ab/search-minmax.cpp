@@ -50,11 +50,11 @@ private:
 int MinMaxStrategy::MinMax(int currentdepth)//0
 {
     
-    if (currentdepth == _maxDepth)
+    if (currentdepth >= _maxDepth)
     {
         return evaluate();
     }
-    int eval;
+    //int eval;
     int max = -999999;
     int min = 999999;
     Move m;
@@ -62,8 +62,8 @@ int MinMaxStrategy::MinMax(int currentdepth)//0
     generateMoves(list);
 
     while(list.getNext(m)){
-        playMove(m);
-        int eval; 
+        int eval;
+        playMove(m); 
         if(currentdepth + 1 < _maxDepth){
             eval = -MinMax(currentdepth+1);
         }
@@ -74,7 +74,7 @@ int MinMaxStrategy::MinMax(int currentdepth)//0
 
         if(eval > max){
             max = eval;
-            foundBestMove(currentdepth, m ,max);
+            foundBestMove(currentdepth, m ,eval);
 
         }
     }
@@ -218,6 +218,7 @@ void MinMaxStrategy::searchBestMove()
     int eval;
     _currentDepth = 0;
     eval = MinMax(_currentDepth);
+    std::cout <<"Evaluations= " << eval << "\n";
     
 }
 
