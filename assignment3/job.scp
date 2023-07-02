@@ -4,21 +4,22 @@
 #SBATCH -J heat
 #SBATCH --ear=off
 #Output and error (also --output, --error):
-#SBATCH -o vtunejob.out
-#SBATCH -e vtunejob.out
+#SBATCH -o job.out
+#SBATCH -e job.out
 
 # Wall clock limit:
-#SBATCH --time=00:02:00
+#SBATCH --time=00:04:00
 #SBATCH --account=h039v
 #SBATCH --partition=test
 
+./heat test.dat 
 #vtune -collect memory-access -call-stack-mode user-plus-one -result-dir VtuneData/MemoryAccessO2 -app-working-dir . ./heat test.dat
 
 #vtune -collect uarch-exploration -call-stack-mode user-plus-one -result-dir VtuneData/MicroArchitectureO2 -app-working-dir . ./heat test.dat
 
 #vtune -collect hotspots -call-stack-mode user-plus-one -result-dir VtuneData/HotspotsO2 -app-working-dir . ./heat test.dat
 
-vtune -collect performance-snapshot -call-stack-mode user-plus-one -result-dir VtuneData/PerformanceSnapshotO2 -app-working-dir . ./heat test.dat
+#vtune -collect performance-snapshot -call-stack-mode user-plus-one -result-dir VtuneData/PerformanceSnapshotO2 -app-working-dir . ./heat test.dat
 
 
 
