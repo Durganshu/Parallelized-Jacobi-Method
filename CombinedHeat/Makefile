@@ -1,3 +1,9 @@
+# Usage:
+# For pure MPI version: make 
+# For Hybrid MPI + OpenMP version: make VARIANT=HYBRID
+# For non-blocking MPI version: make VARIANT=NON_BLOCKING
+
+
 # CC=mpicc
 # CFLAGS=-O3 -fopenmp 
 VARIANT :=
