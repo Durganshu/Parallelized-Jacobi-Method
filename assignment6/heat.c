@@ -16,14 +16,17 @@ int main(int argc, char *argv[]) {
 	FILE *infile, *resfile;
 	char *resfilename;
 	int np_x, np_y, iter, chkflag;
+	int provided;
 	
 	//*************************
 	int rank, size;
     // double diff, max_diff, local_diff, global_diff;
-	MPI_Init(&argc, &argv);
+	// MPI_Init(&argc, &argv);
+	MPI_Init_thread(&argc, &argv, MPI_THREAD_FUNNELED, &provided);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
+	omp_set_num_threads(48);
 	// algorithmic parameters
 	algoparam_t param;
 

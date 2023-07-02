@@ -39,7 +39,7 @@ int initialize( algoparam_t *param )
 	// (param->uvis)  = (double*)calloc( sizeof(double),
 	// 			      102 * 102);
 
-
+#pragma omp parallel for schedule(static)
     for (i=0;i<np_y;i++){
     	for (j=0;j<np_x;j++){
     		param->u[i*np_x+j]=0;

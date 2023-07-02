@@ -80,11 +80,11 @@
 #echo "128 1"
 #mpirun -np 128 --map-by core ./heat test.dat 128 1
 
-#echo "16 8"
-#mpirun -np 128 --map-by core ./heat test.dat 16 8
+# echo "16 8"
+# mpirun -np 128 --map-by core ./heat test.dat 16 8
 
-#echo "8 16"
-#mpirun -np 128 --map-by core ./heat test.dat 8 16
+# echo "8 16"
+# mpirun -np 128 --map-by core ./heat test.dat 8 16
 
 #echo "64 2"
 #mpirun -np 128 --map-by core ./heat test.dat 64 2
@@ -132,13 +132,14 @@
 # mpirun -np 144 --map-by core ./heat test.dat 48 3
 
 # echo "9 16"
-# mpirun -np 144 --map-by core ./heat test.dat 9 16
+# mpirun -n 144 -perhost 48 ./heat test.dat 9 16
 
 # echo "16 9"
-# mpirun -np 144 --map-by core ./heat test.dat 16 9
+# mpirun -n 144 -perhost 48 ./heat test.dat 16 9
 
 # echo "12 12"
-# mpirun -np 144 --map-by core ./heat test.dat 12 12
+# mpirun -n 192 -perhost 48 ./heat test.dat 12 16
+
 
 # echo "6 24"
 # mpirun -np 144 --map-by core ./heat test.dat 6 24
@@ -146,39 +147,12 @@
 # echo "24 6"
 # mpirun -np 144 --map-by core ./heat test.dat 24 6
 
-echo "192 1"
-mpirun -np 192 --map-by core ./heat test.dat 192 1
 
-echo "1 192"
-mpirun -np 192 --map-by core ./heat test.dat 1 192
 
-echo "2 96"
-mpirun -np 192 --map-by core ./heat test.dat 2 96
+# echo "12 16"
+# mpirun -n 192 -perhost 48 ./heat test.dat 12 16
 
-echo "96 2"
-mpirun -np 192 --map-by core ./heat test.dat 96 2
+# echo "16 12"
+# mpirun -n 192 -perhost 48 ./heat test.dat 16 12
 
-echo "48 4"
-mpirun -np 192 --map-by core ./heat test.dat 48 4
-
-echo "4 48"
-mpirun -np 192 --map-by core ./heat test.dat 4 48
-
-echo "6 32"
-mpirun -np 192 --map-by core ./heat test.dat 6 32
-
-echo "32 6"
-mpirun -np 192 --map-by core ./heat test.dat 32 6
-
-echo "8 24"
-mpirun -np 192 --map-by core ./heat test.dat 8 24
-
-echo "24 8"
-mpirun -np 192 --map-by core ./heat test.dat 24 8
-
-echo "12 16"
-mpirun -np 192 --map-by core ./heat test.dat 12 16
-
-echo "16 12"
-mpirun -np 192 --map-by core ./heat test.dat 16 12
 

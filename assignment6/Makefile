@@ -1,5 +1,5 @@
 CC = mpiicc 
-CFLAGS = -O3 -fno-alias -xhost 
+CFLAGS = -O3 -fno-alias -xhost -fopenmp
 #-parallel -qopt-report-phase=par -qopt-report:5 
 #-par-num-threads=2
 
