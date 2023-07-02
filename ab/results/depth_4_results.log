@@ -11,6 +11,14 @@ Evaluations= -47
 For midgame1:
 
  EvalRate 695 k/s (31715400 evals, 45593 msecs)
+ Finished node at depth 0
+   34327884 leaves, 418523 nodes visited (82 leaves per node)
+Evaluations= -230
+ Search finished after 60.386 secs
+  Found move 'G4/LeftUp'
+  Leaves visited: 34327884 (568 k/s)
+  Nodes visited: 418523 (82 leaves per node)
+
 
 
 For midgame2:
