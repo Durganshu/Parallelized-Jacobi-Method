@@ -3,10 +3,11 @@
 # For Hybrid MPI + OpenMP version: make VARIANT=HYBRID
 # For non-blocking MPI version: make VARIANT=NON_BLOCKING
 
+VARIANT :=
 
 # CC=mpicc
 # CFLAGS=-O3 -fopenmp 
-VARIANT :=
+
 CC = mpiicc 
 CFLAGS = -O3 -fno-alias -xhost -fopenmp
 ifeq ($(VARIANT),NON_BLOCKING)
