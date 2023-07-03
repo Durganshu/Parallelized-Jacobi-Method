@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 	
 	#ifdef HYBRID
 	MPI_Init_thread(&argc, &argv, MPI_THREAD_FUNNELED, &provided);
-	omp_set_num_threads(48);
+	//omp_set_num_threads(48);
 
 	#else
 	MPI_Init(&argc, &argv);
