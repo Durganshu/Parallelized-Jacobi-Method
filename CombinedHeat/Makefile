@@ -9,11 +9,11 @@ VARIANT :=
 # CFLAGS=-O3 -fopenmp 
 
 CC = mpiicc 
-CFLAGS = -O3 -fno-alias -xhost -fopenmp
+CFLAGS = -O3 -fno-alias -xhost 
 ifeq ($(VARIANT),NON_BLOCKING)
     CFLAGS += -DNON_BLOCKING
 else ifeq ($(VARIANT),HYBRID) 
-	CFLAGS += -DHYBRID
+	CFLAGS += -DHYBRID -fopenmp
 else
 	CFLAGS += -DPURE_MPI
 endif
