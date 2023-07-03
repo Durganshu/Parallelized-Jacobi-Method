@@ -33,17 +33,27 @@ Run these commands in the interactive shell of batch node. These can also be run
 mpirun -np <number of processses> <options> ./heat test.date <number of processses in x> <number of processses in y>
 ```
 
+Example usage:
+
+```mpirun -np 4 ./heat test.dat 2 2```
+
 ### For non-blocking MPI version: 
 
 ```shell
 mpirun -np <number of processses> <options> ./heat test.date <number of processses in x> <number of processses in y>
 ```
+Example usage:
+```mpirun -np 4 ./heat test.dat 2 2```
 
 ### For Hybrid MPI + OpenMP version:
 ```shell
 export OMP_NUM_THREADS=<number of omp threads>
 mpirun -np <number of processses> <options> ./heat test.date <number of processses in x> <number of processses in y>
 ```
-<options> may include options for binding, affinity or number of tasks per node
+`options` may include options for binding, affinity or number of tasks per node
 
+Example usage for 16 hardware threads:
 
+`export OMP_NUM_THREADS=4`
+
+`mpirun -np 4 ./heat test.dat 2 2`
