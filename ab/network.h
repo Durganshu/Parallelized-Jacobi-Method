@@ -162,7 +162,7 @@ class Connection {
 class NetworkDomain
 {
  public:
-  enum { defaultPort = 2000 };
+  enum { defaultPort = 23412 };
 
   /* install listening TCP socket on port */
   NetworkDomain(int port = defaultPort);

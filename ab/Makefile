@@ -5,7 +5,7 @@
 CXX = g++
 
 # Use this for the Intel C++ compiler ("icc" is only the C version)
-#CXX = icpc
+# CXX = icpc
 
 # Use this for MPI
 #CXX = mpiCC
@@ -14,16 +14,16 @@ CXX = g++
 ### Options
 
 # Useful options for GCC
-CXXFLAGS=-O3
+CXXFLAGS=-O3 -fopenmp -g -fno-omit-frame-pointer
 #LDFLAGS=
 
 # Useful options for Intel C++
-#CXXFLAGS=-O3
-LDFLAGS=
+# CXXFLAGS=-O3 -fopenmp -fno-alias -xhost
+#LDFLAGS=
 
 
 LIB_OBJS = move.o board.o network.o search.o eval.o
-SEARCH_OBJS = $(LIB_OBJS) search-abid.o search-onelevel.o search-minmax.o
+SEARCH_OBJS = $(LIB_OBJS) search-abid.o search-onelevel.o search-minmax.o search-alphabeta.o
 
 all: player start referee
 
@@ -53,3 +53,4 @@ referee.o: referee.cpp board.cpp move.cpp
 search-onelevel.o: search.h board.h eval.h
 search-abid.o: search.h board.h
 search-minmax.o: search.h board.h eval.h
+search-alphabeta.o: search.h board.h eval.h

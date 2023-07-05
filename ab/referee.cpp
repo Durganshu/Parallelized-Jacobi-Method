@@ -48,7 +48,7 @@ extern int verbose;
 /* show board on stdout after each move? */
 static int showBoard = 1;
 
-#define DEFAULT_DOMAIN_PORT 23415
+#define DEFAULT_DOMAIN_PORT 23412
 #define DEFAULT_DOMAIN_DIFF 50
 
 /* remote channel */
