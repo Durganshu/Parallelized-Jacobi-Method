@@ -42,14 +42,14 @@ private:
      */
     void searchBestMove();
 
-    int AlphaBeta(int currentdepth);
+    int AlphaBeta(int currentdepth, int alpha, int beta);
     int AlphaBetaParallel(int currentdepth, Board &board);
     int _currentDepth;
 };
 
-int AlphaBetaStrategy::AlphaBeta(int currentdepth)
+int AlphaBetaStrategy::AlphaBeta(int currentdepth, int alpha, int beta)
 {
-    
+    int currentValue = -14999+currentdepth;
     if (currentdepth >= _maxDepth)
     {
         return evaluate();
@@ -65,21 +65,30 @@ int AlphaBetaStrategy::AlphaBeta(int currentdepth)
         int eval;
         playMove(m); 
         if(currentdepth + 1 < _maxDepth){
-            eval = -AlphaBeta(currentdepth+1);
+            eval = -AlphaBeta(currentdepth+1, -beta, -alpha);
         }
         else{
             eval = evaluate();
         }
         takeBack();
 
-        if(eval > max){
-            max = eval;
+        if(eval > currentValue){
+            currentValue = eval;
+
+            foundBestMove(currentdepth, m, currentValue);
+            if (currentValue>14900 || currentValue >= beta) {
+		        if (_sc) _sc->finishedNode(currentdepth, 0);
+		        return currentValue;
+	        }
+            // max = eval;
+
+            if (currentValue > alpha) alpha = currentValue;
             foundBestMove(currentdepth, m ,eval);
 
         }
     }
     finishedNode(currentdepth, 0);
-    return max;
+    return currentValue;
 
     // if (_board->actColor() == 1)
     // {
@@ -218,7 +227,7 @@ void AlphaBetaStrategy::searchBestMove()
     int bestEval = minEvaluation();
     int eval;
     _currentDepth = 0;
-    eval = AlphaBeta(_currentDepth);
+    eval = AlphaBeta(_currentDepth, alpha, beta);
     std::cout <<"Evaluations= " << eval << "\n";
     
 }
