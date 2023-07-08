@@ -9,6 +9,7 @@
 #define SEARCH_H
 
 #include "move.h"
+#include "omp.h"
 
 class Board;
 class Evaluator;
