@@ -25,6 +25,7 @@ private:
 
   int _currentMaxDepth;
   Move _currentBestMove;
+  omp_lock_t lockArray[10];
 };
 
 /**
@@ -34,8 +35,9 @@ private:
  * calls alpha/beta search
  */
 void AlphaBetaStrategy::searchBestMove() {
-  // we try to maximize bestEvaluation
-    int bestEval = minEvaluation();
+  
+  // for (int i=0; i<10; i++)
+  //       omp_init_lock(&(lockArray[i]));
     int eval;
     _currentMaxDepth = 0;
     #pragma omp parallel
@@ -43,8 +45,12 @@ void AlphaBetaStrategy::searchBestMove() {
        #pragma omp single
         eval = alphabeta_parallel(_currentMaxDepth, -16000, 16000, *_board, *_ev);
     }
+    // eval = alphabeta(_currentMaxDepth, -16000, 16000);
 
     _bestMove = _currentBestMove; //update _bestmove
+
+    // for (int i=0; i<10; i++)
+    //     omp_destroy_lock(&(lockArray[i]));
 }
 
 /*
@@ -100,11 +106,10 @@ int AlphaBetaStrategy::alphabeta(int currentdepth, int alpha, int beta) {
 }
 
 int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta, Board& board, Evaluator& evaluator) {
-
-  //if (currentdepth >= _maxDepth) return evaluate();
-    
-  int max = -999999;
-  std::cout << "threadID = " << omp_get_thread_num() << " currentdepth = "<< currentdepth << "\n";
+  //std::cout << currentdepth << "\n";
+  int someVal = -999999;
+  int* max = &someVal;
+  // std::cout << "threadID = " << omp_get_thread_num() << " currentdepth = "<< currentdepth << "\n";
   Move m;
   MoveList list;
   board.generateMoves(list);
@@ -122,9 +127,11 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
       }
       board.takeBack();
       #pragma omp critical
+      // omp_set_lock(&(lockArray[currentdepth]));
       {
-        if(eval > max){
-          max = eval;
+        if(eval > *max){
+          std::cout << currentdepth << " " << omp_get_thread_num() << "\n";
+          *max = eval;
           foundBestMove(currentdepth, m ,eval);
           if (currentdepth == 0) _currentBestMove = m;
         }
@@ -138,13 +145,16 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
           get_out = true;
         }
       }
+
+      // omp_unset_lock(&(lockArray[currentdepth]));
       
     }
     if(get_out) break;
       
   }
+  #pragma omp taskwait 
     finishedNode(currentdepth, 0);
-    return max;
+    return *max;
 }
 
 // register ourselve
