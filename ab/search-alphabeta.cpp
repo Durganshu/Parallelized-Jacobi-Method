@@ -7,27 +7,24 @@
 
 #include <stdio.h>
 #include <iostream> 
-
-#include "board.h"
 #include "search.h"
+#include "board.h"
+#include "eval.h"
 
 class AlphaBetaStrategy : public SearchStrategy {
 public:
   AlphaBetaStrategy() : SearchStrategy("AlphaBeta") {}
   SearchStrategy *clone() { return new AlphaBetaStrategy(); }
 
-  Move &nextMove() { return _pv[1]; }
 
 private:
   void searchBestMove();
   /* recursive alpha/beta search */
-  int alphabeta(int depth, int alpha, int beta, Board* board);
+  int alphabeta(int depth, int alpha, int beta);
+  int alphabeta_parallel(int currentdepth, int alpha, int beta, Board& _board, Evaluator& evaluator);
 
-  /* prinicipal variation found in last search */
-  Variation _pv;
-  Move _currentBestMove;
-  bool _inPV;
   int _currentMaxDepth;
+  Move _currentBestMove;
 };
 
 /**
@@ -37,80 +34,17 @@ private:
  * calls alpha/beta search
  */
 void AlphaBetaStrategy::searchBestMove() {
-  int alpha = -15000, beta = 15000;
-  int nalpha, nbeta, currentValue = 0;
-
-  _pv.clear(_maxDepth);
-  _currentBestMove.type = Move::none;
-  _currentMaxDepth = 1;
-     std::cout << "threads: " << omp_get_num_threads() << "\n";
-  /* iterative deepening loop */
-  do {
-
+  // we try to maximize bestEvaluation
+    int bestEval = minEvaluation();
+    int eval;
+    _currentMaxDepth = 0;
     #pragma omp parallel
     {
-        #pragma omp single
-        {
-            std::cout << "threads: " << omp_get_num_threads() << "\n";
-            /* searches on same level with different alpha/beta windows */
-            while (1) {
-
-            nalpha = alpha, nbeta = beta;
-            _inPV = (_pv[0].type != Move::none);
-
-            if (_sc && _sc->verbose()) {
-                char tmp[100];
-                sprintf(tmp, "Alpha/Beta [%d;%d] with max depth %d", alpha, beta,
-                        _currentMaxDepth);
-                _sc->substart(tmp);
-            }
-
-            currentValue = alphabeta(0, alpha, beta, _board);
-
-            /* stop searching if a win position is found */
-            if (currentValue > 14900 || currentValue < -14900)
-                _stopSearch = true;
-
-            /* Don't break out if we haven't found a move */
-            if (_currentBestMove.type == Move::none)
-                _stopSearch = false;
-
-            if (_stopSearch)
-                break;
-
-            /* if result is outside of current alpha/beta window,
-            * the search has to be rerun with widened alpha/beta
-            */
-            if (currentValue <= nalpha) {
-                alpha = -15000;
-                if (beta < 15000)
-                beta = currentValue + 1;
-                continue;
-            }
-            if (currentValue >= nbeta) {
-                if (alpha > -15000)
-                alpha = currentValue - 1;
-                beta = 15000;
-                continue;
-            }
-            break;
-            }
-
-        }
+       #pragma omp single
+        eval = alphabeta_parallel(_currentMaxDepth, -16000, 16000, *_board, *_ev);
     }
 
-    
-
-    /* Window in both directions cause of deepening */
-    alpha = currentValue - 200, beta = currentValue + 200;
-
-    if (_stopSearch)
-      break;
-
-    _currentMaxDepth++;
-  } while (_currentMaxDepth <= _maxDepth);
-
-  _bestMove = _currentBestMove;
+    _bestMove = _currentBestMove; //update _bestmove
 }
 
 /*
@@ -119,175 +53,98 @@ void AlphaBetaStrategy::searchBestMove() {
  * - first, start with principal variation
  * - depending on depth, we only do depth search for some move types
  */
-int AlphaBetaStrategy::alphabeta(int depth, int alpha, int beta, Board* board) {
-  int currentValue = -14999 + depth, value;
+int AlphaBetaStrategy::alphabeta(int currentdepth, int alpha, int beta) {
+
+  if (currentdepth >= _maxDepth)
+    {
+        return evaluate();
+    }
+    //int eval;
+    int max = -999999;
+    Move m;
+    MoveList list;
+    generateMoves(list);
+
+    while(list.getNext(m)){
+        int eval;
+        playMove(m); 
+        if(currentdepth + 1 < _maxDepth){
+            eval = -alphabeta(currentdepth+1, -beta, -alpha);
+        }
+        else{
+            eval = evaluate();
+        }
+        takeBack();
+
+        if(eval > max){
+            max = eval;
+            foundBestMove(currentdepth, m ,eval);
+
+            if (currentdepth == 0) _currentBestMove = m;
+
+        }
+
+        //alpha beta pruning
+        if (eval > alpha)
+        {
+            alpha = eval;
+        }
+
+        if (beta <= alpha)
+        {
+            break;
+        }
+    }
+    finishedNode(currentdepth, 0);
+    return max;
+}
+
+int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta, Board& board, Evaluator& evaluator) {
+
+  //if (currentdepth >= _maxDepth) return evaluate();
+    
+  int max = -999999;
+  std::cout << "threadID = " << omp_get_thread_num() << " currentdepth = "<< currentdepth << "\n";
   Move m;
   MoveList list;
-  bool depthPhase, doDepthSearch;
-
-  /* We make a depth search for the following move types... */
-  int maxType = (depth < _currentMaxDepth - 1) ? Move::maxMoveType
-                : (depth < _currentMaxDepth)   ? Move::maxPushType
-                                               : Move::maxOutType;
-
-//   _board->generateMoves(list);
-  board->generateMoves(list);
-
-  if (_sc && _sc->verbose()) {
-    char tmp[100];
-    sprintf(tmp, "Alpha/Beta [%d;%d], %d moves (%d depth)", alpha, beta,
-            list.count(Move::none), list.count(maxType));
-    _sc->startedNode(depth, tmp);
-  }
-
-  /* check for an old best move in principal variation */
-  if (_inPV) {
-    m = _pv[depth];
-
-    if ((m.type != Move::none) && (!list.isElement(m, 0, true)))
-      m.type = Move::none;
-
-    #pragma omp critical
+  board.generateMoves(list);
+  while(list.getNext(m)){
+    bool get_out = false;
+    #pragma omp task firstprivate(m, currentdepth, max, board, evaluator)
     {
-        if (m.type == Move::none)
-        _inPV = false;
-    }
-    
-  }
-
-  // first, play all moves with depth search
-  depthPhase = true;
-
-  while (1) {
-
-    // get next move
-    if (m.type == Move::none) {
-      if (depthPhase)
-        depthPhase = list.getNext(m, maxType);
-      if (!depthPhase)
-        if (!list.getNext(m, Move::none))
-          break;
-    }
-
-    bool createThread = false;
-    if (_inPV && (depth < _currentMaxDepth - 2)) { 
-      createThread = true;
-    }
-
-    if (!createThread) {
-      // we could start with a non-depth move from principal variation
-      doDepthSearch = depthPhase && (m.type <= maxType);
-
-      board->playMove(m);
-
-      /* check for a win position first */
-      if (!board->isValid()) {
-
-        /* Shorter path to win position is better */
-        value = 14999 - depth;
-      } else {
-
-        if (doDepthSearch) {
-          /* opponent searches for its maximum; but we want the
-           * minimum: so change sign (for alpha/beta window too!)
-           */
-          value = -alphabeta(depth + 1, -beta, -alpha, board);
-        } else {
-          value = evaluate();
-        }
+      int eval;
+      board.playMove(m); 
+      if(currentdepth + 1 < _maxDepth){
+        eval = -alphabeta_parallel(currentdepth+1, -beta, -alpha, board, evaluator);
       }
-
-      board->takeBack();
-
-      /* best move so far? */
-      if (value > currentValue) {
-        currentValue = value;
-        _pv.update(depth, m);
-
-        if (_sc)
-          _sc->foundBestMove(depth, m, currentValue);
-        if (depth == 0)
-          _currentBestMove = m;
-
-        /* alpha/beta cut off or win position ... */
-        if (currentValue > 14900 || currentValue >= beta) {
-          if (_sc)
-            _sc->finishedNode(depth, _pv.chain(depth));
-          return currentValue;
-        }
-
-        /* maximize alpha */
-        if (currentValue > alpha)
-          alpha = currentValue;
+      else{
+        eval = evaluator.calcEvaluation(&board);
       }
-      if (_stopSearch)
-        break; // depthPhase=false;
-      m.type = Move::none;
-    } else {
-        
-#pragma omp task firstprivate(m, depth, board, currentValue)
+      board.takeBack();
+      #pragma omp critical
       {
-        // int threadId =  omp_get_thread_num();
-        // std::cout << "thread: " << threadId << " hello\n";
-        bool breakLoop = false;
-        // we could start with a non-depth move from principal variation
-        doDepthSearch = depthPhase && (m.type <= maxType);
-
-        board->playMove(m);
-
-        /* check for a win position first */
-        if (!board->isValid()) {
-
-          /* Shorter path to win position is better */
-          value = 14999 - depth;
-        } else {
-
-          if (doDepthSearch) {
-            /* opponent searches for its maximum; but we want the
-             * minimum: so change sign (for alpha/beta window too!)
-             */
-            value = -alphabeta(depth + 1, -beta, -alpha, board);
-          } else {
-            value = evaluate();
-          }
+        if(eval > max){
+          max = eval;
+          foundBestMove(currentdepth, m ,eval);
+          if (currentdepth == 0) _currentBestMove = m;
         }
-
-        board->takeBack();
-
-        /* best move so far? */
-        if (value > currentValue) {
-          currentValue = value;
-          _pv.update(depth, m);
-
-          if (_sc)
-            _sc->foundBestMove(depth, m, currentValue);
-          if (depth == 0)
-            _currentBestMove = m;
-        //   return currentValue;
-          /* alpha/beta cut off or win position ... */
-          if (currentValue > 14900 || currentValue >= beta) {
-            if (_sc)
-              _sc->finishedNode(depth, _pv.chain(depth));
-              breakLoop = true;
-            // return currentValue;
-
-          }
-
-          /* maximize alpha */
-          if (currentValue > alpha)
-            alpha = currentValue;
+        //alpha beta pruning
+        if (eval > alpha)
+        {
+          alpha = eval;
         }
-        if (_stopSearch) breakLoop = true;
-        //   break; // depthPhase=false;
-        m.type = Move::none;
+        if (beta <= alpha)
+        {
+          get_out = true;
+        }
       }
+      
     }
+    if(get_out) break;
+      
   }
-
-  if (_sc)
-    _sc->finishedNode(depth, _pv.chain(depth));
-
-  return currentValue;
+    finishedNode(currentdepth, 0);
+    return max;
 }
 
 // register ourselve
