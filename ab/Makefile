@@ -14,7 +14,8 @@ CXX = g++
 ### Options
 
 # Useful options for GCC
-CXXFLAGS=-O3 -fopenmp -g -fno-omit-frame-pointer
+# CXXFLAGS=-O3 -fopenmp -g -pg -fsanitize=thread -fno-omit-frame-pointer
+CXXFLAGS=-O3 -fopenmp -fno-omit-frame-pointer
 #LDFLAGS=
 
 # Useful options for Intel C++
