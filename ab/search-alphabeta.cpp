@@ -31,7 +31,6 @@ private:
   
   int _currentMaxDepth; 
   Move _currentBestMove;
-  omp_lock_t lockArray[10];
   
   int upperAlphaArray[10];
   bool reachedBottom=false;
@@ -46,8 +45,6 @@ private:
 void AlphaBetaStrategy::searchBestMove() {
   
   reachedBottom=false;
-  for (int i=0; i<10; i++)
-        omp_init_lock(&(lockArray[i]));
     
   int eval;
   
@@ -68,8 +65,6 @@ void AlphaBetaStrategy::searchBestMove() {
   // eval = alphabeta(_currentMaxDepth, -16000, 16000);
   _bestMove = _currentBestMove; //update _bestmove
 
-  for (int i=0; i<10; i++)
-      omp_destroy_lock(&(lockArray[i]));
 }
 
 /*
@@ -165,7 +160,7 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
           foundBestMove(currentdepth, m, eval);
           
           if (currentdepth == 0)
-          { //if we are at start of tree set move as nex best
+          { 
               _currentBestMove = m;
           }
       }      
@@ -193,26 +188,24 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
 
         board.takeBack();
 
-        // #pragma omp critical
-        omp_set_lock(&(lockArray[currentdepth]));
-        
-        if(eval > *max){
+         #pragma omp critical
+        {
+          if(eval > *max){
           // std::cout << currentdepth << " " << omp_get_thread_num() << "\n";
-          *max = eval;
-          foundBestMove(currentdepth, m ,eval);
-          if (currentdepth == 0) _currentBestMove = m;
+            *max = eval;
+            foundBestMove(currentdepth, m ,eval);
+            if (currentdepth == 0) _currentBestMove = m;
+          }
+          //alpha beta pruning
+          if (eval > alpha)
+          {
+            alpha = eval;
+          }
+          if (beta <= alpha)
+          {
+            get_out = true;
+          }
         }
-        //alpha beta pruning
-        if (eval > alpha)
-        {
-          alpha = eval;
-        }
-        if (beta <= alpha)
-        {
-          get_out = true;
-        }
-        
-        omp_unset_lock(&(lockArray[currentdepth]));
 
       }
       if(get_out) break;
@@ -253,7 +246,7 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
         }
 
         if(m.type == Move::none){ //handle cases in which we are too deep already or didn't find pv move in possible list: stop pv
-            #pragma omp critical (update_inPv)
+            #pragma omp critical
             {
                 _inPv = false;
             }
@@ -302,9 +295,6 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
                     _currentBestMove = m;
                 }
             }
-
-
-            //omp_set_lock(&(lockArray[depthOfPv]));
             if (!arePv)
             {   
                     int upperAlpha = upperAlphaArray[depthOfPv];
@@ -326,15 +316,9 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
                 
             }
 
-            if (eval > alpha)
-            {
-                alpha = eval;
-            }
+            if (eval > alpha) alpha = eval;
 
-            if (beta <= alpha)
-            {
-                break;
-            }
+            if (beta <= alpha) break;
 
         }
         else { //parallel: create tasks on lower depths
@@ -358,40 +342,42 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
 
                 board.takeBack();
 
-                omp_set_lock(&(lockArray[depthOfPv]));
-                if (eval > *maxEval)
+                #pragma omp critical
                 {
-                    *maxEval = eval;
+                  if (eval > *maxEval)
+                  {
+                      *maxEval = eval;
 
-                    //safe m -> do own variation pv?
-                    newTaskMList[currentdepth] = m;
-                    foundBestMove(currentdepth, m, eval);
+                      //safe m -> do own variation pv?
+                      newTaskMList[currentdepth] = m;
+                      foundBestMove(currentdepth, m, eval);
 
-                    //copy everything from TaskMList to mlist
-                    for(int d = currentdepth; d < curMaxdepth; d++){
-                      _pv.update(currentdepth, newTaskMList[d]);
-                    }
+                      //copy everything from TaskMList to mlist
+                      for(int d = currentdepth; d < curMaxdepth; d++){
+                        _pv.update(currentdepth, newTaskMList[d]);
+                      }
 
-                    if (currentdepth == 0)
-                    { //if we are at start of tree set move as nex best
-                        _currentBestMove = m;
-                    }
+                      if (currentdepth == 0)
+                      { //if we are at start of tree set move as nex best
+                          _currentBestMove = m;
+                      }
+                  }
+
+                  if (eval > alpha)
+                  {
+                      alpha = eval;
+                      if (arePv)
+                      {
+                          upperAlphaArray[depthOfPv] = eval;
+                      }
+                  }
+
+                  if (beta <= alpha)
+                  {
+                      breakLoop = true;
+                  }
                 }
-
-                if (eval > alpha)
-                {
-                    alpha = eval;
-                    if (arePv)
-                    {
-                        upperAlphaArray[depthOfPv] = eval;
-                    }
-                }
-
-                if (beta <= alpha)
-                {
-                    breakLoop = true;
-                }
-                omp_unset_lock(&(lockArray[depthOfPv]));
+        
 
                 
                 if (!arePv)
