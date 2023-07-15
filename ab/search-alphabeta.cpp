@@ -77,11 +77,8 @@ void AlphaBetaStrategy::searchBestMove() {
  */
 int AlphaBetaStrategy::alphabeta(int currentdepth, int alpha, int beta) {
 
-  if (currentdepth >= _maxDepth)
-    {
-        return evaluate();
-    }
-    //int value;
+    if (currentdepth >= _maxDepth) return evaluate();
+
     int max = -999999;
     Move m;
     MoveList list;
@@ -227,8 +224,8 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
     //generate moves
     board.generateMoves(list); 
 
-    bool arePv = !firstPvLeaf;
-    if(arePv)
+    bool pvNode = !firstPvLeaf;
+    if(pvNode)
     {
         pvAlphaBounds[currentdepth] = alpha;
         depthOfPv=currentdepth;
@@ -238,6 +235,7 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
     if(_inPV){
         
         m = _pv[currentdepth];
+        
         //if pv move is not in list, set to none
         if(m.type != Move::none && !list.isElement(m,0,true)) 
             m.type = Move::none;
@@ -264,7 +262,7 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
         bool inParallel = false;
 
         // PV splitting
-        if(arePv && firstPvLeaf && (currentdepth < curMaxdepth - 2))
+        if(pvNode && firstPvLeaf && (currentdepth < curMaxdepth - 2))
             inParallel = true;
         
         // sequential search
@@ -273,8 +271,9 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
             board.playMove(m);
             int value;
             if (currentdepth + 1 < curMaxdepth) 
+            {
               value = -alphabeta_pv_split(currentdepth + 1, -beta, -alpha , depthOfPv, curMaxdepth, board, evaluator); 
-            
+            }
             else
             {
                 firstPvLeaf = true;
@@ -291,17 +290,18 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
 
                 if (currentdepth == 0) _currentBestMove = m;
             }
-            if (!arePv)
+            if (!pvNode)
             {   
-                    int upperAlpha = pvAlphaBounds[depthOfPv];
-
+                    
                     if ((currentdepth - depthOfPv) % 2 == 0)
                     {
-                        if (upperAlpha > alpha) alpha = upperAlpha;
+                        if (pvAlphaBounds[depthOfPv] > alpha) 
+                          alpha = pvAlphaBounds[depthOfPv];
                     }
                     else
                     {
-                        if (-upperAlpha < beta)  beta = -upperAlpha;
+                        if (-pvAlphaBounds[depthOfPv] < beta)  
+                          beta = -pvAlphaBounds[depthOfPv];
 
                     }
                 
@@ -347,7 +347,7 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
                   if (value > alpha)
                   {
                       alpha = value;
-                      if (arePv) pvAlphaBounds[depthOfPv] = value;
+                      if (pvNode) pvAlphaBounds[depthOfPv] = value;
 
                   }
 
@@ -357,19 +357,19 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
         
 
                 
-                if (!arePv)
+                if (!pvNode)
                 {   
 
-                    int upperAlpha = pvAlphaBounds[depthOfPv];
-
-                    if ((currentdepth - depthOfPv) % 2 == 0) 
+                    if (((currentdepth - depthOfPv) & 1)) 
                     {
-                        if (upperAlpha > alpha) alpha = upperAlpha;
+                        if (pvAlphaBounds[depthOfPv] > alpha) 
+                          alpha = pvAlphaBounds[depthOfPv];
 
                     }
                     else
                     {
-                        if (-upperAlpha < beta) beta = -upperAlpha;
+                        if (-pvAlphaBounds[depthOfPv] < beta) 
+                          beta = -pvAlphaBounds[depthOfPv];
                     }
                 }
 
