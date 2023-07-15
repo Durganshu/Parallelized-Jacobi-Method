@@ -7,6 +7,11 @@
  * 2. Parallel
  * 3. Parallel with PV splitting
  * 
+ * Authors:
+ * - Aditya Phopale
+ * - Durganshu Mishra
+ * - Gaurav Gokhale
+ *
  * Original code:
  * (c) 2005, Josef Weidendorfer
  */
