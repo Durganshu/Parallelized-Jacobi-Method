@@ -134,18 +134,18 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
 
     bool inParallel = false;
 
-    if(firstPvLeaf && (currentdepth < _maxDepth - 2)){ //PV-Splitting: Only create threads on PV nodes
+    if(firstPvLeaf && (currentdepth < _maxDepth - 2)){
             inParallel = true;
     }
 
     if(!inParallel) 
-    { //handle sequentially to safe on copy operations
+    { 
 
       board.playMove(m);
       int value;
-      if (currentdepth + 1 < _maxDepth) //SearchStrategy::_maxDepth
+      if (currentdepth + 1 < _maxDepth)
       {
-          value = -alphabeta_parallel(currentdepth + 1, -beta, -alpha, board, evaluator); //call for the enemy here, so change sign to get the best move for us
+          value = -alphabeta_parallel(currentdepth + 1, -beta, -alpha, board, evaluator);
       }
       else
       {
@@ -193,11 +193,12 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
          #pragma omp critical
         {
           if(value > *max){
-          // std::cout << currentdepth << " " << omp_get_thread_num() << "\n";
+          
             *max = value;
             foundBestMove(currentdepth, m ,value);
             if (currentdepth == 0) _currentBestMove = m;
           }
+
           //alpha beta pruning
           if (value > alpha) alpha = value;
 
@@ -211,8 +212,7 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
       
   }
   #pragma omp taskwait 
-    // finishedNode(currentdepth, 0);
-    return *max;
+  return *max;
 }
 
 int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta , int depthOfPv, int curMaxdepth, Board& board, Evaluator& evaluator){
@@ -223,8 +223,9 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
     Move m;
     Move nodeBestMove;
     MoveList list;
-
-    board.generateMoves(list); //generate currently possible moves
+    
+    //generate moves
+    board.generateMoves(list); 
 
     bool arePv = !firstPvLeaf;
     if(arePv)
@@ -233,16 +234,16 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
         depthOfPv=currentdepth;
     }
         
-
-    if(_inPV){ //check move in pv first to get best moves
+    //if we are in the PV, get the next move from the PV
+    if(_inPV){
         
         m = _pv[currentdepth];
-
-        if(m.type != Move::none && !list.isElement(m,0,true)) // if pv move is not possible set to null in order to stop pv search and get next from list in loop
+        //if pv move is not in list, set to none
+        if(m.type != Move::none && !list.isElement(m,0,true)) 
             m.type = Move::none;
         
-
-        if(m.type == Move::none){ //handle cases in which we are too deep already or didn't find pv move in possible list: stop pv
+        //if no pv move found
+        if(m.type == Move::none){ 
             #pragma omp critical
             {
                 _inPV = false;
@@ -251,25 +252,27 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
         }
     }
 
+    //iterate through each possible move
+    while(true) { 
 
-    while(true) { //iterate through each possible move
-
-        if(m.type == Move::none){ //get next move if not yet taken from pv
+        //if no pv move found, get next from list
+        if(m.type == Move::none){ 
             if(!list.getNext(m))
                 break;
         }
 
         bool inParallel = false;
 
-        if(arePv && firstPvLeaf && (currentdepth < curMaxdepth - 2)) //PV-Splitting: Only create threads on PV nodes
+        // PV splitting
+        if(arePv && firstPvLeaf && (currentdepth < curMaxdepth - 2))
             inParallel = true;
         
-
-        if(!inParallel) { //handle sequentially to safe on copy operations
+        // sequential search
+        if(!inParallel) { 
 
             board.playMove(m);
             int value;
-            if (currentdepth + 1 < curMaxdepth) //SearchStrategy::_maxDepth
+            if (currentdepth + 1 < curMaxdepth) 
               value = -alphabeta_pv_split(currentdepth + 1, -beta, -alpha , depthOfPv, curMaxdepth, board, evaluator); 
             
             else
@@ -309,13 +312,12 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
             if (beta <= alpha) break;
 
         }
-        else { //parallel: create tasks on lower depths
+        //parallel search
+        else { 
 
             bool breakLoop = false;
             #pragma omp task firstprivate(m, currentdepth, board, maxEval, evaluator, depthOfPv)
             {   
-
-                Move newTaskMList[MAX_SEARCH];//children write here
 
                 board.playMove(m);
                 int value;
@@ -333,14 +335,10 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
                   {
                       *maxEval = value;
 
-                      //safe m -> do own variation pv?
-                      newTaskMList[currentdepth] = m;
-                      foundBestMove(currentdepth, m, value);
+                      _pv.update(currentdepth, m);
 
-                      //copy everything from TaskMList to mlist
-                      for(int d = currentdepth; d < curMaxdepth; d++){
-                        _pv.update(currentdepth, newTaskMList[d]);
-                      }
+                      foundBestMove(currentdepth, m, value);
+ 
 
                       if (currentdepth == 0) _currentBestMove = m;
 
