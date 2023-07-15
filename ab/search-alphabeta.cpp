@@ -60,7 +60,6 @@ void AlphaBetaStrategy::searchBestMove() {
   {
      #pragma omp single
       // value = alphabeta_parallel(_currentMaxDepth, -16000, 16000, *_board, *_ev);
-      // value = alphabeta_pv_split(_currentMaxDepth, -16000, 16000, 0, *_board, *_ev);
       value = alphabeta_pv_split(0, -16000, 16000, 0, SearchStrategy::_maxDepth, *_board, *_ev);
   }
   
@@ -79,7 +78,7 @@ int AlphaBetaStrategy::alphabeta(int currentdepth, int alpha, int beta) {
 
     if (currentdepth >= _maxDepth) return evaluate();
 
-    int max = -999999;
+    int currentValue = -999999;
     Move m;
     MoveList list;
     generateMoves(list);
@@ -95,8 +94,8 @@ int AlphaBetaStrategy::alphabeta(int currentdepth, int alpha, int beta) {
         }
         takeBack();
 
-        if(value > max){
-            max = value;
+        if(value > currentValue){
+            currentValue= value;
             foundBestMove(currentdepth, m ,value);
 
             if (currentdepth == 0) _currentBestMove = m;
@@ -115,13 +114,12 @@ int AlphaBetaStrategy::alphabeta(int currentdepth, int alpha, int beta) {
         }
     }
     finishedNode(currentdepth, 0);
-    return max;
+    return currentValue;
 }
 
 int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta, Board& board, Evaluator& evaluator) {
 
-  int someVal = -999999;
-  int* max = &someVal;
+  int currentValue = -999999;
   
   Move m;
   MoveList list;
@@ -152,9 +150,9 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
       
       board.takeBack();
 
-      if (value > *max)
+      if (value > currentValue)
       {
-          *max = value;
+          currentValue= value;
         
           foundBestMove(currentdepth, m, value);
           
@@ -172,7 +170,7 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
     else
     {
       bool get_out = false;
-      #pragma omp task firstprivate(m, currentdepth, max, board, evaluator)
+      #pragma omp task firstprivate(m, currentdepth, board, evaluator) shared(currentValue)
       {
         int value;
         board.playMove(m); 
@@ -189,9 +187,9 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
 
          #pragma omp critical
         {
-          if(value > *max){
+          if(value > currentValue){
           
-            *max = value;
+            currentValue= value;
             foundBestMove(currentdepth, m ,value);
             if (currentdepth == 0) _currentBestMove = m;
           }
@@ -209,13 +207,12 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
       
   }
   #pragma omp taskwait 
-  return *max;
+  return currentValue;
 }
 
 int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta , int depthOfPv, int curMaxdepth, Board& board, Evaluator& evaluator){
     
-    int someVal = -999999;
-    int* maxEval = &someVal;
+    int currentValue = -999999;
 
     Move m;
     Move nodeBestMove;
@@ -281,9 +278,9 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
             }
             board.takeBack();
 
-            if (value > *maxEval)
+            if (value > currentValue)
             {
-                *maxEval = value;
+                currentValue = value;
 
                 _pv.update(currentdepth, m);
                 foundBestMove(currentdepth, m, value);
@@ -316,7 +313,7 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
         else { 
 
             bool breakLoop = false;
-            #pragma omp task firstprivate(m, currentdepth, board, maxEval, evaluator, depthOfPv)
+            #pragma omp task firstprivate(m, currentdepth, board, evaluator, depthOfPv) shared(currentValue)
             {   
 
                 board.playMove(m);
@@ -331,9 +328,9 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
 
                 #pragma omp critical
                 {
-                  if (value > *maxEval)
+                  if (value > currentValue)
                   {
-                      *maxEval = value;
+                      currentValue = value;
 
                       _pv.update(currentdepth, m);
 
@@ -384,7 +381,7 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
     }
     
     #pragma omp taskwait 
-    return *maxEval;
+    return currentValue;
 }
 
 
