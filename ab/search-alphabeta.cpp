@@ -1,7 +1,13 @@
 /**
- * A real world, sequential strategy:
- * Alpha/Beta with Iterative Deepening (ABID)
- *
+ * 
+ * Implementation of Alpha/beta pruning
+ * 
+ * This file contains three different versions
+ * 1. Seuential
+ * 2. Parallel
+ * 3. Parallel with PV splitting
+ * 
+ * Original code:
  * (c) 2005, Josef Weidendorfer
  */
 
@@ -56,14 +62,14 @@ void AlphaBetaStrategy::searchBestMove() {
 
   int test;
 
-  #pragma omp parallel
-  {
-     #pragma omp single
-      // value = alphabeta_parallel(_currentMaxDepth, -16000, 16000, *_board, *_ev);
-      value = alphabeta_pv_split(0, -16000, 16000, 0, SearchStrategy::_maxDepth, *_board, *_ev);
-  }
+  // #pragma omp parallel
+  // {
+  //    #pragma omp single
+  //     value = alphabeta_parallel(_currentMaxDepth, -16000, 16000, *_board, *_ev);
+  //     // value = alphabeta_pv_split(0, -16000, 16000, 0, SearchStrategy::_maxDepth, *_board, *_ev);
+  // }
   
-  // value = alphabeta(_currentMaxDepth, -16000, 16000);
+  value = alphabeta(_currentMaxDepth, -16000, 16000);
   _bestMove = _currentBestMove; //update _bestmove
 
 }
@@ -119,7 +125,7 @@ int AlphaBetaStrategy::alphabeta(int currentdepth, int alpha, int beta) {
 
 int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta, Board& board, Evaluator& evaluator) {
 
-  int currentValue = -999999;
+  int currentValue = -16000;
   
   Move m;
   MoveList list;
@@ -160,7 +166,18 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
           { 
               _currentBestMove = m;
           }
-      }      
+      }
+      if (pvAlphaBounds[currentdepth] > alpha) 
+            alpha = pvAlphaBounds[currentdepth];
+      // if (((currentdepth % 2) == 0)) 
+      // {
+          
+      // }
+      // else
+      // {
+      // if (-pvAlphaBounds[currentdepth] < beta) 
+      //       beta = -pvAlphaBounds[currentdepth];
+      // }      
       if (value > alpha) alpha = value;
       
       if (beta <= alpha) break;
@@ -194,10 +211,24 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
             if (currentdepth == 0) _currentBestMove = m;
           }
 
+          
+
           //alpha beta pruning
           if (value > alpha) alpha = value;
 
           if (beta <= alpha) get_out = true;
+
+          if (pvAlphaBounds[currentdepth] > alpha) 
+                alpha = pvAlphaBounds[currentdepth];
+          // if (((currentdepth % 2) == 0)) 
+          // {
+              
+          // }
+          // else
+          // {
+          //     if (-pvAlphaBounds[currentdepth] < beta) 
+          //       beta = -pvAlphaBounds[currentdepth];
+          // }
         }
 
       }
@@ -212,7 +243,7 @@ int AlphaBetaStrategy::alphabeta_parallel(int currentdepth, int alpha, int beta,
 
 int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta , int depthOfPv, int curMaxdepth, Board& board, Evaluator& evaluator){
     
-    int currentValue = -999999;
+    int currentValue = -16000;
 
     Move m;
     Move nodeBestMove;
@@ -290,17 +321,16 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
             if (!pvNode)
             {   
                     
-                    if ((currentdepth - depthOfPv) % 2 == 0)
-                    {
-                        if (pvAlphaBounds[depthOfPv] > alpha) 
-                          alpha = pvAlphaBounds[depthOfPv];
-                    }
-                    else
-                    {
-                        if (-pvAlphaBounds[depthOfPv] < beta)  
-                          beta = -pvAlphaBounds[depthOfPv];
-
-                    }
+                if ((currentdepth - depthOfPv) % 2 == 0)
+                {
+                    if (pvAlphaBounds[depthOfPv] > alpha) 
+                      alpha = pvAlphaBounds[depthOfPv];
+                }
+                else
+                {
+                  if (-pvAlphaBounds[depthOfPv] < beta)  
+                    beta = -pvAlphaBounds[depthOfPv];
+                }
                 
             }
 
