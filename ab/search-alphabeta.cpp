@@ -295,7 +295,7 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
         bool inParallel = false;
 
         // PV splitting
-        if(pvNode && firstPvLeaf && (currentdepth < curMaxdepth - 2))
+        if(pvNode && firstPvLeaf)
             inParallel = true;
         
         // sequential search
