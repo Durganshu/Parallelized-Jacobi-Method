@@ -67,6 +67,8 @@ void AlphaBetaStrategy::searchBestMove() {
 
   int test;
 
+  omp_set_num_threads(48);
+
   #pragma omp parallel
   {
      #pragma omp single
@@ -74,7 +76,7 @@ void AlphaBetaStrategy::searchBestMove() {
       value = alphabeta_pv_split(0, -16000, 16000, 0, SearchStrategy::_maxDepth, *_board, *_ev);
   }
   
-  //value = alphabeta(_currentMaxDepth, -16000, 16000);
+  // value = alphabeta(_currentMaxDepth, -16000, 16000);
   _bestMove = _currentBestMove; //update _bestmove
 
 }

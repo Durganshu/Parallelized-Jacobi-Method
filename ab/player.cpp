@@ -19,6 +19,7 @@
 #include "search.h"
 #include "eval.h"
 #include "network.h"
+#include <iostream>
 
 
 /* Global, static vars */
@@ -285,7 +286,7 @@ void parseArgs(int argc, char* argv[])
 	    printf("ERROR - Unknown option %s\n", argv[arg]);
 	    printHelp(argv[0], false);
 	}
-
+	
 	maxDepth = strength;
     }
 }
@@ -293,7 +294,6 @@ void parseArgs(int argc, char* argv[])
 int main(int argc, char* argv[])
 {
     parseArgs(argc, argv);
-
     SearchStrategy* ss = SearchStrategy::create(strategyNo);
     ss->setMaxDepth(maxDepth);
     printf("Using strategy '%s' (depth %d) ...\n", ss->name(), maxDepth);

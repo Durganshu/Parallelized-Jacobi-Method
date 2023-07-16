@@ -2,10 +2,10 @@
 ### Chosen compiler has to be in path (use "module" to setup environment)
 
 # Use this for GCC (warning: GCC < 4.2.x does not support OpenMP)
-CXX = g++
+# CXX = g++
 
 # Use this for the Intel C++ compiler ("icc" is only the C version)
-# CXX = icpc
+CXX = icpc
 
 # Use this for MPI
 #CXX = mpiCC
@@ -15,11 +15,12 @@ CXX = g++
 
 # Useful options for GCC
 # CXXFLAGS=-O3 -fopenmp -g -pg -fsanitize=thread -fno-omit-frame-pointer
-CXXFLAGS=-O3 -fopenmp -fno-omit-frame-pointer
+# CXXFLAGS=-O3 -fopenmp -fno-omit-frame-pointer
 #LDFLAGS=
 
 # Useful options for Intel C++
-# CXXFLAGS=-O3 -fopenmp -fno-alias -xhost
+CXXFLAGS=-O3 -fopenmp -fno-alias -xhost
+# CXXFLAGS=-O3 -fno-alias -xhost
 #LDFLAGS=
 
 
