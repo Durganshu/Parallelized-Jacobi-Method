@@ -68,7 +68,6 @@ void AlphaBetaStrategy::searchBestMove() {
   int test;
 
   omp_set_num_threads(48);
-  std::cout << "Max Depth: " << SearchStrategy::_maxDepth << "\n";
   #pragma omp parallel
   {
      #pragma omp single

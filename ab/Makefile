@@ -14,15 +14,11 @@ CXX = icpc
 ### Options
 
 # Useful options for GCC
-# CXXFLAGS=-O3 -fopenmp -g -pg -fsanitize=thread -fno-omit-frame-pointer
-# CXXFLAGS=-O3 -fopenmp -fno-omit-frame-pointer
+#  CXXFLAGS=-O3 -fopenmp -fno-omit-frame-pointer
 #LDFLAGS=
 
 # Useful options for Intel C++
 CXXFLAGS=-O3 -fopenmp -fno-alias -xhost
-# CXXFLAGS=-O3 -fno-alias -xhost
-#LDFLAGS=
-
 
 LIB_OBJS = move.o board.o network.o search.o eval.o
 SEARCH_OBJS = $(LIB_OBJS) search-abid.o search-onelevel.o search-minmax.o search-alphabeta.o

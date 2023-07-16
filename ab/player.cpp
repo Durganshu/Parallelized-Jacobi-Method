@@ -125,7 +125,6 @@ void MyDomain::received(char* str)
 
     if (myBoard.actColor() & myColor) {
 	struct timeval t1, t2;
-
 	
 	if(!changeDepth) {
 		
@@ -133,17 +132,15 @@ void MyDomain::received(char* str)
 		double secsPassed = (elapsed_time.tv_sec + elapsed_time.tv_usec / 1000000.0) -
     		(begin_time.tv_sec + begin_time.tv_usec / 1000000.0);
 		
-		if (myBoard.getMaximumDepth() > 4 && secsPassed > 40.0) printf("Time passed: %f\n", secsPassed);
+		if (myBoard.getMaximumDepth() > 4 && secsPassed > 90.0) printf("Time passed: %f\n", secsPassed);
 
-		if ((myBoard.getMaximumDepth() > 4) && secsPassed > 50.0){
+		if ((myBoard.getMaximumDepth() > 4) && secsPassed > 110.0){
 		
 			printf("Changing depth from %d", myBoard.getMaximumDepth());
 			myBoard.setDepth(4);
 			printf(" to %d\n", myBoard.getMaximumDepth());
 			changeDepth = true;
-		}
-
-		
+		}	
 	}
 	
 	gettimeofday(&t1,0);
