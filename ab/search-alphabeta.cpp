@@ -27,7 +27,7 @@
 
 class AlphaBetaStrategy : public SearchStrategy {
 public:
-  AlphaBetaStrategy() : SearchStrategy("AlphaBeta") {}
+  AlphaBetaStrategy() : SearchStrategy("AlphaBeta",0) {}
   SearchStrategy *clone() { return new AlphaBetaStrategy(); }
 
 
