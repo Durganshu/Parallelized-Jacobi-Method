@@ -20,7 +20,8 @@
 #include "eval.h"
 #include "network.h"
 #include <iostream>
-
+#include <chrono>
+ 
 
 /* Global, static vars */
 NetworkLoop l;
@@ -52,7 +53,8 @@ int lport = 23412;
 /* change evaluation after move? */
 bool changeEval = true;
 
-
+struct timeval begin_time, elapsed_time;
+bool changeDepth = false;
 
 
 /**
@@ -124,6 +126,26 @@ void MyDomain::received(char* str)
     if (myBoard.actColor() & myColor) {
 	struct timeval t1, t2;
 
+	
+	if(!changeDepth) {
+		
+		gettimeofday(&elapsed_time,0);
+		double secsPassed = (elapsed_time.tv_sec + elapsed_time.tv_usec / 1000000.0) -
+    		(begin_time.tv_sec + begin_time.tv_usec / 1000000.0);
+		
+		if (myBoard.getMaximumDepth() > 4 && secsPassed > 40.0) printf("Time passed: %f\n", secsPassed);
+
+		if ((myBoard.getMaximumDepth() > 4) && secsPassed > 50.0){
+		
+			printf("Changing depth from %d", myBoard.getMaximumDepth());
+			myBoard.setDepth(4);
+			printf(" to %d\n", myBoard.getMaximumDepth());
+			changeDepth = true;
+		}
+
+		
+	}
+	
 	gettimeofday(&t1,0);
 	Move m = myBoard.bestMove();
 	gettimeofday(&t2,0);
@@ -293,6 +315,7 @@ void parseArgs(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
+	gettimeofday(&begin_time,0);
     parseArgs(argc, argv);
     SearchStrategy* ss = SearchStrategy::create(strategyNo);
     ss->setMaxDepth(maxDepth);

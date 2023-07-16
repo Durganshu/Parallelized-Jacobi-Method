@@ -147,6 +147,7 @@ class Board
   /* Searching best move */
   void setSearchStrategy(SearchStrategy* ss);
   void setDepth(int d);
+  int getMaximumDepth();
   Move& bestMove();
   /* next move in prinipal variation */
   Move& nextMove();

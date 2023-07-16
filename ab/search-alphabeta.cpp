@@ -37,7 +37,7 @@ private:
   int alphabeta(int depth, int alpha, int beta);
   int alphabeta_parallel(int currentdepth, int alpha, int beta, Board& _board, Evaluator& evaluator);
   int alphabeta_pv_split(int currentdepth, int alpha, int beta , int depthOfPv, int curMaxdepth, Board& board, Evaluator& evaluator);
-
+  int alphabeta_transposition(int currentdepth, int alpha, int beta, int depthOfPv, Board& _board, Evaluator& evaluator);
   Variation _pv; 
   bool _inPV;
   bool _foundBestFromPrev;
@@ -68,7 +68,7 @@ void AlphaBetaStrategy::searchBestMove() {
   int test;
 
   omp_set_num_threads(48);
-
+  std::cout << "Max Depth: " << SearchStrategy::_maxDepth << "\n";
   #pragma omp parallel
   {
      #pragma omp single
@@ -420,6 +420,22 @@ int AlphaBetaStrategy::alphabeta_pv_split(int currentdepth, int alpha, int beta 
     #pragma omp taskwait 
     return currentValue;
 }
+
+// Implement the alphabeta pvSplit strategy with transposition table using OpenMP
+
+int AlphaBetaStrategy::alphabeta_transposition(int currentdepth, int alpha, int beta, int depthOfPv, Board& _board, Evaluator& evaluator)
+{
+  
+
+}
+
+
+
+
+
+
+
+
 
 
 // register ourselve

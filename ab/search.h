@@ -71,6 +71,8 @@ class SearchStrategy
 
     void registerCallbacks(SearchCallbacks* sc) { _sc = sc; }
     void setMaxDepth(int d) { _maxDepth = d; }
+
+    int getMaxDepth() { return _maxDepth; }
     void setEvaluator(Evaluator* e) { _ev = e; }
 
     /* Start search and return best move. */
@@ -109,6 +111,7 @@ class SearchStrategy
     void finishedNode(int d, Move* bestList);
     // see Evaluator::calcEvaluation
     int evaluate();
+
 
 
     int _maxDepth;

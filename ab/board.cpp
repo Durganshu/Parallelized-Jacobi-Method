@@ -891,6 +891,12 @@ void Board::setDepth(int d)
     _ss->setMaxDepth(d+1); 
 }
 
+int Board::getMaximumDepth()
+{
+    // if (!_ss) return;
+    return (_ss->getMaxDepth()); 
+}
+
 Move& Board::bestMove()
 {
     static Move best;
