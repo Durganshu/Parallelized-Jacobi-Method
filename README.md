@@ -1,6 +1,11 @@
-# Group 6: Heat parallelization
+# Paralleized Jacobi Method
 
-The code consists of Pure MPI (with and without blocking) and Hybrid parallelization (MPI + OpenMP)
+The code implements Jacobi method with shared and distributed memory.
+
+Three flavours of parallelization are available:
+1. Using MPI (with blocking communication)
+2. Using MPI (with non-blocking communication)
+3. Using Hybrid parallelization (MPI + OpenMP)
 
 Use the provided `Makefile` to compile the code according to the desired MPI variant.
 
