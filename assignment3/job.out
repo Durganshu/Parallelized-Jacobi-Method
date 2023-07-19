@@ -1,21 +1,0 @@
-Resolutions       : (200, 1200, ... 4200)
-Iterations        : 200
-Algorithm         : 0 (Jacobi)
-Num. Heat sources : 2
-   1: (0.00, 0.00) 1.00 1.00 
-   2: (1.00, 1.00) 1.00 0.50 
-Resolution:   200residual 0.008282, 100 iterations
-Resolution:   200, Time: 0.006 (0.088 GFlop => 15739.82 MFlop/s, residual 0.002897, 200 iterations)
-Resolution:  1200residual 0.049988, 100 iterations
-Resolution:  1200, Time: 0.273 (3.168 GFlop => 11614.64 MFlop/s, residual 0.017651, 200 iterations)
-Resolution:  2200residual 0.091629, 100 iterations
-Resolution:  2200, Time: 1.213 (10.648 GFlop => 8776.72 MFlop/s, residual 0.032362, 200 iterations)
-Resolution:  3200residual 0.133267, 100 iterations
-Resolution:  3200, Time: 2.713 (22.528 GFlop => 8302.26 MFlop/s, residual 0.047071, 200 iterations)
-Resolution:  4200residual 0.174903, 100 iterations
-Resolution:  4200, Time: 4.731 (38.808 GFlop => 8202.66 MFlop/s, residual 0.061778, 200 iterations)
-  200; 0.006; 15739.819
- 1200; 0.273; 11614.640
- 2200; 1.213; 8776.724
- 3200; 2.713; 8302.261
- 4200; 4.731; 8202.659

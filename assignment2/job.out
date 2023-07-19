@@ -1,2 +1,0 @@
-Failed to execute command: ./heat test.dat
-Marker API result file does not exist. This may happen if the application has not called LIKWID_MARKER_CLOSE.

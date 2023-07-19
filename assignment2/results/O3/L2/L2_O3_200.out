@@ -1,8 +1,0 @@
-Resolutions       : (200, 1200, ... 200)
-Iterations        : 200
-Algorithm         : 0 (Jacobi)
-Num. Heat sources : 2
-   1: (0.00, 0.00) 1.00 1.00 
-   2: (1.00, 1.00) 1.00 0.50 
-Resolution:   200residual 0.008159, 100 iterations
-Resolution:   200, Time: 0.029 (0.088 GFlop => 3011.72 MFlop/s, residual 0.002875, 200 iterations)
