@@ -1,11 +1,13 @@
-# Paralleized Jacobi Method
+# Parallelized Jacobi Method
 
-The code implements Jacobi method with shared and distributed memory.
+The code implements the Jacobi method with shared and distributed memory.
 
-Three flavours of parallelization are available:
+Three flavors of parallelization are available:
 1. Using MPI (with blocking communication)
 2. Using MPI (with non-blocking communication)
 3. Using Hybrid parallelization (MPI + OpenMP)
+
+The code has been tested on [SuperMUC](https://doku.lrz.de/supermuc-ng-10745965.html).
 
 Use the provided `Makefile` to compile the code according to the desired MPI variant.
 
@@ -30,7 +32,6 @@ make VARIANT=HYBRID
 
 ## Running the code
 
-Run these commands in the interactive shell of batch node. These can also be run in the batch script.
 
 ### For pure MPI version (blocking): 
 
