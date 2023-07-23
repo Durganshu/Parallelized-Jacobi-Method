@@ -1,6 +1,6 @@
 # Parallelized Jacobi Method
 
-The code implements the Jacobi method with shared and distributed memory.
+The code implements the Jacobi method on a discretized 5-point stencil with shared and distributed memory parallelism.
 
 Three flavors of parallelization are available:
 1. Using MPI (with blocking communication)
